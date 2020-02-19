@@ -1,4 +1,4 @@
-Asset tracking
+# Asset tracking
 
 De aanleiding voor het maken van dit project is het ondersteunen bij het volgen van assets. Bij assets moet u denken aan bijvoorbeeld boten. Een verhuurbedrijf plaatst bijvoorbeeld allemaal GPS trackers in zijn boten en kan dan via dit systeem kijken waar de boten varen.
  
@@ -9,15 +9,15 @@ Gewenste situatie: botenverhuurbedrijf kan zo kijken waar een boot ligt zodat hi
 In dit voorbeeld gebruik ik botenverhuurbedrijf om een duidelijke schets te maken van hoe het product in de praktijk gebruikt zou worden. Het product is natuurlijk niet alleen maar werkbaar met boten. De asset tracker kan ook werken met auto’s, mensen, dieren, fietsen etcetera. 
 
 
-Getting Started
+## Build with
 
-Download all the code and open the index file in your browser
-
-
-Build with
-
-    Leaflet
+    * [Leaflet](https://leafletjs.com/) - an open-source JavaScript library for mobile-friendly interactive maps
     GPS tracker API
-Authors
 
-   Jurjen Veenstra - ROC Friese Poort Student App developer
+## Authors
+
+   * **Jurjen Veenstra** - ROC Friese Poort Student App developer
+
+## Further info
+
+   See the list of [documentation](https://github.com/Jurjen-V/Asset-tracking/tree/master/documentatie) for a clear description of the project and how it is build.
