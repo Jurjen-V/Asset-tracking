@@ -9,15 +9,20 @@ Gewenste situatie: botenverhuurbedrijf kan zo kijken waar een boot ligt zodat hi
 In dit voorbeeld gebruik ik botenverhuurbedrijf om een duidelijke schets te maken van hoe het product in de praktijk gebruikt zou worden. Het product is natuurlijk niet alleen maar werkbaar met boten. De asset tracker kan ook werken met auto’s, mensen, dieren, fietsen etcetera. 
 
 
-## Build with
+## Gebouwd met
 
-    * [Leaflet](https://leafletjs.com/) - an open-source JavaScript library for mobile-friendly interactive maps
-    GPS tracker API
+* [Leaflet](https://leafletjs.com/) - an open-source JavaScript library for mobile-friendly interactive maps
+* GPS tracker API
 
-## Authors
+## Opdracht gevers
+
+* [ROC Friese Poort](https://www.rocfriesepoort.nl/) - Beste grote ROC van Nederland met 12 Topopleidingen · Het oordeel 'goed' van de Onderwijsinspectie in 2019;
+* [HawarIT](https://www.hawarit.com/) - Dutch/Bangladeshi company specialized in independent IT services.
+
+## Auteurs 
 
    * **Jurjen Veenstra** - ROC Friese Poort Student App developer
 
-## Further info
+## Verdere info
 
-   See the list of [documentation](https://github.com/Jurjen-V/Asset-tracking/tree/master/documentatie) for a clear description of the project and how it is build.
+   Zie de lijst [documentatie](https://github.com/Jurjen-V/Asset-tracking/tree/master/documentatie) voor een duidelijke omschrijving van wat het project inhoud en hoe het is gebouwd.
