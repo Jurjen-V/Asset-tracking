@@ -25,4 +25,4 @@ In dit voorbeeld gebruik ik botenverhuurbedrijf om een duidelijke schets te make
 
 ## Verdere info
 
-   Zie de lijst [documentatie](https://github.com/Jurjen-V/Asset-tracking/tree/master/documentatie) voor een duidelijke omschrijving van wat het project inhoud en hoe het is gebouwd.
+   Zie de lijst met [documentatie](https://github.com/Jurjen-V/Asset-tracking/tree/master/documentatie) voor een duidelijke omschrijving van wat het project inhoud en hoe het is gebouwd.
