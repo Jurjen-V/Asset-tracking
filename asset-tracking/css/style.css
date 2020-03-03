@@ -1,0 +1,217 @@
+input:focus {
+  border-bottom: 1px solid #1C9CDA !important;
+  box-shadow: 0 1px 0 0 #1C9CDA !important;
+}
+label.active {
+  color: #1C9CDA !important;
+}
+.standard-bgcolor{
+  background-color: #1C9CDA !important;
+}
+.standard-color{
+  color: #1C9CDA !important;
+}
+
+body {font-family: Arial, Helvetica, sans-serif;}
+* {box-sizing: border-box;}
+html, body {
+    margin: 0;
+    height: 100%;
+}
+#map{
+    height:100%;
+    width: 100%;
+}
+.dropdown-content{
+   width: max-content !important;
+   height:auto !important;
+}
+/* Button used to open the contact form - fixed at the bottom of the page */
+.open-button {
+  position: absolute !important;
+  bottom: 23px;
+  right: 20px;
+  width: 200px;
+}
+#form_btn{
+  float: none;
+  clear: both;
+}
+
+/* The popup form - hidden by default */
+.form-popup {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  right: 15px;
+  border: 3px solid #f1f1f1;
+  z-index: 9;
+  margin-bottom: 0 !important;
+}
+
+/* Add styles to the form container */
+.form-popup{
+  max-width: 400px;
+  min-width: 300px;
+  width: 25%;
+}
+/*form box*/
+.form-container {
+  padding: 20px !important;
+  background-color: white;
+}
+.login{
+  display: inline;
+  font-size: 30px;
+}
+.Sign-up, .Sign-up:visited{
+  cursor: pointer;
+  font-size: 24px;
+  text-decoration: underline;
+  float: none !important;
+  clear: both;
+}
+#form_full{
+  background-color: white;  
+  width: 100%;
+  height: 60%;
+  position: absolute;
+  top: 20%;
+  left: 20%;
+  opacity: 0.9;
+}
+#Sign-up{
+  font-size: 25px;
+  text-transform: capitalize;
+  height: 50px;
+  width: auto;
+  position: absolute;
+  right: 50%;
+  border-radius: 10px;
+}
+.not-a-user{
+  font-size: 24px;
+  color: #707070;
+}
+.Cancel{
+  font-size: 35px;
+  color: #707070;
+}
+.Sign-up_Cancel{
+  font-size: 35px;
+  text-decoration: underline;
+}
+#row_link{
+  margin-left:  0;
+}
+.alert {
+  position: relative;
+  width: 100%;
+  padding: 15px;
+  background-color: #f44336;
+  color: white;
+  text-align: center;
+}
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+#login_alert{
+  top: 0;
+}
+/*table with gps trackers*/
+.Assets{
+  width: calc(100% - 100px);
+  margin: 0px 50px 0px 50px;
+}
+
+.link{
+  color: #1a9988;
+}
+.link:hover{
+  color:  #0f7567;
+}
+/*popup add assets style*/
+/* The Modal (background) */
+.add_assets {
+  left: 0;
+  top: 10%;
+  width: 100%; /* Full width */
+  height: auto; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  max-height: none !important;
+  padding-bottom: 30px !important;
+}
+#submit{
+  font-size: 25px;
+  text-transform: capitalize;
+  height: 50px;
+  width: 20%;
+  position: absolute;
+  right:30px;
+  border-radius: 10px;
+}
+#Cancel_add{
+  font-size: 25px;
+  text-transform: capitalize;
+  height: 50px;
+  width: 20%;
+  position: absolute;
+  left:30px;
+  border-radius: 10px;
+  background-color: #f44336;
+}
+.animate {
+  -webkit-animation: animatezoom 5s;
+  animation: animatezoom 5s
+  background-color: #fefefe;
+}
+@-webkit-keyframes animatezoom {
+  from {-webkit-transform: scale(0)} 
+  to {-webkit-transform: scale(1)}
+}
+  
+@keyframes animatezoom {
+  from {transform: scale(0)} 
+  to {transform: scale(1)}
+}
+@media only screen and (max-width: 600px) {
+  .Assets::-webkit-scrollbar {
+    z-index:10;
+  }
+  /*asset table*/
+  .Assets{
+    width: 100%;
+    margin: 0px 0px 0px 0px;
+  }
+  #submit, #Cancel_add{
+    width: auto;
+  }
+  .modal-content{
+    padding: 0;
+  }
+  #form_full{
+    width: 100%;
+    left: 0;
+  }
+  #Sign-up{
+    width: auto;
+    right: 10px;
+  }
+  .Cancel{
+    margin-left: 10px;
+  }
+  #e-mail, #password, #name , #GPS_ID, #info{
+    width: 100%;
+  }
+}
