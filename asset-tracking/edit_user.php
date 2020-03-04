@@ -119,8 +119,7 @@ if(isset($_POST['Save'])) {
             </div>
           </div>
         </li>
-      	<li><a title="Home" class="modal-trigger" href="assets.php"><i class="material-icons left">home</i>Home</a></li>
-      	<li><a title="Map" href="index.php"><i class="material-icons">map</i>Kaart</a></li>
+      	<li><a title="Home" class="modal-trigger" href="admin.php"><i class="material-icons left">home</i>Home</a></li>
       	<li><a title="Uitloggen" href="?logout=1"><i class="material-icons left">exit_to_app</i>Uitloggen</a></li>
   </ul>
   <nav>
@@ -128,8 +127,7 @@ if(isset($_POST['Save'])) {
     	<a href="#" class="brand-logo center">Asset Tracking</a>
     	<a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
       <ul id="nav-mobile" class="left hide-on-med-and-down">
-      	<li><a title="Home" class="modal-trigger" href="assets.php"><i class="material-icons left">home</i>Home</a></li>
-      	<li><a title="Map" href="index.php"><i class="material-icons left">map</i>Kaart</a></li>
+      	<li><a title="Home" class="modal-trigger" href="admin.php"><i class="material-icons left">home</i>Home</a></li>
       </ul>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
       		<li class="right"><a title="Uitloggen" href="?logout=1"><i class="material-icons right">exit_to_app</i>Uitloggen</a></li>

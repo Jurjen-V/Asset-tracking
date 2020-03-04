@@ -33,7 +33,7 @@ if(isset($_GET['delete'])){
     	<script>window.location.href = "admin.php";</script>
     <?php
 }
-// if add asset is pressed
+// if add user is pressed
 if(isset($_POST['submit'])) {
 	$error = 0;
 	$email = htmlspecialchars($_POST['email']);
@@ -103,7 +103,17 @@ if(isset($_POST['submit'])) {
 // if update profile is pressed
 if(isset($_POST['update'])) {
 	$error = 0;
-
+	$email = htmlspecialchars($_POST['email']);
+	$query = "SELECT * FROM user WHERE email = :email AND ID !=:ID LIMIT 1";
+	$stmt = $database->prepare($query);
+	$results = $stmt->execute(array(":email" => $email, ":ID" => $User_ID));
+	$user = $stmt->fetch(PDO::FETCH_ASSOC);
+	if ($user) { // if user exists
+	    if ($user['email'] == $email) {
+		    $error++;
+	        $errorMessage= "User already excist";
+	    }
+	}
 	if (!empty($_POST['email'])){
 	    $email = htmlspecialchars($_POST['email']);
 
@@ -155,7 +165,7 @@ if(isset($_POST['update'])) {
 	}else{?>
 	   	<div class="alert">
 	        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-	        <strong>Let op!</strong> <?php echo $errorMSG ?>
+	        <strong>Let op!</strong> <?php echo $errorMessage ?>
 	    </div><?php
 	}
 }

@@ -116,14 +116,16 @@ if (isset($_GET['logout'])) {
 
             <div class="row">
             <div class="input-field col s12" id="email">
-              <input required class="leaflet-control " type="email" name="email">
+              <input required class="leaflet-control validate" type="email" name="email">
               <label for="Email">Email</label>
+              <span class="helper-text" data-error="Geen correct e-mailadres" data-success="correct">voorbeeld@voorbeeld.nl</span>
             </div>
           </div>
           <div class="row">
             <div class="input-field col s12" id="psw">
-              <input required class="leaflet-control" type="password" name="psw">
+              <input minlength="10" required class="leaflet-control validate" type="password" name="psw">
               <label for="Password">Password</label>
+              <span class="helper-text" data-error="Wachtwoord is te kort" data-success="correct">10 karakters lang</span>
             </div>
           </div>
           <div class="row"  id="row_link">

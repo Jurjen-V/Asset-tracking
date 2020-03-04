@@ -143,7 +143,7 @@ function onLocationFound(e) {
   current_position.bindPopup("Latitude: " + e.latitude +"<br>" + "Longitude: " + e.longitude);
   map.addLayer(current_position);
   var REMOTE_ADDR = <?php echo json_encode($REMOTE_ADDR);?>;
-  window.history.replaceState(null, null, "index.php?latitude=" + e.latitude + "&longitude=" + e.longitude + "&REMOTE_ADDR=" + REMOTE_ADDR); 
+  <!-- window.history.replaceState(null, null, "index.php?latitude=" + e.latitude + "&longitude=" + e.longitude + "&REMOTE_ADDR=" + REMOTE_ADDR);  -->
   if(count == 0){
     setTimeout(update(e), 1000);
   }else{

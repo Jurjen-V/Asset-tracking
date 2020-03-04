@@ -11,7 +11,9 @@ label.active {
 .standard-color{
   color: #1C9CDA !important;
 }
-
+.sidenav{
+  z-index:1001 !important;
+}
 body {font-family: Arial, Helvetica, sans-serif;}
 * {box-sizing: border-box;}
 html, body {

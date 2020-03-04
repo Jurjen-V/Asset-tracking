@@ -16,29 +16,29 @@ if(empty($_GET['ID'])){
 }else{
 	$ID = $_GET['ID'];
 }
-$result_users = $database->prepare("SELECT * FROM users");
+$result_users = $database->prepare("SELECT * FROM user");
 $result_users->execute();
 for($i=0; $row = $result_users->fetch(); $i++){
 	$id = $row['ID'];
 }	
-$result_software = $database->prepare("SELECT * FROM user WHERE ID = " . $ID);
+$result_software = $database->prepare("SELECT * FROM location WHERE ID = " . $ID);
 $result_software->execute();
 for($i=0; $row = $result_software->fetch(); $i++){
-	$email = $row['email'];
-	$password = $row['activatiecode'];
+	$name = $row['name'];
+	$activatiecode = $row['activatiecode'];
 	$info = $row['info'];
 }	
 if(isset($_POST['Save'])) {
 	$error = 0;
 	$activatiecode = htmlspecialchars($_POST['activatiecode']);
-	$query = "SELECT * FROM user WHERE ID =:ID  LIMIT 1";
+	$query = "SELECT * FROM location WHERE ID != :ID AND activatiecode = :activatiecode LIMIT 1";
 	$stmt = $database->prepare($query);
-	$results = $stmt->execute(array(":ID" => $ID));
+	$results = $stmt->execute(array(":ID" => $ID, ":activatiecode" => $activatiecode));
 	$location = $stmt->fetch(PDO::FETCH_ASSOC);
 	if ($location) { // if tracker exists
 	    if ($location['activatiecode'] == $activatiecode ) {
 		    $error++;
-	        $errorMessage= "GPS already excist";
+	        $errorMessage= "Die GPS is al geactiveerd";
 	    }
 	}	
 	if (!empty($_POST['name'])){
@@ -127,14 +127,14 @@ if(isset($_POST['Save'])) {
 		<h4 class="standard-color">Bewerk asset</h4>
 			<div class="row">
 				<div class="input-field col s6" id="name">
-					<input class="validate" type="text" value="<?=$email?>" required name="name">
+					<input class="validate" type="text" value="<?=$name?>" required name="name">
 	          		<label for="Name">Asset name</label>
 	          		<span class="helper-text" data-error="Veld mag niet leeg zijn" data-success="correct">Geef de GPS tracker een naam</span>
 				</div>
 			</div>
 			<div class="row">
 				<div class="input-field col s6" id="activatiecode ">
-					<input class="validate" type="text" value="<?=$activatiecode ?>" required name="activatiecode">
+					<input class="validate" type="text" value="<?=$activatiecode?>" required name="activatiecode">
 	          		<label for="activatiecode ">GPS tracker ID</label>
 	          		<span class="helper-text" data-error="Moet uniek zijn" data-success="correct">activatiecode  van de tracker (IMEI + korte activatie string)</span>
 				</div>

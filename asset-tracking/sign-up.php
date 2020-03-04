@@ -10,7 +10,7 @@ include_once 'db.php';
     if ($user) { // if user exists
       if ($user['email'] == $email) {
         $error++;
-        $errorMSG= "Email already excist";
+        $errorMessage= "Email already excist";
       }
     }
     if (!empty($_POST['email'])){
@@ -18,31 +18,31 @@ include_once 'db.php';
 
     }else{
         $error++;
-        $errorMSG= "Email is empty";
+        $errorMessage= "Email is empty";
     }
     if (!empty($_POST['password_1'])){
         $password_1 = htmlspecialchars($_POST['password_1']);
 
     }else{
         $error++;
-        $errorMSG= "Password is empty";
+        $errorMessage= "Password is empty";
     }
     if (!empty($_POST['password_2'])){
         $password_2 = htmlspecialchars($_POST['password_2']);
 
     }else{
         $error++;
-        $errorMSG= "Please confirm the password";
+        $errorMessage= "Please confirm the password";
     }
     if(strlen($password_1) < 10 || strlen($password_2) < 10){
       $error++;
-      $errorMSG= "Password needs to me longer than 10 characters.";
+      $errorMessage= "Password needs to me longer than 10 characters.";
     }
     if($password_1 == $password_2){
       $password_3 = $password_3 = password_hash($password_1, PASSWORD_DEFAULT);
     }else{
       $error++;
-      $errorMSG= "Password needs to be the same";
+      $errorMessage= "Password needs to be the same";
     }
 
       if ($error === 0) {
@@ -68,7 +68,7 @@ include_once 'db.php';
         ?>
         <div class="alert">
           <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-          <strong>Let op!</strong> <?php echo $errorMSG ?>
+          <strong>Let op!</strong> <?php echo $errorMessage ?>
         </div><?php
       }
   }
