@@ -1,8 +1,12 @@
 <?php
 session_start();
-if (empty($_SESSION['email'])) {
+if (empty($_SESSION['email']) || $_SESSION['level'] == 1) {
 	$_SESSION['msg'] = "You must log in first";
     header('location: index.php');
+}
+if ($_SESSION['level'] == 1) {
+	$_SESSION['msg'] = "You belong at the admin page";
+    header('location: admin.php');
 }
 if (isset($_GET['logout'])) {
 	session_destroy();
@@ -22,7 +26,7 @@ for($i=0; $row = $result_users->fetch(); $i++){
 }	
 // if delete is pressed
 if(isset($_GET['delete'])){
-    $query = "DELETE FROM location WHERE ID={$_GET['delete']}";
+    $query = "DELETE FROM asset WHERE ID={$_GET['delete']}";
     $insert = $database->prepare($query);
     $insert->execute();
     ?>
@@ -33,14 +37,25 @@ if(isset($_GET['delete'])){
 if(isset($_POST['submit'])) {
 	$error = 0;
 	$activatiecode = htmlspecialchars($_POST['activatiecode']);
-	$query = "SELECT * FROM location WHERE activatiecode= :activatiecode AND user_ID !=:user_ID LIMIT 1";
+	$query = "SELECT * FROM asset WHERE activatiecode= :activatiecode AND user_ID !=:user_ID LIMIT 1";
 	$stmt = $database->prepare($query);
 	$results = $stmt->execute(array(":activatiecode" => $activatiecode, ":user_ID" => $User_ID));
-	$location = $stmt->fetch(PDO::FETCH_ASSOC);
-	if ($location) { // if user exists
-	    if ($location['activatiecode'] == $activatiecode) {
+	$asset = $stmt->fetch(PDO::FETCH_ASSOC);
+	if ($asset) { // if user exists
+	    if ($asset['activatiecode'] == $activatiecode) {
 		    $error++;
 	        $errorMessage= "GPS already excist";
+	    }
+	}	
+	$name = htmlspecialchars($_POST['name']);
+	$query = "SELECT * FROM asset WHERE name= :name AND user_ID =:user_ID LIMIT 1";
+	$stmt = $database->prepare($query);
+	$results = $stmt->execute(array(":name" => $name, ":user_ID" => $User_ID));
+	$asset_naam = $stmt->fetch(PDO::FETCH_ASSOC);
+	if ($asset_naam) { // if user exists
+	    if ($asset_naam['name'] == $name) {
+		    $error++;
+	        $errorMessage= "That name is already used";
 	    }
 	}	
 	if (!empty($_POST['name'])){
@@ -63,7 +78,7 @@ if(isset($_POST['submit'])) {
 	    $errorMessage = "Info is leeg";
 	}
 	if ($error == 0) {
-	    $query = "INSERT INTO location (name, activatiecode, info, user_ID) VALUES (?,?,?,?)";
+	    $query = "INSERT INTO asset (name, activatiecode, info, user_ID) VALUES (?,?,?,?)";
 	    $insert = $database->prepare($query);
 	    $data = array("$name", "$activatiecode", "$info" ,"$User_ID");
 
@@ -73,7 +88,7 @@ if(isset($_POST['submit'])) {
 	    catch (PDOException $e) {
 	        echo $e->getMessage();
 	    }
-	    header('Location: assets.php');	
+	    header('location: assets.php');	
 	}else{?>
 	   	<div class="alert">
 	        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
@@ -142,7 +157,7 @@ if(isset($_POST['update'])) {
 	    catch (PDOException $e) {
 	        echo $e->getMessage();
 	    }
-	    header('Location: assets.php');
+	    header('location: assets.php');
 
 	}else{?>
 	   	<div class="alert">
@@ -160,7 +175,7 @@ if(isset($_POST['update'])) {
   	<link type="text/css" rel="stylesheet" href="./css/materialize.min.css"  media="screen,projection"/>
   	<meta charset="UTF-8">
   	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"/>
-	<title>Home</title>
+	<title>Homepagina van <?= $email?></title>
 </head>
 <ul id="dropdown1" class="dropdown-content">
     <li><a title="Add Asset" class="modal-trigger grey-text text-darken-1" href="#modal1"><i class="material-icons">add</i>Voeg asset toe</a></li>
@@ -207,7 +222,7 @@ if(isset($_POST['update'])) {
 			          <th>Actions</th>
 			        </tr>
 		        </thead>";
-	$result_assets = $database->prepare("SELECT * FROM location WHERE user_ID=".$User_ID);
+	$result_assets = $database->prepare("SELECT * FROM asset WHERE user_ID=".$User_ID);
 
 	  $result_assets->execute();
 	  for($i=0; $row = $result_assets->fetch(); $i++){
@@ -219,6 +234,7 @@ if(isset($_POST['update'])) {
 	   	echo "<td>" . $row['info'] . "</td>";
 	    echo "
    			<td>
+   			<a title='Route' class='link btn-floating  btn standard-bgcolor' href=route.php?ID=". $id."><i class='material-icons'>visibility</i></a>
 			<a title='Edit' class='link btn-floating  btn standard-bgcolor' href=edit.php?ID=". $id."><i class='material-icons'>edit</i></a>
    			<a title='Delete' onclick=\"return confirm('Delete This item?')\" class='link btn-floating btn standard-bgcolor'href='?delete=". $id ."'><i class='material-icons'>delete</i></a>
 			</td>";

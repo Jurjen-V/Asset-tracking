@@ -60,7 +60,7 @@ document.getElementById("map").style.height = "calc(100% - 64px)";
 document.getElementById("Btn").style.display = "none";
 var array = [
   <?php
-      $result_users = $database->prepare("SELECT * FROM location WHERE latitude != '' AND longitude != '' AND user_ID =". $_SESSION['id']);
+      $result_users = $database->prepare("SELECT * FROM asset WHERE latitude != '' AND longitude != '' AND user_ID =". $_SESSION['id']);
       $result_users->execute();
       for($i=0; $row = $result_users->fetch(); $i++){
         $id = $row['ID'];
@@ -73,7 +73,7 @@ var array = [
 ];
 var popup_data= [
   <?php
-  $result_users = $database->prepare("SELECT * FROM location WHERE latitude != '' AND longitude != '' AND  user_ID =". $_SESSION['id']);
+  $result_users = $database->prepare("SELECT * FROM asset WHERE latitude != '' AND longitude != '' AND  user_ID =". $_SESSION['id']);
   $result_users->execute();
   for($i=0; $row = $result_users->fetch(); $i++){
     $name = $row['name'];

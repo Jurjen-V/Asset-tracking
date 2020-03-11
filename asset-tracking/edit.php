@@ -4,6 +4,10 @@ if (!isset($_SESSION['email'])) {
 	$_SESSION['msg'] = "You must log in first";
     header('location: index.php');
 }
+if ($_SESSION['level'] == 1) {
+	$_SESSION['msg'] = "You belong at the admin page";
+    header('location: admin.php');
+}
 if (isset($_GET['logout'])) {
 	session_destroy();
     unset($_SESSION['email']);
@@ -12,7 +16,7 @@ if (isset($_GET['logout'])) {
 include_once 'db.php';
 $User_ID= $_SESSION['id'];
 if(empty($_GET['ID'])){
-	header("location: assets.php");
+	header("loation: assets.php");
 }else{
 	$ID = $_GET['ID'];
 }
@@ -21,7 +25,7 @@ $result_users->execute();
 for($i=0; $row = $result_users->fetch(); $i++){
 	$id = $row['ID'];
 }	
-$result_software = $database->prepare("SELECT * FROM location WHERE ID = " . $ID);
+$result_software = $database->prepare("SELECT * FROM asset WHERE ID = " . $ID);
 $result_software->execute();
 for($i=0; $row = $result_software->fetch(); $i++){
 	$name = $row['name'];
@@ -31,16 +35,27 @@ for($i=0; $row = $result_software->fetch(); $i++){
 if(isset($_POST['Save'])) {
 	$error = 0;
 	$activatiecode = htmlspecialchars($_POST['activatiecode']);
-	$query = "SELECT * FROM location WHERE ID != :ID AND activatiecode = :activatiecode LIMIT 1";
+	$query = "SELECT * FROM asset WHERE ID != :ID AND activatiecode = :activatiecode LIMIT 1";
 	$stmt = $database->prepare($query);
 	$results = $stmt->execute(array(":ID" => $ID, ":activatiecode" => $activatiecode));
-	$location = $stmt->fetch(PDO::FETCH_ASSOC);
-	if ($location) { // if tracker exists
-	    if ($location['activatiecode'] == $activatiecode ) {
+	$asset = $stmt->fetch(PDO::FETCH_ASSOC);
+	if ($asset) { // if tracker exists
+	    if ($asset['activatiecode'] == $activatiecode ) {
 		    $error++;
 	        $errorMessage= "Die GPS is al geactiveerd";
 	    }
-	}	
+	}
+	$name = htmlspecialchars($_POST['name']);
+	$query = "SELECT * FROM asset WHERE ID != :ID AND name= :name AND user_ID =:user_ID LIMIT 1";
+	$stmt = $database->prepare($query);
+	$results = $stmt->execute(array(":name" => $name, ":user_ID" => $User_ID, ":ID" => $ID));
+	$asset_naam = $stmt->fetch(PDO::FETCH_ASSOC);
+	if ($asset_naam) { // if user exists
+	    if ($asset_naam['name'] == $name) {
+		    $error++;
+	        $errorMessage= "That name is already used";
+	    }
+	}		
 	if (!empty($_POST['name'])){
 	    $name = htmlspecialchars($_POST['name']);
 
@@ -63,7 +78,7 @@ if(isset($_POST['Save'])) {
 	    $errorMessage = "info is leeg";
 	}
     if ($error == 0) {
-	    $query = "UPDATE location SET name=:name, activatiecode =:activatiecode , info=:info WHERE ID= :ID";
+	    $query = "UPDATE asset SET name=:name, activatiecode =:activatiecode , info=:info WHERE ID= :ID";
 	    $stmt = $database->prepare($query);
 
 	    $stmt->bindValue(":ID", $ID, PDO::PARAM_STR);
@@ -77,7 +92,7 @@ if(isset($_POST['Save'])) {
 	    catch (PDOException $e) {
 	        echo $e->getMessage();
 	    }
-	    header('Location: assets.php');	
+	    header('location: assets.php');	
 	}else{?>
 	   	<div class="alert">
 	        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
@@ -157,9 +172,4 @@ if(isset($_POST['Save'])) {
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script type="text/javascript" src="js/materialize.min.js"></script>
 <script src="js/script.js" type="text/javascript"></script>
-<script>
-$(document).ready(function(){
-	$('select').formSelect();
-});
-</script>
 </html>

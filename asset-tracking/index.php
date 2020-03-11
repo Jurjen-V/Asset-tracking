@@ -1,5 +1,10 @@
 <?php
 session_start();
+$_SESSION['level'] = 0;
+if ($_SESSION['level'] == 1) {
+  $_SESSION['msg'] = "You belong at the admin page";
+    header('location: admin.php');
+}
 include_once 'db.php';
 $error = 0;
 // login validation
@@ -56,7 +61,7 @@ if (isset($_GET['logout'])) {
 <html>
 <head>
   <!-- Title document -->
-  <title> leaflet webviewer with Geoserver</title>
+  <title>Kaartpagina</title>
   <!--Load the style stylesheet of leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin=""/>
   <!--Load leaflet -->
