@@ -14,6 +14,9 @@ label.active {
 .sidenav{
   z-index:1001 !important;
 }
+.nav{
+  padding-left: 16px !important;
+}
 body {font-family: Arial, Helvetica, sans-serif;}
 * {box-sizing: border-box;}
 html, body {
@@ -177,6 +180,21 @@ html, body {
   -webkit-animation: animatezoom 5s;
   animation: animatezoom 5s
   background-color: #fefefe;
+}
+/*blockquote*/
+.blockquote_white {
+  border-left-color: white;
+}
+/*info_box*/
+.info_box{
+  height: auto;
+  max-height: 100%;
+  overflow: auto;
+  padding:  0 25px 0 25px;
+}
+/*routing box*/
+.leaflet-routing-alternatives-container, .leaflet-bar{
+  display: none;
 }
 @-webkit-keyframes animatezoom {
   from {-webkit-transform: scale(0)} 

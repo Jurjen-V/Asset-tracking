@@ -74,14 +74,12 @@ if (isset($_GET['logout'])) {
   <!-- boat icon -->
   <script src="https://unpkg.com/leaflet.boatmarker/leaflet.boatmarker.min.js"></script>
   <!-- meta tags -->
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
   <link rel="stylesheet" type="text/css" href="./css/style.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link type="text/css" rel="stylesheet" href="./css/materialize.min.css"  media="screen,projection"/>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
 </head>
 <body>
   <?php if (isset($_SESSION['email'])) : ?>
@@ -144,9 +142,9 @@ if (isset($_GET['logout'])) {
     </div>
   </div>
 <script type="text/javascript" src="js/script.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script type="text/javascript" src="js/materialize.min.js"></script>
 <script type="text/javascript" src="script.php"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </body>
 </html>
 <?php

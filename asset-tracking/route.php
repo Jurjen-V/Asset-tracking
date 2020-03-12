@@ -16,28 +16,24 @@ if (isset($_GET['logout'])) {
 $User_ID= $_SESSION['id'];
 include_once 'db.php';
 if(isset($_POST['TEST'])){
-	$latitude = 51.981854;
-	$longitude= 5.198157;
-	$location = 'POINT(' . $latitude . ", " . $longitude . ')';
-	$ASSET_ID = $_GET['ID'];
-	$sql = "INSERT INTO `point` SET `g` = ".$location . ", ASSET_ID = ".$ASSET_ID;
-	$insert = $database->prepare($sql);
-	$data = array("$location", "$ASSET_ID");
-	      // INSERT INTO my_geodata SET location = PointFromText('POINT(-41 12)');    
-	print_r($data);
-	try 
-	{
-	    $insert->execute($data);
-	print_r($insert);
-	}
-
-	catch(PDOException $e)
-	{               
-	    echo $e->getMessage();
-	}
-	if($insert){
-		echo "succes";
-	}
+	$location = array("POINT(52.972565, 5.612297)", "POINT(52.966623, 5.590024)", "POINT(52.967554, 5.545907)", "POINT(52.991894, 5.553374)", "POINT(52.985539, 5.583587)", "POINT(52.972565, 5.612297)");
+	$length = count($location);
+	for($i = 0; $i<$length; $i++) {
+		$ASSET_ID = $_GET['ID'];
+		$sql = "INSERT INTO `point` SET `latlong` = ".$location[$i] . ", ASSET_ID = ".$ASSET_ID;
+		$insert = $database->prepare($sql);
+		$data = array("$location[$i]", "$ASSET_ID");
+		print_r($data);
+		try 
+		{
+		    $insert->execute($data);
+			print_r($insert);
+		}
+		catch(PDOException $e)
+		{               
+	    	echo $e->getMessage();
+		}
+	} 
 }
 $result_users = $database->prepare("SELECT * FROM user WHERE ID = ".$User_ID);
 $result_users->execute();
@@ -54,10 +50,19 @@ if(isset($_GET['delete']) || isset($_GET['TS'])){
     $delete->execute();
     header('location: route.php?ID='.$route_id);
 }
-$result_assets = $database->prepare("SELECT asset.ID, point.ASSET_ID, asset.name, CAST(point.TS AS DATE), asset.activatiecode, asset.info, (SELECT ST_X(latlong)) AS LAT, (SELECT ST_y(latlong)) AS LON FROM asset INNER JOIN point on asset.ID = point.ASSET_ID WHERE point.ASSET_ID=".$_GET['ID']." GROUP BY CAST(TS AS DATE)");
-$result_assets->execute();
-$result = $result_assets->fetch(PDO::FETCH_ASSOC);
+$result_name = $database->prepare("SELECT asset.ID, point.ASSET_ID, asset.name, CAST(point.TS AS DATE), asset.activatiecode, asset.info, (SELECT ST_X(latlong)) AS LAT, (SELECT ST_y(latlong)) AS LON FROM asset INNER JOIN point on asset.ID = point.ASSET_ID WHERE point.ASSET_ID=".$_GET['ID']." GROUP BY CAST(TS AS DATE)");
+$result_name->execute();
+$result = $result_name->fetch(PDO::FETCH_ASSOC);
 $assetName = $result['name'];
+if(!$result){
+	$errorMessage = "Geen afgelegde routes gevonden";
+	?>
+	<div class="alert">
+	   	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+	    <strong>Let op!</strong> <?php echo $errorMessage ?>
+	</div><?php
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -77,7 +82,7 @@ $assetName = $result['name'];
             </div>
           </div>
         </li>
-      	<li><a title="Home" class="dropdown-trigger" data-target="dropdown1" href="assets.php"><i class="material-icons left">home</i>Home<i class="material-icons right">arrow_drop_down</i></a></li>
+      	<li><a title="Home" class="dropdown-trigger" data-target="dropdown1" href="assets.php"><i class="material-icons left">home</i>Home</a></li>
       	<li><a title="Map" href="index.php"><i class="material-icons">map</i>Kaart</a></li>
       	<li><a title="Uitloggen" href="?logout=1"><i class="material-icons left">exit_to_app</i>Uitloggen</a></li>
   </ul>
@@ -96,14 +101,14 @@ $assetName = $result['name'];
   </nav>
 <body>
 	<form method="post">
-		<button type="submit" name="TEST">send test</button>
+		<button class="btn waves-effect standard-bgcolor" type="submit" name="TEST">send test</button>
 	</form>
 	  <h5 class="left-align">
       Asset naam: <?= $assetName?>
     </h5>
 	<?php
 	echo "
-	      <table class='Assets responsive-table centered highlight'>
+	      <table class='Assets centered highlight'>
 		      <thead>
 			        <tr>
 			          <th>Datum</th>
@@ -111,6 +116,9 @@ $assetName = $result['name'];
 			          <th>Actions</th>
 			        </tr>
 		        </thead>";
+
+	$result_assets = $database->prepare("SELECT asset.ID, point.ASSET_ID, asset.name, CAST(point.TS AS DATE), asset.activatiecode, asset.info, (SELECT ST_X(latlong)) AS LAT, (SELECT ST_y(latlong)) AS LON FROM asset INNER JOIN point on asset.ID = point.ASSET_ID WHERE point.ASSET_ID=".$_GET['ID']." GROUP BY CAST(TS AS DATE)");
+	$result_assets->execute();
 	  for($i=0; $row = $result_assets->fetch(); $i++){
 	    $id = $row['ID'];
 	    $ASSET_ID = $row['ASSET_ID'];

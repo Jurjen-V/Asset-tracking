@@ -188,23 +188,35 @@ if(isset($_POST['update'])) {
     <li><a title="Add Asset" class="modal-trigger grey-text text-darken-1" href="#modal1"><i class="material-icons">add</i>Voeg gebruiker toe</a></li>
     <li><a title="Edit profile" class="modal-trigger grey-text text-darken-1" href="#modal2"><i class="material-icons left ">person</i>Edit profile</a></li>
 </ul>
- <ul class="sidenav" id="mobile-demo">
+  <ul class="sidenav" id="mobile-demo">
  	<li class="sidenav-header standard-bgcolor ">
-          <div class="row">
-            <div class="col s4">
-                <h4 class="white-text">Asset tracking</h4>
+        <div class="row">
+        	<div class="col s4">
+            	<h4 class="white-text">Asset tracking</h4>
             </div>
-          </div>
-        </li>
-      	<li class="active"><a title="Home" class="dropdown-trigger" data-target="dropdown1" href="#!"><i class="material-icons left">home</i>Home<i class="material-icons right">arrow_drop_down</i></a></li>
-      	<li><a title="Uitloggen" href="?logout=1"><i class="material-icons left">exit_to_app</i>Uitloggen</a></li>
+        </div>
+    </li> 
+    <li class="no-padding nav">
+	    <ul class="collapsible collapsible-accordion">
+	    	<li>
+		      	<a class="collapsible-header"><i class="material-icons left">home</i>Home<i class="material-icons right">arrow_drop_down</i></a>
+		  		<div class="collapsible-body">
+		            <ul>
+    					<li><a title="Add Asset" class="modal-trigger grey-text text-darken-1" href="#modal1"><i class="material-icons">add</i>Voeg gebruiker toe</a></li>
+    					<li><a title="Edit profile" class="modal-trigger grey-text text-darken-1" href="#modal2"><i class="material-icons left ">person</i>Edit profile</a></li>
+				    </ul>
+		        </div>
+	        </li>
+	    </ul>
+	</li>
+    <li><a class="nav" title="Uitloggen" href="?logout=1"><i class="material-icons left">exit_to_app</i>Uitloggen</a></li>  	
   </ul>
   <nav>
     <div class="nav-wrapper standard-bgcolor">
     	<a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
     	<a href="#" class="brand-logo center">Asset Tracking</a>
       <ul id="nav-mobile" class="left hide-on-med-and-down">
-		<li class="active"><a title="Home" class="dropdown-trigger" data-target="dropdown2" href="#!"><i class="material-icons left">home</i>Home<i class="material-icons right">arrow_drop_down</i></a></li>
+		<li class="active"><a title="Home" class="dropdown-trigger" data-target="dropdown1" href="#!"><i class="material-icons left">home</i>Home<i class="material-icons right">arrow_drop_down</i></a></li>
       </ul>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
       		<li class="right"><a title="Uitloggen" href="?logout=1"><i class="material-icons right">exit_to_app</i>Uitloggen</a></li>
