@@ -13,7 +13,6 @@ if (isset($_GET['logout'])) {
     unset($_SESSION['email']);
     header("location: index.php");
 }
-
 $User_ID= $_SESSION['id'];
 include_once 'db.php';
 
@@ -316,7 +315,6 @@ if(isset($_POST['update'])) {
 		  </form>
 		</div>
 	</div>
-
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script type="text/javascript" src="js/materialize.min.js"></script>

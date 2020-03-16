@@ -82,6 +82,8 @@ var popup_data= [
   ?>
 ];
 assets = array.map(s => eval('null,' + s));
+console.log(assets);
+console.log(popup_data);
 var i;
 for (i = 0; i < assets.length; i++) {
   document.createElement("a");
@@ -164,11 +166,11 @@ function redraw(point) {
     line.addLatLng(point);
 }
 function update(e) {
-    if(e != null){
-        var loc = [e.latlng];
-        if (loc.length) {
-            redraw(loc.shift());
-            setTimeout(update, 1000);
-        }
+  if(e != null){
+    var loc = [e.latlng];
+    if (loc.length) {
+      redraw(loc.shift());
+      setTimeout(update, 1000);
     }
+  }
 }
