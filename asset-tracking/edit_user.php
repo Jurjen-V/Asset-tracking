@@ -137,7 +137,7 @@ if(isset($_POST['Save'])) {
   <body class="login_body">
 	<div class="row">
 		<form class="col s12" id="form_full" action="" method="post">
-		<h4 class="standard-color">Bewerk gebruiker</h4>
+		<h4 class="standard-color">Bewerk asset</h4>
 			<div class="row">
 				<div class="input-field col s6" id="email">
 					<input class="validate" type="email" value="<?=$email?>" required name="email">
@@ -171,8 +171,8 @@ if(isset($_POST['Save'])) {
 			</div>
 		     <div class="input-group">
 	      		<button id="Sign-up" class="btn waves-effect standard-bgcolor" type="submit" name="Save">Edit</button>
-	    		<h2 class="Cancel"><a href="admin.php" class="Sign-up_Cancel standard-color">Cancel</a></h2>
 	    	</div>
+	    	<h2 class="Cancel"><a href="admin.php" class="Sign-up_Cancel standard-color">Cancel</a></h2>
 	    	</div>
 		  </form>
 	</div>

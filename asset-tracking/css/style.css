@@ -31,7 +31,6 @@ html, body {
 .dropdown-content{
    width: max-content !important;
    height:auto !important;
-   top: 100% !important
 }
 /* Button used to open the contact form - fixed at the bottom of the page */
 .open-button {
@@ -86,9 +85,6 @@ html, body {
   top: 20%;
   left: 20%;
   opacity: 0.9;
-}
-.login_body{
-  overflow: hidden;
 }
 #Sign-up{
   font-size: 25px;
@@ -238,7 +234,7 @@ html, body {
   .Cancel{
     margin-left: 10px;
   }
-  #email, #password, #name , #GPS_ID, #info, #activatiecode{
+  #e-mail, #password, #name , #GPS_ID, #info{
     width: 100%;
   }
 }
