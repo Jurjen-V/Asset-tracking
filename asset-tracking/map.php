@@ -44,16 +44,16 @@ if (isset($_GET['logout'])) {
 </head>
 <body>
   <ul class="sidenav" id="mobile-demo">
-  <li class="sidenav-header standard-bgcolor">
-          <div class="row">
-            <div class="col s4">
-                <h4 class="white-text">Asset tracking</h4>
-            </div>
-          </div>
-        </li>
-        <li><a title="Home" class="modal-trigger" href="assets.php"><i class="material-icons left">home</i>Home</a></li>
-        <li ><a title="Map" href="index.php"><i class="material-icons">map</i>Kaart</a></li>
-        <li><a title="Uitloggen" href="?logout=1"><i class="material-icons left">exit_to_app</i>Uitloggen</a></li>
+    <li class="sidenav-header standard-bgcolor">
+      <div class="row">
+        <div class="col s4">
+            <h4 class="white-text">Asset tracking</h4>
+        </div>
+      </div>
+    </li>
+    <li><a title="Home" class="modal-trigger" href="assets.php"><i class="material-icons left">home</i>Home</a></li>
+    <li ><a title="Map" href="index.php"><i class="material-icons">map</i>Kaart</a></li>
+    <li><a title="Uitloggen" href="?logout=1"><i class="material-icons left">exit_to_app</i>Uitloggen</a></li>
   </ul>
   <nav>
     <div class="nav-wrapper standard-bgcolor">
@@ -76,6 +76,7 @@ if (isset($_GET['logout'])) {
 
       </div>
     </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script type="text/javascript" src="js/script.js"></script>
 <script type="text/javascript" src="js/materialize.min.js"></script>
 <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
@@ -176,6 +177,5 @@ routeControl.setWaypoints(route);
 map.setView(route[0], 10);  
 // var line = L.polyline(route,{dashArray: '20,15'}).addTo(map);
 </script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </body>
 </html>

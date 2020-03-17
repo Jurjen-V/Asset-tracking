@@ -82,10 +82,11 @@ var popup_data= [
   ?>
 ];
 assets = array.map(s => eval('null,' + s));
-console.log(assets);
-console.log(popup_data);
+// console.log(assets);
+// console.log(popup_data);
 var i;
 for (i = 0; i < assets.length; i++) {
+  
   document.createElement("a");
 
   // data = popup_data.map(s => eval('null,' + s));
@@ -146,7 +147,7 @@ function onLocationFound(e) {
   if(count == 0){
     setTimeout(update(e), 1000);
   }else{
-    console.log(count);
+    // console.log(count);
     count -= 1;   
   }
 }
@@ -173,4 +174,82 @@ function update(e) {
       setTimeout(update, 1000);
     }
   }
+}
+// voorbeeld api call javascript voor live locatie
+// document.addEventListener('DOMContentLoaded',()=>{
+//     /* api endpoint */
+//     let url='https://api.opencagedata.com/geocode/v1/json?q=53.281844,5.268157&key=5b104f01c9434e3dad1e2d6a548445da&language=nl&pretty=1';
+//     /* only for demo purposes - display output in this element */
+//     let out=document.querySelector('output');
+//     /* ultra simple callback to display data from API */
+//     const callback=function( a ){
+//     // Add it to the data string (each record will be separated by a space)
+//       results = a['results'];
+//       for(results of results){
+//         components = results['components'];
+//         console.log(components['suburb']);
+//       }
+//     };  
+//     /* Send a basic request to the api ( which returns JSON ) and process using callback */
+//     const fetchposition=function( url, callback ){
+//       fetch( url ).then( r=>{ return r.json() } ).then( callback )
+//     };
+//     /* 
+//      create a self-executing anonymous function with relevant 
+//      parameters ~ this is in the John Resig style... 
+//      This acts like `setInterval` or a self referencing `setTimeout`
+//     */
+//     (function( url, delay, callback ){
+//       (function(){
+//         setTimeout( arguments.callee, 1000 * delay );
+//         fetchposition( url, callback );
+//       })();
+//     })( url, 60, callback );             
+// });
+for (i = 0; i < assets.length; i++) {
+  console.log(i); 
+ var apikey = '5b104f01c9434e3dad1e2d6a548445da';
+  var latitude = '51.0';
+  var longitude = '7.0';
+  console.log(assets[i]);
+  var api_url = 'https://api.opencagedata.com/geocode/v1/json'
+  var request_url = api_url
+    + '?'
+    + 'key=' + apikey
+    + '&q=' + assets[i]
+    + '&pretty=1'
+    + '&no_annotations=1';
+    console.log(request_url); 
+  // see full list of required and optional parameters:
+  // https://opencagedata.com/api#forward
+
+  var request = new XMLHttpRequest();
+  request.open('GET', request_url, true);
+
+  request.onload = function() {
+    // see full list of possible response codes:
+    // https://opencagedata.com/api#codes
+
+    if (request.status == 200){ 
+      // Success!
+      var data = JSON.parse(request.responseText);
+      var naam =data.results;
+      console.log(data);
+
+    } else if (request.status <= 500){ 
+      // We reached our target server, but it returned an error
+                           
+      console.log("unable to geocode! Response code: " + request.status);
+      var data = JSON.parse(request.responseText);
+      console.log(data.status.message);
+    } else {
+      console.log("server error");
+    }
+  };
+
+  request.onerror = function() {
+    // There was a connection error of some sort
+    console.log("unable to connect to server");        
+  };
+  request.send();  // make the request
 }
