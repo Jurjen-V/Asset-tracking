@@ -23,6 +23,7 @@ map.locate({
   maxZoom: 18,
   enableHighAccuracy: true
 });
+document.getElementsByClassName("info_box")[0].style.display = "none";
 var count = 4;
 // Open default map from mapbox
 L.tileLayer(
@@ -57,6 +58,7 @@ map.setView([52.132633, 5.291266], 6);
 <?php if (isset($_SESSION['email'])) : ?>
 document.getElementById("map").style.height = "calc(100% - 64px)";
 document.getElementById("Btn").style.display = "none";
+var layerGroup = L.layerGroup().addTo(map);
 var array = [
   <?php
       $result_users = $database->prepare("SELECT * FROM asset WHERE latitude != '' AND longitude != '' AND user_ID =". $_SESSION['id']);
@@ -82,36 +84,51 @@ var popup_data= [
   ?>
 ];
 assets = array.map(s => eval('null,' + s));
-console.log(assets);
-console.log(popup_data);
-var i;
-for (i = 0; i < assets.length; i++) {
-  document.createElement("a");
-
-  // data = popup_data.map(s => eval('null,' + s));
-    L.circleMarker(assets[i], {
-        color: "#4285F4",
-        weight: 0,
-        fillColor: "#4285F4",
-        fillOpacity: 0.5,
-        radius: 20,
-        'className': 'pulse'
-    }).addTo(map);
-    marker = L.circleMarker(assets[i], {
-        color: "white",
-        opacity: 1,
-        weight: 2,
-        fillColor: "#4285F4",
-        radius: 10,
-        opacity: 1,
-        fillOpacity: 1,
-        'className': 'pulse'
-    }).addTo(map);
-    marker.bindPopup(popup_data[i]);
+function addlayer() {
+  var i;
+  layerGroup.clearLayers();
+  document.getElementById("info_box").innerHTML = ""; 
+  for (i = 0; i < assets.length; i++) {
+    // data = popup_data.map(s => eval('null,' + s));
+      L.circleMarker(assets[i], {
+          color: "#4285F4",
+          weight: 0,
+          fillColor: "#4285F4",
+          fillOpacity: 0.5,
+          radius: 20,
+          'className': 'pulse'
+      }).addTo(layerGroup);
+      marker = L.circleMarker(assets[i], {
+          color: "white",
+          opacity: 1,
+          weight: 2,
+          fillColor: "#4285F4",
+          radius: 10,
+          opacity: 1,
+          fillOpacity: 1,
+          'className': 'pulse'
+      }).addTo(layerGroup);
+      marker.bindPopup(popup_data[i]); 
+    // get location name from API
+    document.getElementsByClassName('info_box')[0].style.display = "block";
+    fetch('https://api.opencagedata.com/geocode/v1/json?key=5b104f01c9434e3dad1e2d6a548445da&language&q=' + assets[i] + '&pretty=1&no_annotations=1')
+    .then(response => {
+      if(response.ok) return response.json();
+      throw new Error(response.statusText)
+    })
+    .then(function handleData(data){
+      data = data.results[0].components['suburb'];
+      console.log(data);
+      document.getElementById('info_box').innerHTML +=  data + "<br>"; 
+    })
+    .catch(function handleError(error){
+    })
+  }
 }
+addlayer();
+setInterval(addlayer, 60000)
 <?php endif ?>
 // functie om afgelde route te tekenen
-
 function onLocationFound(e) {
   if (i == 0) {
     map.panTo(new L.LatLng(e.latitude, e.longitude));
@@ -174,3 +191,48 @@ function update(e) {
     }
   }
 }
+// for (i = 0; i < assets.length; i++) {
+//   var apikey = '5b104f01c9434e3dad1e2d6a548445da&language';
+
+//   var api_url = 'https://api.opencagedata.com/geocode/v1/json'
+
+//   var request_url = api_url
+//     + '?'
+//     + 'key=' + apikey
+//     + '&q=' + encodeURIComponent(assets[i])
+//     + '&pretty=1'
+//     + '&no_annotations=1';
+//   console.log(request_url);   
+//   // see full list of required and optional parameters:
+//   // https://opencagedata.com/api#forward
+
+//   var request = new XMLHttpRequest();
+//   request.open('GET', request_url, true);
+
+//   request.onload = function() {
+//     // see full list of possible response codes:
+//     // https://opencagedata.com/api#codes
+
+//     if (request.status == 200){ 
+//       // Success!
+//       var data = JSON.parse(request.responseText);
+//       console.log(data.results[0]);
+
+//     } else if (request.status <= 500){ 
+//       // We reached our target server, but it returned an error
+                           
+//       console.log("unable to geocode! Response code: " + request.status);
+//       var data = JSON.parse(request.responseText);
+//       console.log(data.status.message);
+//     } else {
+//       console.log("server error");
+//     }
+//   };
+
+//   request.onerror = function() {
+//     // There was a connection error of some sort
+//     console.log("unable to connect to server");        
+//   };
+
+//   request.send();  // make the request
+// }

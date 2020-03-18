@@ -109,7 +109,9 @@ if(isset($_POST['Save'])) {
 	<link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	<title>Edit software</title>
+	<title>Edit <?= $email ?></title>
+	<!-- icon of page -->
+  	<link rel="icon" href="img/favicon.png">
 </head>
   <ul class="sidenav" id="mobile-demo">
  	<li class="sidenav-header standard-bgcolor">
@@ -135,9 +137,9 @@ if(isset($_POST['Save'])) {
     </div> 
   </nav>
   <body class="login_body">
-	<div class="row">
+	<div class="row"  id="mobile">
 		<form class="col s12" id="form_full" action="" method="post">
-		<h4 class="standard-color">Bewerk asset</h4>
+		<h4 class="standard-color">Bewerk gebruiker</h4>
 			<div class="row">
 				<div class="input-field col s6" id="email">
 					<input class="validate" type="email" value="<?=$email?>" required name="email">
@@ -171,8 +173,8 @@ if(isset($_POST['Save'])) {
 			</div>
 		     <div class="input-group">
 	      		<button id="Sign-up" class="btn waves-effect standard-bgcolor" type="submit" name="Save">Edit</button>
+	    		<h2 class="Cancel"><a href="admin.php" id="edit_Cancel" class="btn waves-effect modal-close">Cancel</a></h2>
 	    	</div>
-	    	<h2 class="Cancel"><a href="admin.php" class="Sign-up_Cancel standard-color">Cancel</a></h2>
 	    	</div>
 		  </form>
 	</div>

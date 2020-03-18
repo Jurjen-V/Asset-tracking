@@ -109,7 +109,9 @@ if(isset($_POST['Save'])) {
 	<link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	<title>Edit software</title>
+	<title>Edit <?= $name ?></title>
+	<!-- icon of page -->
+  	<link rel="icon" href="img/favicon.png">
 </head>
   <ul class="sidenav" id="mobile-demo">
  	<li class="sidenav-header standard-bgcolor">
@@ -137,7 +139,7 @@ if(isset($_POST['Save'])) {
     </div> 
   </nav>
   <body class="login_body">
-	<div class="row">
+	<div class="row" id="mobile">
 		<form class="col s12" id="form_full" action="" method="post">
 		<h4 class="standard-color">Bewerk asset</h4>
 			<div class="row">
@@ -148,7 +150,7 @@ if(isset($_POST['Save'])) {
 				</div>
 			</div>
 			<div class="row">
-				<div class="input-field col s6" id="activatiecode ">
+				<div class="input-field col s6" id="activatiecode">
 					<input class="validate" type="text" value="<?=$activatiecode?>" required name="activatiecode">
 	          		<label for="activatiecode ">GPS tracker ID</label>
 	          		<span class="helper-text" data-error="Moet uniek zijn" data-success="correct">activatiecode  van de tracker (IMEI + korte activatie string)</span>
@@ -163,8 +165,7 @@ if(isset($_POST['Save'])) {
 			</div>
 		     <div class="input-group">
 	      		<button id="Sign-up" class="btn waves-effect standard-bgcolor" type="submit" name="Save">Edit</button>
-	    	</div>
-	    	<h2 class="Cancel"><a href="assets.php" class="Sign-up_Cancel standard-color">Cancel</a></h2>
+	    		<h2 class="Cancel"><a href="assets.php" id="edit_Cancel" class="btn waves-effect modal-close">Cancel</a></h2>
 	    	</div>
 		  </form>
 	</div>

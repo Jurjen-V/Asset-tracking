@@ -174,7 +174,10 @@ if(isset($_POST['update'])) {
   	<link type="text/css" rel="stylesheet" href="./css/materialize.min.css"  media="screen,projection"/>
   	<meta charset="UTF-8">
   	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+	<!-- title pagina -->
 	<title>Homepagina van <?= $email?></title>
+	<!-- icon pagina -->
+	<link rel="icon" href="img/favicon.png">
 </head>
 <ul id="dropdown1" class="dropdown-content">
     <li><a title="Add Asset" class="modal-trigger grey-text text-darken-1" href="#modal1"><i class="material-icons">add</i>Voeg asset toe</a></li>

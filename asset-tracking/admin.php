@@ -179,6 +179,8 @@ if(isset($_POST['update'])) {
   	<meta charset="UTF-8">
   	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"/>
 	<title>Home</title>
+	<!-- icon of page -->
+  	<link rel="icon" href="img/favicon.png">
 </head>
 <ul id="dropdown1" class="dropdown-content">
     <li><a title="Add Asset" class="modal-trigger grey-text text-darken-1" href="#modal1"><i class="material-icons">add</i>Voeg gebruiker toe</a></li>

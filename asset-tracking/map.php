@@ -41,6 +41,9 @@ if (isset($_GET['logout'])) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
+  <!-- icon of page -->
+  <link rel="icon" href="img/favicon.png">
+
 </head>
 <body>
   <ul class="sidenav" id="mobile-demo">
@@ -72,8 +75,6 @@ if (isset($_GET['logout'])) {
       <div class="leaflet-top leaflet-right button_box2 leaflet-control standard-bgcolor white-text info_box">
         <h6 class="white-text">Locaties:</h6>
         <blockquote class="blockquote_white btnStyle span3 leaflet-control Button" id="info_box"></blockquote>
-
-
       </div>
     </div>
 <script type="text/javascript" src="js/script.js"></script>

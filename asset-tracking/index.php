@@ -80,6 +80,8 @@ if (isset($_GET['logout'])) {
   <link rel="stylesheet" type="text/css" href="./css/style.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link type="text/css" rel="stylesheet" href="./css/materialize.min.css"  media="screen,projection"/>
+  <!-- icon of page -->
+  <link rel="icon" href="img/favicon.png">
 </head>
 <body>
   <?php if (isset($_SESSION['email'])) : ?>
@@ -110,6 +112,10 @@ if (isset($_GET['logout'])) {
   </nav>
   <?php endif ?>
     <div id='map'>
+      <div class="leaflet-top leaflet-right button_box2 leaflet-control standard-bgcolor white-text info_box">
+        <h6 class="white-text">Locaties:</h6>
+        <blockquote class="blockquote_white btnStyle span3 leaflet-control Button" id="info_box"></blockquote>
+      </div>
       <div class="leaflet-bottom leaflet-right button_box2">
             <button type="button" id="Btn" class="open-button btn waves-effect standard-bgcolor btnStyle span3 leaflet-control Button" onclick="openForm()">Login</button>
       <!-- login form -->

@@ -107,6 +107,17 @@ html, body {
   font-size: 35px;
   text-decoration: underline;
 }
+#edit_Cancel{
+  width: auto;
+  font-size: 25px;
+  text-transform: capitalize;
+  height: 50px;
+  line-height: 50px;
+  position: absolute;
+  left:0px;
+  border-radius: 10px;
+  background-color: #f44336;
+}
 #row_link{
   margin-left:  0;
 }
@@ -234,7 +245,14 @@ html, body {
   .Cancel{
     margin-left: 10px;
   }
-  #e-mail, #password, #name , #GPS_ID, #info{
+  #email, #password, #name , #GPS_ID, #info, #activatiecode{
     width: 100%;
+  }
+  #mobile{
+    background-color: red;
+    margin: 0;
+  }
+  #form_full{
+    top: 10%;
   }
 }
