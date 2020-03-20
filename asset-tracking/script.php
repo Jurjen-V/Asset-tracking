@@ -72,19 +72,19 @@ var array = [
       }
   ?>
 ];
-var popup_data= [
-  <?php
-  $result_users = $database->prepare("SELECT * FROM asset WHERE latitude != '' AND longitude != '' AND  user_ID =". $_SESSION['id']);
-  $result_users->execute();
-  for($i=0; $row = $result_users->fetch(); $i++){
-    $name = $row['name'];
-    $activatiecode =$row['activatiecode']; 
-    echo "'Name: $name <br> activatiecode: $activatiecode',";
-  }
-  ?>
-];
 assets = array.map(s => eval('null,' + s));
 function addlayer() {
+  var popup_data= [
+    <?php
+    $result_users = $database->prepare("SELECT * FROM asset WHERE latitude != '' AND longitude != '' AND  user_ID =". $_SESSION['id']);
+    $result_users->execute();
+    for($i=0; $row = $result_users->fetch(); $i++){
+      $name = $row['name'];
+      $activatiecode =$row['activatiecode']; 
+      echo "'Name: $name <br> activatiecode: $activatiecode',";
+    }
+    ?>
+  ];
   var i;
   layerGroup.clearLayers();
   document.getElementById("info_box").innerHTML = ""; 
