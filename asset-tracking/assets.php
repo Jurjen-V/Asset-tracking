@@ -36,9 +36,9 @@ if(isset($_GET['delete'])){
 if(isset($_POST['submit'])) {
 	$error = 0;
 	$activatiecode = htmlspecialchars($_POST['activatiecode']);
-	$query = "SELECT * FROM asset WHERE activatiecode= :activatiecode AND user_ID !=:user_ID LIMIT 1";
+	$query = "SELECT * FROM asset WHERE activatiecode= :activatiecode LIMIT 1";
 	$stmt = $database->prepare($query);
-	$results = $stmt->execute(array(":activatiecode" => $activatiecode, ":user_ID" => $User_ID));
+	$results = $stmt->execute(array(":activatiecode" => $activatiecode));
 	$asset = $stmt->fetch(PDO::FETCH_ASSOC);
 	if ($asset) { // if user exists
 	    if ($asset['activatiecode'] == $activatiecode) {
