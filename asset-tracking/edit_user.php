@@ -138,24 +138,24 @@ if(isset($_POST['Save'])) {
   </nav>
   <body class="login_body">
 	<div class="row"  id="mobile">
-		<form class="col s12" id="form_full" action="" method="post">
+		<form class="col s6" id="form_full" action="" method="post">
 		<h4 class="standard-color">Bewerk gebruiker</h4>
 			<div class="row">
-				<div class="input-field col s6" id="email">
+				<div class="input-field col s12" id="email">
 					<input class="validate" type="email" value="<?=$email?>" required name="email">
 	          		<label for="E-mail address">E-mail address</label>
 	          		<span class="helper-text" data-error="Veld mag niet leeg zijn" data-success="correct">voorbeeld@voorbeeld.nl</span>
 				</div>
 			</div>
 			<div class="row">
-				<div class="input-field col s6" id="password">
+				<div class="input-field col s12" id="password">
 					<input minlength="10" type="password" class="validate" name="password_1">
 			        <label for="Password">Password</label>
 			        <span class="helper-text" data-error="Wachtwoord is te kort" data-success="correct">10 karakters lang</span>
 				</div>
 			</div>
 			<div class="row">
-				<div class="input-field col s6" id="password">
+				<div class="input-field col s12" id="password">
 					<input minlength="10" type="password" class="validate" name="password_2">
 			        <label for="Password">Password</label>
 			        <span class="helper-text" data-error="Wachtwoord is te kort" data-success="correct">10 karakters lang</span>

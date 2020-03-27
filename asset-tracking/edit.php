@@ -31,6 +31,7 @@ for($i=0; $row = $result_software->fetch(); $i++){
 	$name = $row['name'];
 	$activatiecode = $row['activatiecode'];
 	$info = $row['info'];
+	$seconden = $row['seconden'];
 }	
 if(isset($_POST['Save'])) {
 	$error = 0;
@@ -77,14 +78,21 @@ if(isset($_POST['Save'])) {
 	    $error++;
 	    $errorMessage = "info is leeg";
 	}
+	if(!empty($_POST['seconden'])){
+		$seconden = htmlspecialchars($_POST['seconden']);
+	}else{
+	    $error++;
+	    $errorMessage = "Seconden is leeg";
+	}
     if ($error == 0) {
-	    $query = "UPDATE asset SET name=:name, activatiecode =:activatiecode , info=:info WHERE ID= :ID";
+	    $query = "UPDATE asset SET name=:name, activatiecode =:activatiecode , info=:info, seconden=:seconden WHERE ID= :ID";
 	    $stmt = $database->prepare($query);
 
 	    $stmt->bindValue(":ID", $ID, PDO::PARAM_STR);
 		$stmt->bindValue(":name", $name, PDO::PARAM_STR);
 		$stmt->bindValue(":activatiecode", $activatiecode , PDO::PARAM_STR);
 		$stmt->bindValue(":info", $info, PDO::PARAM_STR);
+		$stmt->bindValue(":seconden", $seconden, PDO::PARAM_STR);
 
 	    try {
 	        $stmt->execute();
@@ -140,27 +148,36 @@ if(isset($_POST['Save'])) {
   </nav>
   <body class="login_body">
 	<div class="row" id="mobile">
-		<form class="col s12" id="form_full" action="" method="post">
+		<form class="col s6" id="form_full" action="" method="post">
 		<h4 class="standard-color">Bewerk asset</h4>
 			<div class="row">
-				<div class="input-field col s6" id="name">
+				<div class="input-field col s12" id="name">
 					<input class="validate" type="text" value="<?=$name?>" required name="name">
 	          		<label for="Name">Asset name</label>
 	          		<span class="helper-text" data-error="Veld mag niet leeg zijn" data-success="correct">Geef de GPS tracker een naam</span>
 				</div>
 			</div>
 			<div class="row">
-				<div class="input-field col s6" id="activatiecode">
+				<div class="input-field col s12" id="activatiecode">
 					<input class="validate" type="text" value="<?=$activatiecode?>" required name="activatiecode">
 	          		<label for="activatiecode ">GPS tracker ID</label>
 	          		<span class="helper-text" data-error="Moet uniek zijn" data-success="correct">activatiecode  van de tracker (IMEI + korte activatie string)</span>
 				</div>
 			</div>
 			<div class="row">
-				<div class="input-field col s6" id="info">
+				<div class="input-field col s12" id="info">
 					<input class="validate" type="text" value="<?=$info?>" required name="info">
 	          		<label for="Info">Other gps info</label>
 	          		<span data-error="Veld mag niet leeg zijn" data-success="correct" class="helper-text">Extra info over de GPS</span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="input-field col s12" id="info">
+					    <p class="range-field">
+					      <input type="range" name="seconden" id="test5" value="<?=$seconden?>" min="30" max="600" />
+					    </p>
+	          		<label for="Info">Aantal seconden tot nieuwe locatie?</label>
+	          		<span data-error="Veld mag niet leeg zijn" data-success="correct" class="helper-text">Getal moet tussen de 30 en 60 seconden zijn.</span>
 				</div>
 			</div>
 		     <div class="input-group">

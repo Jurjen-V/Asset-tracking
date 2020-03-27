@@ -76,10 +76,16 @@ if(isset($_POST['submit'])) {
 	    $error++;
 	    $errorMessage = "Info is leeg";
 	}
+	if(!empty($_POST['seconden'])){
+		$seconden = htmlspecialchars($_POST['seconden']);
+	}else{
+	    $error++;
+	    $errorMessage = "Seconden is leeg";
+	}
 	if ($error == 0) {
-	    $query = "INSERT INTO asset (name, activatiecode, info, user_ID) VALUES (?,?,?,?)";
+	    $query = "INSERT INTO asset (name, activatiecode, info, user_ID, seconden) VALUES (?,?,?,?,?)";
 	    $insert = $database->prepare($query);
-	    $data = array("$name", "$activatiecode", "$info" ,"$User_ID");
+	    $data = array("$name", "$activatiecode", "$info" ,"$User_ID", "$seconden");
 
 	    try {
 	        $insert->execute($data);
@@ -133,13 +139,13 @@ if(isset($_POST['update'])) {
 	}
 	if(strlen($password_1) < 10 || strlen($password_2) < 10){
       $error++;
-      $errorMSG= "Password needs to me longer than 10 characters.";
+      $errorMessage= "Password needs to me longer than 10 characters.";
     }
     if($password_1 == $password_2){
       $password_3 = $password_3 = password_hash($password_1, PASSWORD_DEFAULT);
     }else{
       $error++;
-      $errorMSG= "Password needs to be the same";
+      $errorMessage= "Password needs to be the same";
     }
 	if ($error == 0) {
 	    $query = "UPDATE user SET email=:email, password=:password_3 WHERE ID =:ID";
@@ -229,6 +235,7 @@ if(isset($_POST['update'])) {
 			          <th>Asset name</th>
 			          <th>activatiecode</th>
 			          <th>Info</th>
+			          <th>Seconden</th>			
 			          <th>Actions</th>
 			        </tr>
 		        </thead>";
@@ -242,6 +249,7 @@ if(isset($_POST['update'])) {
 	    echo "<td>" . $row['name'] . "</td>";
 	    echo "<td>" . $row['activatiecode'] . "</td>";
 	   	echo "<td>" . $row['info'] . "</td>";
+	   	echo "<td>" . $row['seconden'] . "</td>";
 	    echo "
    			<td>
    			<a title='Route' class='link btn-floating  btn standard-bgcolor' href=route.php?ID=". $id."><i class='material-icons'>visibility</i></a>
@@ -263,24 +271,28 @@ if(isset($_POST['update'])) {
 	          		<label for="Name">Asset name</label>
 	          		<span class="helper-text" data-error="Veld mag niet leeg zijn" data-success="correct">Geef de GPS tracker een naam</span>
 				</div>
-			<div class="row">
 				<div class="input-field col s12" id="activatiecode">
 					<input class="validate" type="text" required name="activatiecode">
 	          		<label for="activatiecode">Activatiecode</label>
 	          		<span class="helper-text" data-error="Moet uniek zijn" data-success="correct">Activatiecode van de tracker (IMEI + korte activatie string)</span>
 				</div>
-			</div>
-			<div class="row">
 				<div class="input-field col s12" id="info">
 					<input class="validate" type="text" required name="info">
 	          		<label for="Info">Other gps info</label>
 	          		<span data-error="Veld mag niet leeg zijn" data-success="correct" class="helper-text">Extra info over de GPS</span>
 				</div>
+				<div class="input-field col s12" id="seconden">
+					<p class="range-field">
+						<input type="range" name="seconden" required id="test5" value="60" min="30" max="600" />
+					</p>
+					<label for="Info">Aantal seconden tot nieuwe locatie?</label>
+	          		<span data-error="Veld mag niet leeg zijn" data-success="correct" class="helper-text">Aantal seconden tot nieuwe locatie?.</span>
+				</div>
+			     <div class="input-group">
+		      		<button id="submit" class="btn waves-effect standard-bgcolor" type="submit" name="submit">Add</button>
+		      		<button id="Cancel_add" type="button" class="btn waves-effect  modal-close" >Cancel</button>
+		    	</div>
 			</div>
-		     <div class="input-group">
-	      		<button id="submit" class="btn waves-effect standard-bgcolor" type="submit" name="submit">Add</button>
-	    	</div>
-	      		<button id="Cancel_add" type="button" class="btn waves-effect  modal-close" >Cancel</button>
 	    	</div>
 		  </form>
 		</div>
@@ -309,11 +321,11 @@ if(isset($_POST['update'])) {
 	        		<label for="Password">Confrim password</label>
 	        		<span class="helper-text" data-error="Wachtwoord is te kort" data-success="correct">10 karakters lang</span>
 				</div>
+			     <div class="input-group">
+		      		<button id="submit" class="btn waves-effect standard-bgcolor" type="submit" name="update">Update</button>
+		      		<button id="Cancel_add" type="button" class="btn waves-effect  modal-close">Cancel</button>
+		    	</div>
 			</div>
-		     <div class="input-group">
-	      		<button id="submit" class="btn waves-effect standard-bgcolor" type="submit" name="update">Update</button>
-	    	</div>
-	      		<button id="Cancel_add" type="button" class="btn waves-effect  modal-close">Cancel</button>
 	    	</div>
 		  </form>
 		</div>

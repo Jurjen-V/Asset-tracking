@@ -53,7 +53,7 @@ if(isset($_GET['delete']) || isset($_GET['TS'])){
 $result_name = $database->prepare("SELECT asset.ID, point.ASSET_ID, asset.name, CAST(point.TS AS DATE), asset.activatiecode, asset.info, (SELECT ST_X(latlong)) AS LAT, (SELECT ST_y(latlong)) AS LON FROM asset INNER JOIN point on asset.ID = point.ASSET_ID WHERE point.ASSET_ID=".$_GET['ID']." GROUP BY CAST(TS AS DATE)");
 $result_name->execute();
 $result = $result_name->fetch(PDO::FETCH_ASSOC);
-$assetName = $result['name'];
+$assetName= "";
 if(!$result){
 	$errorMessage = "Geen afgelegde routes gevonden";
 	?>
@@ -61,6 +61,8 @@ if(!$result){
 	   	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
 	    <strong>Let op!</strong> <?php echo $errorMessage ?>
 	</div><?php
+}else{
+	$assetName = $result['name'];
 }
 
 ?>
