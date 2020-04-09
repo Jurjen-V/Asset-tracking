@@ -1,21 +1,29 @@
 <?php
+// start session
 session_start();
+// if there is no session or level is 1 redirect user to login page
 if (empty($_SESSION['email']) || $_SESSION['level'] == 1) {
 	$_SESSION['msg'] = "You must log in first";
     header('location: index.php');
 }
+// if session level is 1 redirect user to admin page
 if ($_SESSION['level'] == 1) {
 	$_SESSION['msg'] = "You belong at the admin page";
     header('location: admin.php');
 }
+// if logout is pressed
 if (isset($_GET['logout'])) {
+	// destroy session
 	session_destroy();
     unset($_SESSION['email']);
+    // redirect to login page
     header("location: index.php");
 }
+// set user id 
 $User_ID= $_SESSION['id'];
+// include db file
 include_once 'db.php';
-
+// request basic info from user.
 $result_users = $database->prepare("SELECT * FROM user WHERE ID = ".$User_ID);
 $result_users->execute();
 for($i=0; $row = $result_users->fetch(); $i++){
@@ -28,8 +36,41 @@ if(isset($_GET['delete'])){
     $query = "DELETE FROM asset WHERE ID={$_GET['delete']}";
     $insert = $database->prepare($query);
     $insert->execute();
+
+    // delete from json file
+    //get all your data on file
+	$string = file_get_contents("json/GPS-tracker.json");
+	if ($string === false) {
+		// deal with error...
+	}
+
+	$json_a = json_decode($string, true);
+
+	if ($json_a === null) {
+		// deal with error...
+	}
+	// get array index to delete
+	$arr_index = array();
+	foreach ($json_a as $GPS => $GPS_data) {
+	    if ($json_a[$GPS]['ID'] == $_GET['delete']) {
+	        $arr_index[] = $GPS;
+	    }
+	}
+
+	// delete data
+	foreach ($arr_index as $i) {
+	    unset($json_a[$i]);
+	}
+
+	// rebase array
+	$json_a = array_values($json_a);
+
+	// encode array to json and save to file
+	file_put_contents('json/GPS-tracker.json', json_encode($json_a, JSON_PRETTY_PRINT));
+
     ?>
-    	<script>window.location.href = "assets.php";</script>
+    	<script>
+    	// window.location.href = "assets.php";</script>
     <?php
 }
 // if add asset is pressed
@@ -57,32 +98,33 @@ if(isset($_POST['submit'])) {
 	        $errorMessage= "That name is already used";
 	    }
 	}	
-	if (!empty($_POST['name'])){
+	if (!empty($_POST['name'])){ //if asset name is not empty
 	    $name = htmlspecialchars($_POST['name']);
 	}else{
 	    $error++;
 	    $errorMessage = "Naam is leeg";
 	}
-	if (!empty($_POST['activatiecode'])){
+	if (!empty($_POST['activatiecode'])){ // if activatiecode is not empty
 	    $activatiecode = htmlspecialchars($_POST['activatiecode']);
 	}else{
 	    $error++;
 	    $errorMessage = "Activatiecode is empty";
 	}
-	if (!empty($_POST['info'])){
+	if (!empty($_POST['info'])){ //if info is not empty
 	    $info = htmlspecialchars($_POST['info']);
 
 	}else{
 	    $error++;
 	    $errorMessage = "Info is leeg";
 	}
-	if(!empty($_POST['seconden'])){
+	if(!empty($_POST['seconden'])){ //if seconden is not empty
 		$seconden = htmlspecialchars($_POST['seconden']);
 	}else{
 	    $error++;
 	    $errorMessage = "Seconden is leeg";
 	}
-	if ($error == 0) {
+	if ($error == 0) { //if error is 0 proceed
+		// insert asset into database
 	    $query = "INSERT INTO asset (name, activatiecode, info, user_ID, seconden) VALUES (?,?,?,?,?)";
 	    $insert = $database->prepare($query);
 	    $data = array("$name", "$activatiecode", "$info" ,"$User_ID", "$seconden");
@@ -93,8 +135,42 @@ if(isset($_POST['submit'])) {
 	    catch (PDOException $e) {
 	        echo $e->getMessage();
 	    }
+
+	 //    // add asset to api
+		// $ch = curl_init();
+
+		// curl_setopt($ch, CURLOPT_URL,"http://www.example.com/tester.phtml");
+		// curl_setopt($ch, CURLOPT_POST, 1);
+
+		// // In real life you should use something like:
+		// curl_setopt($ch, CURLOPT_POSTFIELDS, 
+		//          http_build_query(array('name' => '$name', 'activatiecode' => '$activatiecode', 'info' => '$info', 'user_ID' => '$User_ID', 'seconden' => '$seconden')));
+
+		// Receive server response ...
+		// curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+		// $server_output = curl_exec($ch);
+
+		// curl_close ($ch);
+
+		// Further processing ...
+		// if ($server_output == "OK") {
+		// }
+
+		// get the id of the gps 
+		$last_id = $database->lastInsertId();
+
+		// add data to local json file for testing
+		$temp_array = array();
+	    $temp_array = json_decode(file_get_contents('json/GPS-tracker.json'));
+	    $upload_info = array("ID" => "$last_id" ,"name" => "$name", "activatiecode" => "$activatiecode", "info" => "$info" , "user_ID" => "$User_ID", "seconden" => "$seconden");
+	    array_push($temp_array, $upload_info);
+	    file_put_contents('json/GPS-tracker.json', json_encode($temp_array, JSON_PRETTY_PRINT));
+
 	    header('location: assets.php');	
+
 	}else{?>
+		<!-- else show error message -->
 	   	<div class="alert">
 	        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
 	        <strong>Let op!</strong> <?php echo $errorMessage ?>
@@ -115,7 +191,7 @@ if(isset($_POST['update'])) {
 	        $errorMessage= "User already excist";
 	    }
 	}	
-
+	// if email is empty
 	if (!empty($_POST['email'])){
 	    $email = htmlspecialchars($_POST['email']);
 
@@ -123,6 +199,7 @@ if(isset($_POST['update'])) {
 	    $error++;
 	    $errorMessage = "E-mail is leeg";
 	}
+	// if password_1 is empty
 	if (!empty($_POST['password_1'])){
 	    $password_1 = htmlspecialchars($_POST['password_1']);
 
@@ -130,6 +207,7 @@ if(isset($_POST['update'])) {
 	    $error++;
 	    $errorMessage = "Password is empty";
 	}
+	// if password_2 is empty
 	if (!empty($_POST['password_2'])){
 	    $password_2 = htmlspecialchars($_POST['password_2']);
 
@@ -137,17 +215,21 @@ if(isset($_POST['update'])) {
 	    $error++;
 	    $errorMessage = "Please confirm the password";
 	}
+	// if password_1 and password_2 is not 10 characters
 	if(strlen($password_1) < 10 || strlen($password_2) < 10){
       $error++;
       $errorMessage= "Password needs to me longer than 10 characters.";
     }
+    // if password_1 and password_2 are the same
     if($password_1 == $password_2){
       $password_3 = $password_3 = password_hash($password_1, PASSWORD_DEFAULT);
     }else{
       $error++;
       $errorMessage= "Password needs to be the same";
     }
+    // if there are no errors proceed
 	if ($error == 0) {
+		// update user data
 	    $query = "UPDATE user SET email=:email, password=:password_3 WHERE ID =:ID";
 	    
 	   	$stmt = $database->prepare($query);
@@ -165,11 +247,32 @@ if(isset($_POST['update'])) {
 	    header('location: assets.php');
 
 	}else{?>
+		<!-- else show error message -->
 	   	<div class="alert">
 	        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
 	        <strong>Let op!</strong> <?php echo $errorMessage ?>
 	    </div><?php
 	}
+}
+// test json file as api
+$string = file_get_contents("json/GPS-tracker.json");
+if ($string === false) {
+    // deal with error...
+}
+
+$json_a = json_decode($string, true);
+
+if ($json_a === null) {
+    // deal with error...
+}
+$array_length = count($json_a);
+for ($i=0; $i < $array_length; $i++) { 
+	echo $json_a[$i]["ID"];
+    echo $json_a[$i]["name"];
+    echo $json_a[$i]['activatiecode'];
+    echo $json_a[$i]["info"];
+    echo $json_a[$i]['user_ID'];
+    echo $json_a[$i]["seconden"] ."<br>";
 }
 ?>
 <!DOCTYPE html>
@@ -185,10 +288,14 @@ if(isset($_POST['update'])) {
 	<!-- icon pagina -->
 	<link rel="icon" href="img/favicon.png">
 </head>
+<body>
+<header>
+<!-- dropdown for desktop nav -->
 <ul id="dropdown1" class="dropdown-content">
     <li><a title="Add Asset" class="modal-trigger grey-text text-darken-1" href="#modal1"><i class="material-icons">add</i>Voeg asset toe</a></li>
     <li><a title="Edit profile" class="modal-trigger grey-text text-darken-1" href="#modal2"><i class="material-icons left ">person</i>Edit profile</a></li>
 </ul>
+<!-- sidenav mobile -->
  <ul class="sidenav" id="mobile-demo">
  	<li class="sidenav-header standard-bgcolor ">
         <div class="row">
@@ -213,6 +320,7 @@ if(isset($_POST['update'])) {
 	<li><a class="nav" title="Map" href="index.php"><i class="material-icons">map</i>Kaart</a></li>
     <li><a class="nav" title="Uitloggen" href="?logout=1"><i class="material-icons left">exit_to_app</i>Uitloggen</a></li>  	
   </ul>
+  <!-- nav desktop -->
   <nav>
     <div class="nav-wrapper standard-bgcolor">
     	<a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
@@ -226,26 +334,31 @@ if(isset($_POST['update'])) {
       </ul>
     </div> 
   </nav>
-<body>
+</header>
+<main>
+
 	<?php
+	// table to show all assets of user
 	echo "
-	      <table class='Assets responsive-table centered highlight'>
-		      <thead>
-			        <tr>
-			          <th>Asset name</th>
-			          <th>activatiecode</th>
-			          <th>Info</th>
-			          <th>Seconden</th>			
-			          <th>Actions</th>
-			        </tr>
-		        </thead>";
+		<table class='Assets responsive-table centered highlight'>
+		    <thead>
+			    <tr>
+			    	<th>Asset name</th>
+			    	<th>activatiecode</th>
+			        <th>Info</th>
+			        <th>Seconden</th>			
+			        <th>Actions</th>
+			    </tr>
+		    </thead>";
+	//select statement to get users assets  
 	$result_assets = $database->prepare("SELECT * FROM asset WHERE user_ID=".$User_ID);
 
-	  $result_assets->execute();
-	  for($i=0; $row = $result_assets->fetch(); $i++){
+	$result_assets->execute();
+	// loop database results
+	for($i=0; $row = $result_assets->fetch(); $i++){
 	    $id = $row['ID'];
-	    // echo "<tbdoy>";
-	    echo "<tr>";
+	    // the TR row is clickable it will redirect to view asset routes page.	    
+	    echo "<tr class='clickable-row' data-href='route.php?ID=". $id. "'>";
 	    echo "<td>" . $row['name'] . "</td>";
 	    echo "<td>" . $row['activatiecode'] . "</td>";
 	   	echo "<td>" . $row['info'] . "</td>";
@@ -256,9 +369,8 @@ if(isset($_POST['update'])) {
 			<a title='Edit' class='link btn-floating  btn standard-bgcolor' href=edit.php?ID=". $id."><i class='material-icons'>edit</i></a>
    			<a title='Delete' onclick=\"return confirm('Delete This item?')\" class='link btn-floating btn standard-bgcolor'href='?delete=". $id ."'><i class='material-icons'>delete</i></a>
 			</td>";
-		// echo "</tbody>";
 	    ?>
-	<?php } ?>
+	<?php }  ?>
 
 	<!-- add asset form -->
 	<div id="modal1" class="modal add_assets modal2">
@@ -297,40 +409,14 @@ if(isset($_POST['update'])) {
 		  </form>
 		</div>
 	</div>
-		<!-- Update profile form -->
-	<div id="modal2" class="modal add_assets modal2">
-	  <div class="modal-content">
-	  	<h4 class="standard-color">Update account</h4>
-		  <form class="col s12 animate" action="" method="post">
-		   	<div class="row">
-				<div class="input-field col s12" id="name">
-					<input value="<?=$email?>" class="validate" type="email" required name="email">
-	          		<label for="Name">E-mail Address</label>
-	          		<span class="helper-text" data-error="Geen correct e-mailadres" data-success="correct">voorbeeld@voorbeeld.nl</span>
-				</div>
-			<div class="row">
-				<div class="input-field col s12" id="password">
-					<input minlength="10" required type="password" class="validate" name="password_1">
-			        <label for="Password">Password</label>
-			        <span class="helper-text" data-error="Wachtwoord is te kort" data-success="correct">10 karakters lang</span>
-				</div>
-			</div>
-			<div class="row">
-				<div class="input-field col s12" id="password">
-					<input minlength="10" required type="password" class="validate" name="password_2">
-	        		<label for="Password">Confrim password</label>
-	        		<span class="helper-text" data-error="Wachtwoord is te kort" data-success="correct">10 karakters lang</span>
-				</div>
-			     <div class="input-group">
-		      		<button id="submit" class="btn waves-effect standard-bgcolor" type="submit" name="update">Update</button>
-		      		<button id="Cancel_add" type="button" class="btn waves-effect  modal-close">Cancel</button>
-		    	</div>
-			</div>
-	    	</div>
-		  </form>
-		</div>
-	</div>
+</main>
+<?php 
+include('objects/update-profile.php');
+// styling van footer moet nog beter
+//include('objects/footer.php'); 
+?>
 </body>
+<!-- script links -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script type="text/javascript" src="js/materialize.min.js"></script>
 <script type="text/javascript" src="js/script.js"></script>

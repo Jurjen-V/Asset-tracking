@@ -100,6 +100,31 @@ if(isset($_POST['Save'])) {
 	    catch (PDOException $e) {
 	        echo $e->getMessage();
 	    }
+
+
+	    // test edit json file
+		$string = file_get_contents("json/GPS-tracker.json");
+		if ($string === false) {
+		    // deal with error...
+		}
+
+		$json_a = json_decode($string, true);
+
+		if ($json_a === null) {
+		    // deal with error...
+		}
+		foreach ($json_a as $GPS => $GPS_data) {
+			$array_length = count($GPS_data);
+			if ($json_a[$GPS]['ID'] == $ID) {
+			    $json_a[$GPS]["name"] = $name; 
+			    $json_a[$GPS]["activatiecode"] = $activatiecode;
+			    $json_a[$GPS]["info"] = $info;
+			    $json_a[$GPS]["seconden"] = $seconden;
+			}
+		}
+		$newJsonString = json_encode($json_a, JSON_PRETTY_PRINT);
+		file_put_contents('json/GPS-tracker.json', $newJsonString);
+
 	    header('location: assets.php');	
 	}else{?>
 	   	<div class="alert">
@@ -186,6 +211,7 @@ if(isset($_POST['Save'])) {
 	    	</div>
 		  </form>
 	</div>
+	<?php include('objects/footer.php'); ?>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script type="text/javascript" src="js/materialize.min.js"></script>

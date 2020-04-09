@@ -89,7 +89,7 @@ if (isset($_GET['logout'])) {
   <li class="sidenav-header standard-bgcolor">
           <div class="row">
             <div class="col s4">
-                <h4 class="white-text">Asset tracking</h4>
+                <h4 class="white-text">Asset-tracking</h4>
             </div>
           </div>
         </li>
@@ -99,7 +99,7 @@ if (isset($_GET['logout'])) {
   </ul>
   <nav>
     <div class="nav-wrapper standard-bgcolor">
-      <a href="#" class="brand-logo center">Asset Tracking</a>
+      <a href="#" class="brand-logo center">Asset-Tracking</a>
       <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
       <ul id="nav-mobile" class="left hide-on-med-and-down">
         <li><a title="Home" class="modal-trigger" href="assets.php"><i class="material-icons left">home</i>Home</a></li>

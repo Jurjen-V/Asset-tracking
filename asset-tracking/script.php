@@ -126,7 +126,7 @@ function addlayer() {
   }
 }
 addlayer();
-setInterval(addlayer, 60000)
+setInterval(addlayer, 60000);
 <?php endif ?>
 // functie om afgelde route te tekenen
 function onLocationFound(e) {

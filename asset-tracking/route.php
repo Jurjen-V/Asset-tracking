@@ -151,6 +151,7 @@ if(!$result){
 			</td>";	
 	    ?>
 	<?php } ?>
+	<?php include('objects/footer.php'); ?>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script type="text/javascript" src="js/materialize.min.js"></script>

@@ -95,24 +95,24 @@ include_once 'db.php';
   </nav>
 <body class="login_body">
 	<div class="row">
-	<form class="col s12" id="form_full" action="" method="post">
+	<form class="col s6" id="form_full" action="" method="post">
     <h4 class="standard-color">Maak account</h4>
 		<div class="row">
-			<div class="input-field col s6" id="e-mail">
+			<div class="input-field col s12" id="e-mail">
 				<input class="validate" type="email" required name="email">
         <label for="E-mail">E-mail address</label>
         <span class="helper-text" data-error="Geen correct e-mailadres" data-success="correct">voorbeeld@voorbeeld.nl</span>
 			</div>
 		</div>
 		<div class="row">
-			<div class="input-field col s6" id="password">
+			<div class="input-field col s12" id="password">
 				<input minlength="10" required type="password" class="validate" name="password_1">
         <label for="Password">Password</label>
         <span class="helper-text" data-error="Wachtwoord is te kort" data-success="correct">10 karakters lang</span>
 			</div>
 		</div>
 		<div class="row">
-			<div class="input-field col s6" id="password">
+			<div class="input-field col s12" id="password">
 				<input minlength="10" required type="password" class="validate" name="password_2">
         <label for="Password">Confirm password</label>
         <span class="helper-text" data-error="Wachtwoord is te kort" data-success="correct">10 karakters lang</span>
@@ -126,6 +126,7 @@ include_once 'db.php';
     </div>
 	</form>
 	</div>
+  <?php include('objects/footer.php'); ?>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script type="text/javascript" src="js/materialize.min.js"></script>

@@ -1,0 +1,66 @@
+[
+    {
+        "ID": "1",
+        "name": "test-GPS1",
+        "activatiecode": "activatiecode1",
+        "info": "info1",
+        "user_ID": "1",
+        "seconden": "60"
+    },
+    {
+        "ID": "2",
+        "name": "Test-GPS2",
+        "activatiecode": "activatiecode2",
+        "info": "info2",
+        "user_ID": "2",
+        "seconden": "60"
+    },
+    {
+        "ID": "3",
+        "name": "GPS-8",
+        "activatiecode": "Activatiecode3",
+        "info": "Info3",
+        "user_ID": "8",
+        "seconden": "146"
+    },
+    {
+        "ID": "4",
+        "name": "Test-GPS 10",
+        "activatiecode": "Activatiecode4",
+        "info": "Info4",
+        "user_ID": "8",
+        "seconden": "60"
+    },
+    {
+        "ID": "5",
+        "name": "Test-GPS 11",
+        "activatiecode": "Activatiecode5",
+        "info": "Info5",
+        "user_ID": "8",
+        "seconden": "60"
+    },
+    {
+        "ID": "6",
+        "name": "Test-GPS 12",
+        "activatiecode": "Activatiecode6",
+        "info": "Info6",
+        "user_ID": "8",
+        "seconden": "60"
+    },
+    {
+        "ID": "7",
+        "name": "Test-GPS 15",
+        "activatiecode": "Activatiecode9",
+        "info": "Info9",
+        "user_ID": "8",
+        "seconden": "60"
+    },
+    {
+        "ID": "182",
+        "name": "Test-GPS 23",
+        "activatiecode": "Activatiecode14",
+        "info": "info14",
+        "user_ID": "8",
+        "seconden": "60"
+    }
+]
