@@ -70,7 +70,7 @@ if(isset($_GET['delete'])){
 
     ?>
     	<script>
-    	// window.location.href = "assets.php";</script>
+    	window.location.href = "assets.php";</script>
     <?php
 }
 // if add asset is pressed
@@ -358,7 +358,7 @@ for ($i=0; $i < $array_length; $i++) {
 	for($i=0; $row = $result_assets->fetch(); $i++){
 	    $id = $row['ID'];
 	    // the TR row is clickable it will redirect to view asset routes page.	    
-	    echo "<tr class='clickable-row' data-href='route.php?ID=". $id. "'>";
+	    echo "<tr data-href='route.php?ID=". $id. "'>";
 	    echo "<td>" . $row['name'] . "</td>";
 	    echo "<td>" . $row['activatiecode'] . "</td>";
 	   	echo "<td>" . $row['info'] . "</td>";
@@ -379,17 +379,17 @@ for ($i=0; $i < $array_length; $i++) {
 		  <form class="col s12 animate" action="" method="post">
 		   	<div class="row">
 				<div class="input-field col s12" id="name">
-					<input class="validate" type="text" required name="name">
+					<input id="Name" class="validate" type="text" required name="name">
 	          		<label for="Name">Asset name</label>
 	          		<span class="helper-text" data-error="Veld mag niet leeg zijn" data-success="correct">Geef de GPS tracker een naam</span>
 				</div>
 				<div class="input-field col s12" id="activatiecode">
-					<input class="validate" type="text" required name="activatiecode">
-	          		<label for="activatiecode">Activatiecode</label>
+					<input id="Activatiecode" class="validate" type="text" required name="activatiecode">
+	          		<label for="Activatiecode">Activatiecode</label>
 	          		<span class="helper-text" data-error="Moet uniek zijn" data-success="correct">Activatiecode van de tracker (IMEI + korte activatie string)</span>
 				</div>
 				<div class="input-field col s12" id="info">
-					<input class="validate" type="text" required name="info">
+					<input id="Info" class="validate" type="text" required name="info">
 	          		<label for="Info">Other gps info</label>
 	          		<span data-error="Veld mag niet leeg zijn" data-success="correct" class="helper-text">Extra info over de GPS</span>
 				</div>
@@ -397,7 +397,6 @@ for ($i=0; $i < $array_length; $i++) {
 					<p class="range-field">
 						<input type="range" name="seconden" required id="test5" value="60" min="30" max="600" />
 					</p>
-					<label for="Info">Aantal seconden tot nieuwe locatie?</label>
 	          		<span data-error="Veld mag niet leeg zijn" data-success="correct" class="helper-text">Aantal seconden tot nieuwe locatie?.</span>
 				</div>
 			     <div class="input-group">

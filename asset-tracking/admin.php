@@ -70,13 +70,13 @@ if(isset($_POST['submit'])) {
 	}
 	if(strlen($password_1) < 10 || strlen($password_2) < 10){ //check if passwords are longer than 10 
       $error++;
-      $errorMSG= "Password needs to me longer than 10 characters.";
+      $errorMessage= "Password needs to me longer than 10 characters.";
     }
     if($password_1 == $password_2){ //check if passwords are the same
       $password_3 = $password_3 = password_hash($password_1, PASSWORD_DEFAULT);
     }else{
       $error++;
-      $errorMSG= "Password needs to be the same";
+      $errorMessage= "Password needs to be the same";
     }
     if(!empty($_POST['level'])){ //check if the level is empty
     	$level = htmlspecialchars($_POST['level']);
@@ -251,7 +251,7 @@ if(isset($_POST['update'])) {
 	  for($i=0; $row = $result_assets->fetch(); $i++){
 	    $id = $row['ID'];
 	    // the TR row is clickable it will redirect to edit user page.
-	   	echo "<tr class='clickable-row' data-href='edit_user.php?ID=". $id. "'>";
+	   	echo "<tr data-href='edit_user.php?ID=". $id. "'>";
 	    echo "<td>" . $row['email'] . "</td>";
 	    echo "<td>" . $row['GPScount'] ."</td>";
 	    echo "<td>" . $row['level'] . "</td>";
@@ -271,11 +271,11 @@ if(isset($_POST['update'])) {
 				<div class="input-field col s12" id="email">
 					<input class="validate" type="email" required name="email">
 	          		<label for="e-mailadres">E-mailaddress</label>
-	          		<span class="helper-text" data-error="Veld mag niet leeg zijn" data-success="correct">voorbeeld@voorbeeld.nl</span>
+	          		<span class="helper-text" data-error="Geen correct e-mailadres" data-success="correct">voorbeeld@voorbeeld.nl</span>
 				</div>
 			<div class="row">
 				<div class="input-field col s12" id="password">
-					<input class="validate" type="password" required name="password_1">
+					<input minlength="10" required class="validate" type="password" name="password_1">
 			        <label for="Password">Password</label>
 			        <span class="helper-text" data-error="Wachtwoord is te kort" data-success="correct">10 karakters lang</span>
 				</div>

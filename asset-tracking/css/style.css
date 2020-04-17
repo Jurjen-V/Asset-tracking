@@ -303,3 +303,18 @@ html, body {
     font-size: 24px !important;
   }
 }
+.fas, .fab {
+  padding: 20px;
+  font-size: 30px;
+  width: 70px;
+  text-align: center;
+  text-decoration: none;
+  margin: 5px 2px;
+  border-radius: 50%;
+  background: #015e56;
+  color: white;
+}
+
+.fas:hover, .fab:hover {
+    opacity: 0.7;
+}

@@ -60,16 +60,16 @@ if(isset($_POST['Save'])) {
 
 	}else{
 	}
-	if(empty($password)){
+	if(!empty($_POST['password_1']) && !empty($_POST['password_2'])){
 		if(strlen($password_1) < 10 || strlen($password_2) < 10){
 	      $error++;
-	      $errorMSG= "Password needs to me longer than 10 characters.";
+	      $errorMessage= "Password needs to me longer than 10 characters.";
 	    }
 	    if($password_1 == $password_2){
 	      $password = $password = password_hash($password_1, PASSWORD_DEFAULT);
 	    }else{
 	      $error++;
-	      $errorMSG= "Password needs to be the same";
+	      $errorMessage= "Password needs to be the same";
 	    }
 	}
     if(!empty($_POST['level'])){

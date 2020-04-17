@@ -139,6 +139,7 @@ if(isset($_POST['Save'])) {
 <head>
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  	<script src='https://kit.fontawesome.com/a076d05399.js'></script>
 	<link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -201,8 +202,7 @@ if(isset($_POST['Save'])) {
 					    <p class="range-field">
 					      <input type="range" name="seconden" id="test5" value="<?=$seconden?>" min="30" max="600" />
 					    </p>
-	          		<label for="Info">Aantal seconden tot nieuwe locatie?</label>
-	          		<span data-error="Veld mag niet leeg zijn" data-success="correct" class="helper-text">Getal moet tussen de 30 en 60 seconden zijn.</span>
+	          		<span data-error="Veld mag niet leeg zijn" data-success="correct" class="helper-text">Aantal seconden tot nieuwe locatie?..</span>
 				</div>
 			</div>
 		     <div class="input-group">

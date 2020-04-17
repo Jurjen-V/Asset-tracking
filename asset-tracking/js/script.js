@@ -20,9 +20,3 @@ document.addEventListener('DOMContentLoaded', function() {
     var collapsibles = document.querySelectorAll('.collapsible');
     var collapsible = M.Collapsible.init(collapsibles);
   });
-// make table row link to route overview page
-jQuery(document).ready(function($) {
-    $(".clickable-row").click(function() {
-        window.location = $(this).data("href");
-    });
-});
