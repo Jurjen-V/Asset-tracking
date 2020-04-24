@@ -248,20 +248,32 @@ if(isset($_POST['update'])) {
 	$result_assets = $database->prepare("SELECT user.ID, user.email, user.level, (SELECT COUNT(*) FROM asset WHERE asset.user_ID = user.ID) as GPScount FROM user");
 
 	  $result_assets->execute();
+	  echo "<tbody>";
 	  for($i=0; $row = $result_assets->fetch(); $i++){
 	    $id = $row['ID'];
+	    if($row['level'] == 0 ){
+	    	$level = "Gebruiker";
+	    }elseif($row['level'] == 1){
+	    	$level = "Admin";
+	    }else{
+	    	$level = $row['level'];
+	    }
 	    // the TR row is clickable it will redirect to edit user page.
 	   	echo "<tr data-href='edit_user.php?ID=". $id. "'>";
 	    echo "<td>" . $row['email'] . "</td>";
 	    echo "<td>" . $row['GPScount'] ."</td>";
-	    echo "<td>" . $row['level'] . "</td>";
+	    echo "<td>" . $level . "</td>";
 	    echo "
    			<td>
 			<a title='Edit' class='link btn-floating  btn standard-bgcolor' href=edit_user.php?ID=". $id."><i class='material-icons'>edit</i></a>
    			<a title='Delete' onclick=\"return confirm('Delete This item?')\" class='link btn-floating btn standard-bgcolor'href='?delete=". $id ."'><i class='material-icons'>delete</i></a>
 			</td>";
+		echo "</tr>";
 	    ?>
-	<?php } ?>
+	<?php }
+		echo "</tbody>";
+		echo "</table>"; 
+	?>
 	<!-- add user modal form -->
 	<div id="modal1" class="modal add_assets modal2">
 	  <div class="modal-content">
@@ -306,8 +318,9 @@ if(isset($_POST['update'])) {
 		</div>
 	</div>
 	<?php 
+	// include update profile modal and footer
 	include('objects/update-profile.php');
-	//include('objects/footer.php');
+	include('objects/footer.php');
 	?>
 </body>
 <!-- script links -->

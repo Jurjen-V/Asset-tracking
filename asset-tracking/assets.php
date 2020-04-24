@@ -1,4 +1,4 @@
-<?php
+ <?php
 // start session
 session_start();
 // if there is no session or level is 1 redirect user to login page
@@ -355,9 +355,11 @@ for ($i=0; $i < $array_length; $i++) {
 
 	$result_assets->execute();
 	// loop database results
+	echo "<tbody>";
 	for($i=0; $row = $result_assets->fetch(); $i++){
 	    $id = $row['ID'];
 	    // the TR row is clickable it will redirect to view asset routes page.	    
+
 	    echo "<tr data-href='route.php?ID=". $id. "'>";
 	    echo "<td>" . $row['name'] . "</td>";
 	    echo "<td>" . $row['activatiecode'] . "</td>";
@@ -369,8 +371,12 @@ for ($i=0; $i < $array_length; $i++) {
 			<a title='Edit' class='link btn-floating  btn standard-bgcolor' href=edit.php?ID=". $id."><i class='material-icons'>edit</i></a>
    			<a title='Delete' onclick=\"return confirm('Delete This item?')\" class='link btn-floating btn standard-bgcolor'href='?delete=". $id ."'><i class='material-icons'>delete</i></a>
 			</td>";
+			echo "</tr>";
 	    ?>
-	<?php }  ?>
+	<?php }
+		echo "</tbody>";
+		echo "</table>";
+	  ?>
 
 	<!-- add asset form -->
 	<div id="modal1" class="modal add_assets modal2">
@@ -410,9 +416,9 @@ for ($i=0; $i < $array_length; $i++) {
 	</div>
 </main>
 <?php 
+// include update profile modal and footer
 include('objects/update-profile.php');
-// styling van footer moet nog beter
-//include('objects/footer.php'); 
+// include('objects/footer.php'); 
 ?>
 </body>
 <!-- script links -->

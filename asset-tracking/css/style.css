@@ -33,13 +33,21 @@ input[type=range] + .thumb.active .value {
 .nav{
   padding-left: 16px !important;
 }
+/*zorgt er voor dat input werkt op ios devices*/
+input, input:before, input:after {
+  -webkit-user-select: initial;
+  -khtml-user-select: initial;
+  -moz-user-select: initial;
+  -ms-user-select: initial;
+  user-select: initial;
+}
 /*footer of page*/
 .page-footer {
   background-color: #1c9cda !important;
-  position: absolute !important;
+  position: relative !important;
   bottom: 0;
   width: 100%;
-  height: 2.5rem;            /* Footer height */
+  height: auto;            /* Footer height */
 }
 .container{
   background-color: #1c9cda;
@@ -52,6 +60,9 @@ input[type=range] + .thumb.active .value {
   display: block;
   margin-left: auto;
   margin-right: auto;
+}
+.footer{
+  padding-bottom: 20px;
 }
 body {font-family: Arial, Helvetica, sans-serif;}
 * {box-sizing: border-box;}
@@ -105,6 +116,7 @@ html, body {
   display: inline;
   font-size: 30px;
 }
+/*sign up button*/
 .Sign-up, .Sign-up:visited{
   cursor: pointer;
   font-size: 24px;
@@ -112,6 +124,7 @@ html, body {
   float: none !important;
   clear: both;
 }
+/*form for edit and sign up */
 #form_full{
   background-color: white;  
   height: 60%;
@@ -120,6 +133,11 @@ html, body {
   left: 20%;
   opacity: 0.9;
 }
+/*add margin at bottom of edit form for footer*/
+.edit_form{
+  margin-bottom: 100px !important;
+}
+/*sign up button*/
 #Sign-up{
   font-size: 25px;
   text-transform: capitalize;
@@ -129,10 +147,12 @@ html, body {
   right: 0%;
   border-radius: 10px;
 }
+/*link to sign up page*/
 .not-a-user{
   font-size: 24px;
   color: #707070;
 }
+/*The cancel button*/
 .Cancel{
   font-size: 35px;
   color: #707070;
@@ -155,6 +175,7 @@ html, body {
 #row_link{
   margin-left:  0;
 }
+/*alert styling*/
 .alert {
   position: relative;
   width: 100%;
@@ -163,6 +184,7 @@ html, body {
   color: white;
   text-align: center;
 }
+/*alert box close button*/
 .closebtn {
   margin-left: 15px;
   color: white;
@@ -177,6 +199,7 @@ html, body {
 .closebtn:hover {
   color: black;
 }
+/*login alert*/
 #login_alert{
   top: 0;
 }
@@ -209,6 +232,7 @@ html, body {
   max-height: none !important;
   padding-bottom: 30px !important;
 }
+/*submit button*/
 #submit{
   font-size: 25px;
   text-transform: capitalize;
@@ -219,6 +243,7 @@ html, body {
   bottom: 20px;
   border-radius: 10px;
 }
+/*cancel button for add*/
 #Cancel_add{
   font-size: 25px;
   text-transform: capitalize;
@@ -229,11 +254,6 @@ html, body {
   bottom: 20px;
   border-radius: 10px;
   background-color: #f44336;
-}
-.animate {
-  -webkit-animation: animatezoom 5s;
-  animation: animatezoom 5s
-  background-color: #fefefe;
 }
 /*blockquote*/
 .blockquote_white {
@@ -302,19 +322,4 @@ html, body {
   .brand-logo{
     font-size: 24px !important;
   }
-}
-.fas, .fab {
-  padding: 20px;
-  font-size: 30px;
-  width: 70px;
-  text-align: center;
-  text-decoration: none;
-  margin: 5px 2px;
-  border-radius: 50%;
-  background: #015e56;
-  color: white;
-}
-
-.fas:hover, .fab:hover {
-    opacity: 0.7;
 }

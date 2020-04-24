@@ -77,6 +77,7 @@ if (isset($_GET['logout'])) {
         <blockquote class="blockquote_white btnStyle span3 leaflet-control Button" id="info_box"></blockquote>
       </div>
     </div>
+    <!-- script links -->
 <script type="text/javascript" src="js/script.js"></script>
 <script type="text/javascript" src="js/materialize.min.js"></script>
 <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
@@ -117,6 +118,7 @@ L.tileLayer(
           "pk.eyJ1IjoianVyamVudiIsImEiOiJjazZyb2s0c2UwNXlmM2dwOWpoam1veWtvIn0.Wz1L39sbP_yOIek4zP7W9Q"
     }
 ).addTo(map);
+// array where lat lon location of assets are stored in
 var array =[
   <?php
   $result_assets = $database->prepare("SELECT asset.ID, point.ASSET_ID, asset.name, CAST(point.TS AS DATE), asset.activatiecode, asset.info, (SELECT ST_X(latlong)) AS LAT, (SELECT ST_y(latlong)) AS LON FROM asset INNER JOIN point on asset.ID = point.ASSET_ID WHERE CAST(TS AS DATE) = '".$_GET['TS']."' AND point.ASSET_ID=".$_GET['ID']);
@@ -129,6 +131,7 @@ var array =[
   } 
   ?>
 ];
+// array where lat lon location gets conferted to location name
 var plaatsnaam =[
   <?php
   $result_assets = $database->prepare("SELECT asset.ID, point.ASSET_ID, asset.name, CAST(point.TS AS DATE), asset.activatiecode, asset.info, (SELECT ST_X(latlong)) AS LAT, (SELECT ST_y(latlong)) AS LON FROM asset INNER JOIN point on asset.ID = point.ASSET_ID WHERE CAST(TS AS DATE) = '".$_GET['TS']."' AND point.ASSET_ID=".$_GET['ID']);
@@ -155,14 +158,17 @@ route = array.map(s => eval('null,' + s));
 console.log(route);
 console.log(plaatsnaam);
 var i;
+// show all plaats namen
 for (i = 0; i < route.length; i++) {
   document.getElementById('info_box').innerHTML +=  plaatsnaam[i] + "<br>";
 
 }  
+// show route names marker with popup
 for (i = 0; i < route.length; i++) {
   var marker = L.marker(route[i]).addTo(map);
   marker.bindPopup(plaatsnaam[i]).openPopup();
 }
+// draw route between markers
 var routeControl = L.Routing.control({
   createMarker: function() { return null; },
   routeWhileDragging: false,

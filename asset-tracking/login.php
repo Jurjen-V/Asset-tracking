@@ -129,16 +129,10 @@ if (isset($_GET['logout'])) {
       echo $json_a[$i]["TS"]."<br>";
   }
 endif ?>
-    <div id='map'>
-      <div class="leaflet-top leaflet-right button_box2 leaflet-control standard-bgcolor white-text info_box">
-        <h6 class="white-text">Locaties:</h6>
-        <blockquote class="blockquote_white btnStyle span3 leaflet-control Button" id="info_box"></blockquote>
-      </div>
-      <div class="leaflet-bottom leaflet-right button_box2">
-            <button type="button" id="Btn" class="open-button btn waves-effect standard-bgcolor btnStyle span3 leaflet-control Button" onclick="openForm()">Login</button>
       <!-- login form -->
-      <div class="form-popup row" id="myForm">
-        <form action="" method="post" id="form" class="form-container col s12">
+      <div class="row">
+        <div class="col s12 m4 l2"></div>
+        <form action="" method="post" class="form-container col s12 m4 l8">
           <h4 class="login standard-color">Login</h4>
 
             <div class="row">
@@ -161,79 +155,26 @@ endif ?>
             <h2 class="not-a-user">not a user? <a href="sign-up.php" class="Sign-up leaflet-control standard-color ">Sign up</a></h2>
           </div>
           <!-- login button and close button -->
-          <button type="submit" id="form_btn" name="login_user" class="btn waves-effect standard-bgcolor btnStyle leaflet-control Button">Login</button>
-          <button type="button" id="form_btn" class="cancel btn waves-effect standard-bgcolor btnStyle leaflet-control Button" onclick="closeForm()">Close</button>
+          <button type="submit" id="form_btn" name="login_user" class="btn waves-effect standard-bgcolor btnStyle leaflet-control Button right">Login</button>
         </form>
+            <div class="col s12 m4 l2"></div>
       </div>
     </div>
-  </div>
   <!-- script links -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script type="text/javascript" src="js/script.js"></script>
 <script type="text/javascript" src="js/materialize.min.js"></script>
-<script type="text/javascript" src="script.php"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </body>
+<style type="text/css">
+  .form-container{
+    margin-top: 10%;
+  }
+  .page-footer{
+    position: absolute !important;
+    bottom: 0px;
+  }
+</style>
 </html>
 <?php
-// include_once 'js/script.php';
-    // $error = 0;
-    // $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-    // if(strpos($actual_link, 'longitude') && strpos($actual_link, 'latitude') && strpos($actual_link, 'REMOTE_ADDR')){
-    //   if (!empty($_GET['REMOTE_ADDR'])){
-    //     $succes= "succes 1";
-    //   }else{
-    //       $error++;
-    //   }
-    //   if (!empty($_GET['longitude'])){
-    //     $longitude = $_GET["longitude"];
-    //     $succes= "succes 2";
-    //   }else{
-    //     $error++;
-    //   }
-    //   if (!empty($_GET['latitude'])){
-    //     $latitude = $_GET["latitude"];
-    //     $succes= "succes 3";
-    //   }else{
-    //     $error++;
-    //   }
-    //   $result = $database->prepare("SELECT * FROM location WHERE REMOTE_ADDR= :parameter  LIMIT 1");
-    //   $result->bindParam(':parameter', $REMOTE_ADDR, PDO::PARAM_STR);
-    //   $result->execute();
-    //   for($i=0; $row = $result->fetch(); $i++){
-    //     $ID = $row['ID'];
-    //     $row_REMOTE_ADDR = $row["REMOTE_ADDR"];
-    //     $row_latitude = $row['latitude'];
-    //     $row_longitude = $row['longitude'];
-    //   } 
-    //   if ($error === 0 && $result) {
-    //       if ($row_REMOTE_ADDR == $REMOTE_ADDR) {
-    //         if($_GET['longitude'] != $row_longitude || $_GET['latitude'] != $row_latitude){
-    //           $query = "UPDATE location SET latitude=:latitude, longitude=:longitude WHERE REMOTE_ADDR= :REMOTE_ADDR";
-    //           $stmt = $database->prepare($query);
-    //           $stmt->bindValue(":REMOTE_ADDR", $row_REMOTE_ADDR, PDO::PARAM_STR);
-    //           $stmt->bindValue(":latitude", $latitude, PDO::PARAM_STR);
-    //           $stmt->bindValue(":longitude", $longitude, PDO::PARAM_STR);
-    //           try {
-    //             $stmt->execute();
-    //           }
-    //           catch (PDOException $e) {
-    //             echo $e->getMessage();
-    //           }
-    //         }
-    //       }else{
-    //         $query = "INSERT INTO location (latitude, longitude, REMOTE_ADDR) VALUES (?, ?, ?)";
-    //         $insert = $database->prepare($query);
-    //         $data = array("$longitude", "$latitude", "$REMOTE_ADDR");
-    //         try {
-    //           $insert->execute($data);
-    //           $succes = "succes 4";
-    //         }
-    //         catch (PDOException $e) {
-    //           throw $e;
-    //         }
-    //       }
-    //     }
-    // }
-  ?>
+include('objects/footer.php'); 

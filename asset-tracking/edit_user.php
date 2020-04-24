@@ -137,7 +137,7 @@ if(isset($_POST['Save'])) {
     </div> 
   </nav>
   <body class="login_body">
-	<div class="row"  id="mobile">
+	<div class="row edit_form"  id="mobile">
 		<form class="col s6" id="form_full" action="" method="post">
 		<h4 class="standard-color">Bewerk gebruiker</h4>
 			<div class="row">
@@ -178,6 +178,7 @@ if(isset($_POST['Save'])) {
 	    	</div>
 		  </form>
 	</div>
+	<!-- include footer -->
 	<?php include('objects/footer.php'); ?>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>

@@ -57,6 +57,7 @@ if(isset($_POST['Save'])) {
 	        $errorMessage= "That name is already used";
 	    }
 	}		
+	// check if input is empty
 	if (!empty($_POST['name'])){
 	    $name = htmlspecialchars($_POST['name']);
 
@@ -84,7 +85,7 @@ if(isset($_POST['Save'])) {
 	    $error++;
 	    $errorMessage = "Seconden is leeg";
 	}
-    if ($error == 0) {
+    if ($error == 0) { // if error = 0 update the asset
 	    $query = "UPDATE asset SET name=:name, activatiecode =:activatiecode , info=:info, seconden=:seconden WHERE ID= :ID";
 	    $stmt = $database->prepare($query);
 
@@ -126,7 +127,7 @@ if(isset($_POST['Save'])) {
 		file_put_contents('json/GPS-tracker.json', $newJsonString);
 
 	    header('location: assets.php');	
-	}else{?>
+	}else{// else show alert box?> 
 	   	<div class="alert">
 	        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
 	        <strong>Let op!</strong> <?php echo $errorMessage ?>
@@ -173,7 +174,7 @@ if(isset($_POST['Save'])) {
     </div> 
   </nav>
   <body class="login_body">
-	<div class="row" id="mobile">
+	<div class="row edit_form" id="mobile">
 		<form class="col s6" id="form_full" action="" method="post">
 		<h4 class="standard-color">Bewerk asset</h4>
 			<div class="row">
@@ -211,8 +212,10 @@ if(isset($_POST['Save'])) {
 	    	</div>
 		  </form>
 	</div>
+	 <!-- include footer -->
 	<?php include('objects/footer.php'); ?>
 </body>
+<!-- script link -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script type="text/javascript" src="js/materialize.min.js"></script>
 <script src="js/script.js" type="text/javascript"></script>

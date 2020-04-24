@@ -1,10 +1,18 @@
 // open form inlog page
 function openForm() {
-  document.getElementById("myForm").style.display = "block";
+    document.getElementById("myForm").style.display = "block";
+    map.dragging.disable();
+    map.touchZoom.disable();
+    map.doubleClickZoom.disable();
+    map.scrollWheelZoom.disable();
 }
 // close form inlog page
 function closeForm() {
-  document.getElementById("myForm").style.display = "none";
+    document.getElementById("myForm").style.display = "none";
+    map.dragging.enable();
+    map.touchZoom.enable();
+    map.doubleClickZoom.enable();
+    map.scrollWheelZoom.enable();
 }
 document.addEventListener('DOMContentLoaded', function() {
     // trigger modal

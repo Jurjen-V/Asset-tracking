@@ -1,4 +1,5 @@
 <?php 
+// include db connection 
 include_once 'db.php';
   if(isset($_POST['Sign-up'])) {
     $error = 0;
@@ -13,6 +14,7 @@ include_once 'db.php';
         $errorMessage= "Email already excist";
       }
     }
+    // check if input fields are filled in
     if (!empty($_POST['email'])){
         $email = htmlspecialchars($_POST['email']);
 
@@ -34,18 +36,19 @@ include_once 'db.php';
         $error++;
         $errorMessage= "Please confirm the password";
     }
+    // if the passwords are shorter than 10 
     if(strlen($password_1) < 10 || strlen($password_2) < 10){
       $error++;
       $errorMessage= "Password needs to me longer than 10 characters.";
     }
-    if($password_1 == $password_2){
+    if($password_1 == $password_2){ // check if passwords are the same hash the password
       $password_3 = $password_3 = password_hash($password_1, PASSWORD_DEFAULT);
     }else{
       $error++;
       $errorMessage= "Password needs to be the same";
     }
 
-      if ($error === 0) {
+      if ($error === 0) { //if error = 0 insert the user 
         $query = "INSERT INTO user (email, Password) VALUES (?, ?)";
         $insert = $database->prepare($query);
 
@@ -56,7 +59,7 @@ include_once 'db.php';
         catch (PDOException $e) {
             throw $e;
         }
-
+        // start session and send user to his home page
         session_start();
         $user_id =$database->lastInsertId();
         $_SESSION['id'] = $user_id;
@@ -64,7 +67,7 @@ include_once 'db.php';
         $_SESSION['level'] = $Level;
         $_SESSION['msg'] = "You are now logged in";
         header('Location:assets.php');
-      }else{
+      }else{// else show alert box
         ?>
         <div class="alert">
           <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
@@ -93,11 +96,13 @@ include_once 'db.php';
       </ul>
     </div>
   </nav>
+  <!-- login form -->
 <body class="login_body">
 	<div class="row">
 	<form class="col s6" id="form_full" action="" method="post">
     <h4 class="standard-color">Maak account</h4>
 		<div class="row">
+      <!-- email input -->
 			<div class="input-field col s12" id="e-mail">
 				<input class="validate" type="email" required name="email">
         <label for="E-mail">E-mail address</label>
@@ -105,6 +110,7 @@ include_once 'db.php';
 			</div>
 		</div>
 		<div class="row">
+      <!-- password input -->
 			<div class="input-field col s12" id="password">
 				<input minlength="10" required type="password" class="validate" name="password_1">
         <label for="Password">Password</label>
@@ -112,6 +118,7 @@ include_once 'db.php';
 			</div>
 		</div>
 		<div class="row">
+      <!-- password input -->
 			<div class="input-field col s12" id="password">
 				<input minlength="10" required type="password" class="validate" name="password_2">
         <label for="Password">Confirm password</label>
@@ -119,6 +126,7 @@ include_once 'db.php';
 			</div>
 		</div>
       <div class="row">
+        <!-- sign up and cancel button -->
     <div class="input-group">
       <button id="Sign-up" class="btn waves-effect standard-bgcolor" type="submit" name="Sign-up">Sign-up</button>
     </div>
@@ -126,8 +134,10 @@ include_once 'db.php';
     </div>
 	</form>
 	</div>
+  <!-- include footer -->
   <?php include('objects/footer.php'); ?>
 </body>
+<!-- script links -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script type="text/javascript" src="js/materialize.min.js"></script>
 </html>
