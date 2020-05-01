@@ -5,6 +5,21 @@ if ($_SESSION['level'] == 1) {
   $_SESSION['msg'] = "You belong at the admin page";
     header('location: admin.php');
 }
+
+//Detect special conditions devices
+$version = preg_replace("/(.*) OS ([0-9]*)_(.*)/","$2", $_SERVER['HTTP_USER_AGENT']);
+$iPod    = stripos($_SERVER['HTTP_USER_AGENT'],"iPod");
+$iPhone  = stripos($_SERVER['HTTP_USER_AGENT'],"iPhone");
+$iPad    = stripos($_SERVER['HTTP_USER_AGENT'],"iPad");
+$webOS   = stripos($_SERVER['HTTP_USER_AGENT'],"webOS");
+if (!isset($_SESSION['email'])){
+  if( $iPod || $iPhone || $iPad || $webOS){ // als de device een ipod iphone of ipad is.
+    // for example you use it this way
+    if ($version < 13){ // als de ios versie lager is dan 13 kan de gebruiker niet inloggen.
+     header('location: login.php'); //stuur gebruiker door naar andere login pagina.
+    }
+  }
+}
 include_once 'db.php';
 $error = 0;
 // login validation
@@ -45,10 +60,11 @@ if (isset($_POST['login_user'])) {
       header('location: admin.php');
     }
   }else{?>
-    <div class="alert">
-      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+    <div style="display: block" class="alert" id="alert">
+      <span class="closebtn" onclick="Close()">&times;</span> 
       <strong>Let op!</strong> <?php echo $errorMessage ?>
-    </div><?php
+    </div>
+    <?php
   }
 }
 if (isset($_GET['logout'])) {
@@ -84,6 +100,7 @@ if (isset($_GET['logout'])) {
   <link rel="icon" href="img/favicon.png">
 </head>
 <body>
+  <div id="alert" style="display: none"></div>
   <?php if (isset($_SESSION['email'])) : ?>
   <ul class="sidenav" id="mobile-demo">
   <li class="sidenav-header standard-bgcolor">
@@ -129,10 +146,6 @@ if (isset($_GET['logout'])) {
   //     echo $json_a[$i]["TS"]."<br>";
   // }
 endif ?>
-      <div id="info" style="display: none" class="alert info">
-        <span class="closebtn">&times;</span>  
-        <strong>Let op!</strong> Als u niet kunt inloggen klik dan <strong><a href="login.php" class="white-text">hier</a></strong>
-      </div>
     <div id='map'>
       <div class="leaflet-top leaflet-right button_box2 leaflet-control standard-bgcolor white-text info_box">
         <h6 class="white-text">Locaties:</h6>
@@ -174,6 +187,13 @@ endif ?>
   <!-- script links -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
+<script type="text/javascript">
+  var alert = document.getElementById('alert');
+  var map = document.getElementById('map')
+  if (alert.style.display === 'block') {
+      map.style.height = "calc(100% - 52.5px)";
+  }
+</script>
 <script type="text/javascript" src="js/script.js"></script>
 <script type="text/javascript" src="js/materialize.min.js"></script>
 <script type="text/javascript" src="script.php"></script>

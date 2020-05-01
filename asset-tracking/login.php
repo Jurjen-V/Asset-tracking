@@ -84,7 +84,7 @@ if (isset($_POST['login_user'])) {
       <div class="row col s12">
         <h2 class="standard-color center">Asset tracking <img class="logo" src="img/favicon.png"></h2>
         <div class="col s2 m1 l2"></div>
-        <div class="col m4 l2 login hide-on-small-only">
+        <div class="col m4 l4 login hide-on-small-only">
             <div class="row login-box" >
               <br>
               <h5 class="white-text center-align">Powered by</h5>
@@ -128,7 +128,7 @@ if (isset($_POST['login_user'])) {
           <!-- login button and close button -->
           <button type="submit" id="submit" name="login_user" class="btn waves-effect standard-bgcolor right">Login</button>
         </form>
-            <div class="col s12 m4 l2"></div>
+            <div class="col s12 m1 l2"></div>
       </div>
     </div>
   <!-- script links -->
