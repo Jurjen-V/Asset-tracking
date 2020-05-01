@@ -1,0 +1,216 @@
+-- phpMyAdmin SQL Dump
+-- version 4.9.0.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost:3306
+-- Gegenereerd op: 01 mei 2020 om 12:02
+-- Serverversie: 10.2.31-MariaDB-cll-lve
+-- PHP-versie: 7.3.15
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `Leaflet`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `asset`
+--
+
+CREATE TABLE `asset` (
+  `ID` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `latitude` varchar(255) NOT NULL,
+  `longitude` varchar(255) NOT NULL,
+  `Changed` timestamp NOT NULL DEFAULT current_timestamp(),
+  `user_ID` int(11) NOT NULL,
+  `activatiecode` varchar(255) NOT NULL,
+  `info` varchar(255) NOT NULL,
+  `seconden` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Gegevens worden geëxporteerd voor tabel `asset`
+--
+
+INSERT INTO `asset` (`ID`, `name`, `latitude`, `longitude`, `Changed`, `user_ID`, `activatiecode`, `info`, `seconden`) VALUES
+(1, '', '50', '6', '2020-02-24 15:51:44', 0, '0', '', 0),
+(2, 'GPS-1', '53.281844', '5.268157', '2020-03-03 15:44:34', 1, '22', 'V1', 0),
+(5, 'GPS-4', '52.981844', '5.198157', '2020-02-27 11:35:28', 1, '4', 'V1', 0),
+(6, 'GPS-5', '53.581844', '5.498157', '2020-02-27 11:35:36', 1, '5', 'V1', 0),
+(7, 'GPS-55', '53.025688', '5.531616', '2020-03-09 13:22:53', 23, '1', 'V1', 470),
+(9, '', '53.101844', '5.628157', '0000-00-00 00:00:00', 0, '0', '', 0),
+(10, '', '52.981844', '5.508157', '0000-00-00 00:00:00', 0, '0', '', 0),
+(11, 'GPS-6', '52.531844', '5.708157', '2020-02-27 11:35:46', 1, '6', 'V1', 0),
+(123, 'GPS-3', '53.281844', '5.398157', '2020-03-11 10:34:04', 8, '3', 'v1', 30),
+(124, 'adsf', '', '', '0000-00-00 00:00:00', 15, 'asd', 'a', 0),
+(125, 'GPS-1', '', '', '2020-03-04 15:14:08', 16, '88', '123456', 0),
+(134, 'GPS-4', '', '', '0000-00-00 00:00:00', 8, '74685321.0', 'KIP', 47),
+(171, 'GPS-8', '', '', '2020-04-08 12:36:11', 8, 'Activatiecode3', 'Info3', 146),
+(260, 'Test-GPS 1', '', '', '2020-04-09 13:47:10', 8, 'Activatiecode1', 'Info1', 60),
+(262, 'Test-GPS 2', '', '', '2020-04-09 14:03:57', 8, 'activatiecode 2', 'info 2', 60),
+(263, 'Test-GPS 3', '', '', '2020-04-09 14:04:11', 8, 'activatiecode 3', 'info 3', 60),
+(264, 'Test-GPS 4', '', '', '2020-04-10 09:47:49', 8, 'Activatiecode4', 'Info4', 60),
+(267, 'GPS-1', '', '', '2020-04-14 11:12:15', 8, '123', 'Boot gps', 60),
+(270, 'Test', '', '', '2020-04-15 12:22:41', 22, 'dfegrhtfjhj', 'dwsfegrhtvbjnkk', 60),
+(271, 'sdfsdfsdfdsf', '', '', '2020-04-16 11:24:19', 23, '343242352342343', 'dit is een gps tracker ', 30),
+(272, 'iPad gps', '', '', '2020-04-23 09:44:43', 24, 'W1e', 'iPad test gps ', 318);
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `point`
+--
+
+CREATE TABLE `point` (
+  `POINT_ID` int(11) NOT NULL,
+  `ASSET_ID` int(11) DEFAULT NULL,
+  `latlong` geometry DEFAULT NULL,
+  `TS` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Gegevens worden geëxporteerd voor tabel `point`
+--
+
+INSERT INTO `point` (`POINT_ID`, `ASSET_ID`, `latlong`, `TS`) VALUES
+(84, 7, 0x000000000101000000ada415df50844a40309e4143ffa41640, '2020-03-11 14:55:06'),
+(85, 7, 0x000000000101000000325a4755137c4a40309e4143ffa41640, '2020-03-11 14:55:40'),
+(86, 7, 0x00000000010100000002486de2e47e4a40118b187618331640, '2020-03-11 14:57:03'),
+(87, 7, 0x000000000101000000c1c9367007884a40596abddf68171640, '2020-03-11 14:57:26'),
+(88, 7, 0x0000000001010000004034f3e49a884a40f6b704e09f021640, '2020-03-11 15:02:31'),
+(102, 123, 0x000000000101000000fc1d8a027d7c4a4072c119fcfd721640, '2020-03-11 15:25:53'),
+(103, 123, 0x000000000101000000dc476e4dba7b4a40a06b5f402f5c1640, '2020-03-11 15:25:53'),
+(104, 123, 0x000000000101000000978e39cfd87b4a4040a19e3e022f1640, '2020-03-11 15:25:53'),
+(105, 123, 0x000000000101000000a08cf161f67e4a40aad381aca7361640, '2020-03-11 15:25:53'),
+(106, 123, 0x0000000001010000005ef75624267e4a40a67b9dd497551640, '2020-03-11 15:25:53'),
+(107, 123, 0x000000000101000000fc1d8a027d7c4a4072c119fcfd721640, '2020-03-11 15:25:53'),
+(108, 134, 0x000000000101000000fc1d8a027d7c4a4072c119fcfd721640, '2020-03-11 15:26:03'),
+(109, 134, 0x000000000101000000dc476e4dba7b4a40a06b5f402f5c1640, '2020-03-11 15:26:03'),
+(110, 134, 0x000000000101000000978e39cfd87b4a4040a19e3e022f1640, '2020-03-11 15:26:03'),
+(111, 134, 0x000000000101000000a08cf161f67e4a40aad381aca7361640, '2020-03-11 15:26:03'),
+(112, 134, 0x0000000001010000005ef75624267e4a40a67b9dd497551640, '2020-03-11 15:26:03'),
+(113, 134, 0x000000000101000000fc1d8a027d7c4a4072c119fcfd721640, '2020-03-11 15:26:03'),
+(114, 8, 0x000000000101000000fc1d8a027d7c4a4072c119fcfd721640, '2020-03-11 15:39:20'),
+(115, 8, 0x000000000101000000dc476e4dba7b4a40a06b5f402f5c1640, '2020-03-11 15:39:20'),
+(116, 8, 0x000000000101000000978e39cfd87b4a4040a19e3e022f1640, '2020-03-11 15:39:20'),
+(117, 8, 0x000000000101000000a08cf161f67e4a40aad381aca7361640, '2020-03-11 15:39:20'),
+(118, 8, 0x0000000001010000005ef75624267e4a40a67b9dd497551640, '2020-03-11 15:39:20'),
+(119, 8, 0x000000000101000000fc1d8a027d7c4a4072c119fcfd721640, '2020-03-11 15:39:20'),
+(120, 7, 0x000000000101000000fc1d8a027d7c4a4072c119fcfd721640, '2020-03-12 10:52:29'),
+(121, 7, 0x000000000101000000dc476e4dba7b4a40a06b5f402f5c1640, '2020-03-12 10:52:29'),
+(122, 7, 0x000000000101000000978e39cfd87b4a4040a19e3e022f1640, '2020-03-12 10:52:29'),
+(123, 7, 0x000000000101000000a08cf161f67e4a40aad381aca7361640, '2020-03-12 10:52:29'),
+(124, 7, 0x0000000001010000005ef75624267e4a40a67b9dd497551640, '2020-03-12 10:52:29'),
+(125, 7, 0x000000000101000000fc1d8a027d7c4a4072c119fcfd721640, '2020-03-12 10:52:29'),
+(126, 136, 0x000000000101000000fc1d8a027d7c4a4072c119fcfd721640, '2020-03-12 11:27:58'),
+(127, 136, 0x000000000101000000dc476e4dba7b4a40a06b5f402f5c1640, '2020-03-12 11:27:58'),
+(128, 136, 0x000000000101000000978e39cfd87b4a4040a19e3e022f1640, '2020-03-12 11:27:58'),
+(129, 136, 0x000000000101000000a08cf161f67e4a40aad381aca7361640, '2020-03-12 11:27:58'),
+(130, 136, 0x0000000001010000005ef75624267e4a40a67b9dd497551640, '2020-03-12 11:27:58'),
+(131, 136, 0x000000000101000000fc1d8a027d7c4a4072c119fcfd721640, '2020-03-12 11:27:58'),
+(132, 270, 0x000000000101000000fc1d8a027d7c4a4072c119fcfd721640, '2020-04-15 12:23:37'),
+(133, 270, 0x000000000101000000dc476e4dba7b4a40a06b5f402f5c1640, '2020-04-15 12:23:37'),
+(134, 270, 0x000000000101000000978e39cfd87b4a4040a19e3e022f1640, '2020-04-15 12:23:37'),
+(135, 270, 0x000000000101000000a08cf161f67e4a40aad381aca7361640, '2020-04-15 12:23:37'),
+(136, 270, 0x0000000001010000005ef75624267e4a40a67b9dd497551640, '2020-04-15 12:23:37'),
+(137, 270, 0x000000000101000000fc1d8a027d7c4a4072c119fcfd721640, '2020-04-15 12:23:37'),
+(138, 7, 0x000000000101000000fc1d8a027d7c4a4072c119fcfd721640, '2020-04-16 11:21:51'),
+(139, 7, 0x000000000101000000dc476e4dba7b4a40a06b5f402f5c1640, '2020-04-16 11:21:51'),
+(140, 7, 0x000000000101000000978e39cfd87b4a4040a19e3e022f1640, '2020-04-16 11:21:51'),
+(141, 7, 0x000000000101000000a08cf161f67e4a40aad381aca7361640, '2020-04-16 11:21:51'),
+(142, 7, 0x0000000001010000005ef75624267e4a40a67b9dd497551640, '2020-04-16 11:21:51'),
+(143, 7, 0x000000000101000000fc1d8a027d7c4a4072c119fcfd721640, '2020-04-16 11:21:51'),
+(144, 271, 0x000000000101000000fc1d8a027d7c4a4072c119fcfd721640, '2020-04-16 11:24:29'),
+(145, 271, 0x000000000101000000dc476e4dba7b4a40a06b5f402f5c1640, '2020-04-16 11:24:29'),
+(146, 271, 0x000000000101000000978e39cfd87b4a4040a19e3e022f1640, '2020-04-16 11:24:29'),
+(147, 271, 0x000000000101000000a08cf161f67e4a40aad381aca7361640, '2020-04-16 11:24:29'),
+(148, 271, 0x0000000001010000005ef75624267e4a40a67b9dd497551640, '2020-04-16 11:24:29'),
+(149, 271, 0x000000000101000000fc1d8a027d7c4a4072c119fcfd721640, '2020-04-16 11:24:29');
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `user`
+--
+
+CREATE TABLE `user` (
+  `ID` int(11) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `level` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Gegevens worden geëxporteerd voor tabel `user`
+--
+
+INSERT INTO `user` (`ID`, `email`, `password`, `level`) VALUES
+(1, 'jurjen.veenstra@hotmail.nl', '$2y$10$U1jivZQuzLRleEVciKDGg.otJXh.nJfnXoAtAFGGzoDUzl3DNWaaK', 1),
+(7, 'test@test.nl', '$2y$10$RjY0gbLI1lE3P34aqvCyTeQbtl7UFAq1UsbRNfm7vq1ScvaAEnPpm', 0),
+(8, 'jurjen.veenstra@hotmail.com', '$2y$10$ahYgn09hdOsaNriQzCP38OCu95Z71Mn14wVwHuBney4/BjttCT79q', 0),
+(14, 'Admin@admin.nl', '$2y$10$HQV4Iv3N1uWZsp1tAkobc.h5iyGlb6yJYxfgUbi.xqRJJjsWVCLX2', 1),
+(16, 'voorbeeld@voorbeeld.nl', '$2y$10$uJXi.O1nSKYkigq0frIemeeaVQVoM7MWDbKVb5HgFqERuorRpJqeW', 0),
+(17, 'jurjen.veenstra@hotmail.comasfgjjfsschhddfhdsfhjfdhjhddhjfdhhdfbh', '$2y$10$nrbnTNI3TCfvHx.eOHAfVe/xzhO4ZvFjpYYbWN8IJJBWEc100vVdC', 0),
+(23, 'stan@gmail.co', '$2y$10$fdm57wfYkzPFPRmUseXlZOZRW1ZOFn2q0oYMYE.x.mjc3TTlO5igK', 0),
+(24, 'Ipad.user@hotmail.nl', '$2y$10$gl0e0bAOrJFzQajiq/ojZe/DZSpWxmqsIXlXW6GqfqsDCm1Xm0RI2', 0);
+
+--
+-- Indexen voor geëxporteerde tabellen
+--
+
+--
+-- Indexen voor tabel `asset`
+--
+ALTER TABLE `asset`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexen voor tabel `point`
+--
+ALTER TABLE `point`
+  ADD PRIMARY KEY (`POINT_ID`);
+
+--
+-- Indexen voor tabel `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- AUTO_INCREMENT voor geëxporteerde tabellen
+--
+
+--
+-- AUTO_INCREMENT voor een tabel `asset`
+--
+ALTER TABLE `asset`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=273;
+
+--
+-- AUTO_INCREMENT voor een tabel `point`
+--
+ALTER TABLE `point`
+  MODIFY `POINT_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=150;
+
+--
+-- AUTO_INCREMENT voor een tabel `user`
+--
+ALTER TABLE `user`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
