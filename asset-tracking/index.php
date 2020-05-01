@@ -111,24 +111,28 @@ if (isset($_GET['logout'])) {
     </div> 
   </nav>
   <?php 
-  $string = file_get_contents("json/locatie.json");
-  if ($string === false) {
-      // deal with error...
-  }
+  // $string = file_get_contents("json/locatie.json");
+  // if ($string === false) {
+  //     // deal with error...
+  // }
 
-  $json_a = json_decode($string, true);
+  // $json_a = json_decode($string, true);
 
-  if ($json_a === null) {
-      // deal with error...
-  }
-  $array_length = count($json_a);
-  for ($i=0; $i < $array_length; $i++) { 
-    echo $json_a[$i]["POINT_ID"];
-      echo $json_a[$i]["ASSET_ID"];
-      echo $json_a[$i]['latlong'];
-      echo $json_a[$i]["TS"]."<br>";
-  }
+  // if ($json_a === null) {
+  //     // deal with error...
+  // }
+  // $array_length = count($json_a);
+  // for ($i=0; $i < $array_length; $i++) { 
+  //   echo $json_a[$i]["POINT_ID"];
+  //     echo $json_a[$i]["ASSET_ID"];
+  //     echo $json_a[$i]['latlong'];
+  //     echo $json_a[$i]["TS"]."<br>";
+  // }
 endif ?>
+      <div id="info" style="display: none" class="alert info">
+        <span class="closebtn">&times;</span>  
+        <strong>Let op!</strong> Als u niet kunt inloggen klik dan <strong><a href="login.php" class="white-text">hier</a></strong>
+      </div>
     <div id='map'>
       <div class="leaflet-top leaflet-right button_box2 leaflet-control standard-bgcolor white-text info_box">
         <h6 class="white-text">Locaties:</h6>

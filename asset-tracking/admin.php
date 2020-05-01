@@ -320,7 +320,7 @@ if(isset($_POST['update'])) {
 	<?php 
 	// include update profile modal and footer
 	include('objects/update-profile.php');
-	include('objects/footer.php');
+	// include('objects/footer.php');
 	?>
 </body>
 <!-- script links -->

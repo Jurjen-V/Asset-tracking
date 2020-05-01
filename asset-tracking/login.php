@@ -41,6 +41,7 @@ if (isset($_POST['login_user'])) {
     $_SESSION['level'] = $Level;
     $_SESSION['msg'] = "You are now logged in";
     if($Level == 0){
+      header('location: index.php');
     }else{
       header('location: admin.php');
     }
@@ -51,17 +52,12 @@ if (isset($_POST['login_user'])) {
     </div><?php
   }
 }
-if (isset($_GET['logout'])) {
-  session_destroy();
-  unset($_SESSION['email']);
-  header("location: index.php");
-}
 ?>
 <!DOCTYPE html>
 <html>
 <head>
   <!-- Title document -->
-  <title>Kaartpagina</title>
+  <title>Login</title>
   <!--Load the style stylesheet of leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin=""/>
   <!--Load leaflet -->
@@ -84,56 +80,31 @@ if (isset($_GET['logout'])) {
   <link rel="icon" href="img/favicon.png">
 </head>
 <body>
-  <?php if (isset($_SESSION['email'])) : ?>
-  <ul class="sidenav" id="mobile-demo">
-  <li class="sidenav-header standard-bgcolor">
-          <div class="row">
-            <div class="col s4">
-                <h4 class="white-text">Asset-tracking</h4>
-            </div>
-          </div>
-        </li>
-        <li><a title="Home" class="modal-trigger" href="assets.php"><i class="material-icons left">home</i>Home</a></li>
-        <li class="active"><a title="Map" href="index.php"><i class="material-icons">map</i>Kaart</a></li>
-        <li><a title="Uitloggen" href="?logout=1"><i class="material-icons left">exit_to_app</i>Uitloggen</a></li>
-  </ul>
-  <nav>
-    <div class="nav-wrapper standard-bgcolor">
-      <a href="#" class="brand-logo center">Asset-Tracking</a>
-      <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-      <ul id="nav-mobile" class="left hide-on-med-and-down">
-        <li><a title="Home" class="modal-trigger" href="assets.php"><i class="material-icons left">home</i>Home</a></li>
-        <li class="active"><a title="Map" href="index.php"><i class="material-icons left">map</i>Kaart</a></li>
-      </ul>
-      <ul id="nav-mobile" class="right hide-on-med-and-down">
-          <li class="right"><a title="Uitloggen" href="?logout=1"><i class="material-icons right">exit_to_app</i>Uitloggen</a></li>
-      </ul>
-    </div> 
-  </nav>
-  <?php 
-  $string = file_get_contents("json/locatie.json");
-  if ($string === false) {
-      // deal with error...
-  }
-
-  $json_a = json_decode($string, true);
-
-  if ($json_a === null) {
-      // deal with error...
-  }
-  $array_length = count($json_a);
-  for ($i=0; $i < $array_length; $i++) { 
-    echo $json_a[$i]["POINT_ID"];
-      echo $json_a[$i]["ASSET_ID"];
-      echo $json_a[$i]['latlong'];
-      echo $json_a[$i]["TS"]."<br>";
-  }
-endif ?>
       <!-- login form -->
-      <div class="row">
-        <div class="col s12 m4 l2"></div>
-        <form action="" method="post" class="form-container col s12 m4 l8">
-          <h4 class="login standard-color">Login</h4>
+      <div class="row col s12">
+        <h2 class="standard-color center">Asset tracking <img class="logo" src="img/favicon.png"></h2>
+        <div class="col s2 m1 l2"></div>
+        <div class="col m4 l2 login hide-on-small-only">
+            <div class="row login-box" >
+              <br>
+              <h5 class="white-text center-align">Powered by</h5>
+              <br>
+                  <div class="col s12">
+                    <!-- link to hawarit -->
+                    <a href="https://www.hawarit.com/"><img class="footer-img" src="img/HIT-logo-150.png"></a>
+                  </div>
+                  <br><br>
+                  <h5 class="white-text center-align">And</h5>
+                  <br>
+                  <div class="col s12">
+                    <!-- footer link to chaloIS -->
+                    <a href="https://www.chalois.com/"><img class="footer-img" src="img/chalois_logo.png"></a>
+                    <br>
+                  </div>
+              </div>
+          </div>
+        <form action="" method="post" class="form-container login col s12 m6 l4">
+          <h4 class="login center standard-color">Login</h4>
 
             <div class="row">
               <!-- email input -->
@@ -155,7 +126,7 @@ endif ?>
             <h2 class="not-a-user">not a user? <a href="sign-up.php" class="Sign-up leaflet-control standard-color ">Sign up</a></h2>
           </div>
           <!-- login button and close button -->
-          <button type="submit" id="form_btn" name="login_user" class="btn waves-effect standard-bgcolor btnStyle leaflet-control Button right">Login</button>
+          <button type="submit" id="submit" name="login_user" class="btn waves-effect standard-bgcolor right">Login</button>
         </form>
             <div class="col s12 m4 l2"></div>
       </div>
@@ -167,14 +138,30 @@ endif ?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </body>
 <style type="text/css">
-  .form-container{
-    margin-top: 10%;
+  .login-box{
+    background-color: #1c9cda;
   }
+  .login{
+    margin-top: 5%;
+ } 
   .page-footer{
     position: absolute !important;
     bottom: 0px;
   }
+  #submit{
+    position: relative;
+    right: 0px;
+    bottom: 0px;
+    width: auto;
+  }
+  .login{
+    display: block;
+  }
+  .logo{
+    height: 53px;
+  }
+  html, body{
+    height: auto;
+  }
 </style>
 </html>
-<?php
-include('objects/footer.php'); 

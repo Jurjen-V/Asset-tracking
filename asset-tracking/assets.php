@@ -255,25 +255,25 @@ if(isset($_POST['update'])) {
 	}
 }
 // test json file as api
-$string = file_get_contents("json/GPS-tracker.json");
-if ($string === false) {
-    // deal with error...
-}
+// $string = file_get_contents("json/GPS-tracker.json");
+// if ($string === false) {
+//     // deal with error...
+// }
 
-$json_a = json_decode($string, true);
+// $json_a = json_decode($string, true);
 
-if ($json_a === null) {
-    // deal with error...
-}
-$array_length = count($json_a);
-for ($i=0; $i < $array_length; $i++) { 
-	echo $json_a[$i]["ID"];
-    echo $json_a[$i]["name"];
-    echo $json_a[$i]['activatiecode'];
-    echo $json_a[$i]["info"];
-    echo $json_a[$i]['user_ID'];
-    echo $json_a[$i]["seconden"] ."<br>";
-}
+// if ($json_a === null) {
+//     // deal with error...
+// }
+// $array_length = count($json_a);
+// for ($i=0; $i < $array_length; $i++) { 
+// 	echo $json_a[$i]["ID"];
+//     echo $json_a[$i]["name"];
+//     echo $json_a[$i]['activatiecode'];
+//     echo $json_a[$i]["info"];
+//     echo $json_a[$i]['user_ID'];
+//     echo $json_a[$i]["seconden"] ."<br>";
+// }
 ?>
 <!DOCTYPE html>
 <html lang="en">

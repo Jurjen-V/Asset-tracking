@@ -41,6 +41,7 @@ input, input:before, input:after {
   -ms-user-select: initial;
   user-select: initial;
 }
+strong { font-weight: bold !important; }
 /*footer of page*/
 .page-footer {
   background-color: #1c9cda !important;
@@ -92,6 +93,7 @@ html, body {
 
 /* The popup form - hidden by default */
 .form-popup {
+  pointer-events: none;
   display: none;
   position: fixed;
   bottom: 0;
@@ -199,6 +201,7 @@ html, body {
 .closebtn:hover {
   color: black;
 }
+.alert.info {background-color: #2196F3;}
 /*login alert*/
 #login_alert{
   top: 0;

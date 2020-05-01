@@ -1,6 +1,8 @@
 // open form inlog page
 function openForm() {
     document.getElementById("myForm").style.display = "block";
+    document.getElementById("info").style.display = "block";
+    document.getElementById("map").style.height = "calc(100% - 52.5px)"; 
     map.dragging.disable();
     map.touchZoom.disable();
     map.doubleClickZoom.disable();
@@ -9,6 +11,8 @@ function openForm() {
 // close form inlog page
 function closeForm() {
     document.getElementById("myForm").style.display = "none";
+    document.getElementById("info").style.display = "none";
+    document.getElementById("map").style.height = "100%"; 
     map.dragging.enable();
     map.touchZoom.enable();
     map.doubleClickZoom.enable();
@@ -27,4 +31,4 @@ document.addEventListener('DOMContentLoaded', function() {
     // trigger collapsible in mobile nav
     var collapsibles = document.querySelectorAll('.collapsible');
     var collapsible = M.Collapsible.init(collapsibles);
-  });
+});
