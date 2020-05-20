@@ -1,20 +1,31 @@
 <?php
+// start session
 session_start();
+
+// if there is no session or level is 1 redirect user to login page
 if (empty($_SESSION['email']) || $_SESSION['level'] == 1) {
 	$_SESSION['msg'] = "You must log in first";
     header('location: index.php');
 }
+// if session level is 1 redirect user to admin page
 if ($_SESSION['level'] == 1) {
 	$_SESSION['msg'] = "You belong at the admin page";
     header('location: admin.php');
 }
+// if logout is pressed
 if (isset($_GET['logout'])) {
+	// destroy session
 	session_destroy();
     unset($_SESSION['email']);
+    // redirect to login page
     header("location: index.php");
 }
+// set user id 
+// user id is being used to identify wich items in the database are connected to this account.
 $User_ID= $_SESSION['id'];
+// include db file
 include_once 'db.php';
+// test insert to test the route data
 if(isset($_POST['TEST'])){
 	$location = array("POINT(52.972565, 5.612297)", "POINT(52.966623, 5.590024)", "POINT(52.967554, 5.545907)", "POINT(52.991894, 5.553374)", "POINT(52.985539, 5.583587)", "POINT(52.972565, 5.612297)");
 	$length = count($location);
@@ -35,6 +46,7 @@ if(isset($_POST['TEST'])){
 		}
 	} 
 }
+// request basic info from user.
 $result_users = $database->prepare("SELECT * FROM user WHERE ID = ".$User_ID);
 $result_users->execute();
 for($i=0; $row = $result_users->fetch(); $i++){
@@ -44,16 +56,20 @@ for($i=0; $row = $result_users->fetch(); $i++){
 }	
 // if delete is pressed
 if(isset($_GET['delete']) || isset($_GET['TS'])){
+	// $_Get delete is the id of the asset the id is used to identify the correct asset and delete it
+	// $_GEt TS is the timestamp of the asset lat lon points it will delete all the asset points of that timestamp.
 	$route_id= $_GET['ID'];
     $query = "DELETE FROM point WHERE ASSET_ID={$_GET['delete']} AND CAST(point.TS AS DATE) = '{$_GET['TS']}' ";
     $delete = $database->prepare($query);
     $delete->execute();
     header('location: route.php?ID='.$route_id);
 }
+// select the traveled routes ordered by timestamp.
 $result_name = $database->prepare("SELECT asset.ID, point.ASSET_ID, asset.name, CAST(point.TS AS DATE), asset.activatiecode, asset.info, (SELECT ST_X(latlong)) AS LAT, (SELECT ST_y(latlong)) AS LON FROM asset INNER JOIN point on asset.ID = point.ASSET_ID WHERE point.ASSET_ID=".$_GET['ID']." GROUP BY CAST(TS AS DATE)");
 $result_name->execute();
 $result = $result_name->fetch(PDO::FETCH_ASSOC);
 $assetName= "";
+// if there are no traveled routes show error message.
 if(!$result){
 	$errorMessage = "Geen afgelegde routes gevonden";
 	?>
@@ -74,45 +90,51 @@ if(!$result){
   	<link type="text/css" rel="stylesheet" href="./css/materialize.min.css"  media="screen,projection"/>
   	<meta charset="UTF-8">
   	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"/>
+  	<!-- title of page -->
 	<title>Route overzicht <?= $assetName?></title>
 	<!-- icon of page -->
   	<link rel="icon" href="img/favicon.png">
 </head>
+<!-- nav bar mobile -->
 <ul class="sidenav" id="mobile-demo">
  	<li class="sidenav-header standard-bgcolor">
-          <div class="row">
-            <div class="col s4">
+        <div class="row">
+        	<div class="col s4">
                 <h4 class="white-text">Asset tracking</h4>
             </div>
           </div>
-        </li>
-      	<li><a title="Home" class="modal-trigger" href="assets.php"><i class="material-icons left">home</i>Home</a></li>
-      	<li><a title="Map" href="index.php"><i class="material-icons">map</i>Kaart</a></li>
-      	<li><a title="Uitloggen" href="?logout=1"><i class="material-icons left">exit_to_app</i>Uitloggen</a></li>
-  </ul>
-  <nav>
+    </li>
+    <li><a title="Home" class="modal-trigger" href="assets.php"><i class="material-icons left">home</i>Home</a></li>
+    <li><a title="Map" href="index.php"><i class="material-icons">map</i>Kaart</a></li>
+    <li><a title="Uitloggen" href="?logout=1"><i class="material-icons left">exit_to_app</i>Uitloggen</a></li>
+</ul>
+<!-- nav desktop -->
+<nav>
     <div class="nav-wrapper standard-bgcolor">
     	<a href="#" class="brand-logo center">Asset Tracking</a>
     	<a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-      <ul id="nav-mobile" class="left hide-on-med-and-down">
-      	<li><a title="Home" class="modal-trigger" href="assets.php"><i class="material-icons left">home</i>Home</a></li>
-      	<li><a title="Map" href="index.php"><i class="material-icons left">map</i>Kaart</a></li>
-      </ul>
-      <ul id="nav-mobile" class="right hide-on-med-and-down">
+      	<ul id="nav-mobile" class="left hide-on-med-and-down">
+	      	<li><a title="Home" class="modal-trigger" href="assets.php"><i class="material-icons left">home</i>Home</a></li>
+	      	<li><a title="Map" href="index.php"><i class="material-icons left">map</i>Kaart</a></li>
+      	</ul>
+      	<ul id="nav-mobile" class="right hide-on-med-and-down">
       		<li class="right"><a title="Uitloggen" href="?logout=1"><i class="material-icons right">exit_to_app</i>Uitloggen</a></li>
-      </ul>
+      	</ul>
     </div> 
   </nav>
 <body>
 	<form method="post">
+		<!-- send test data to database button -->
 		<button class="btn waves-effect standard-bgcolor" type="submit" name="TEST">send test</button>
 	</form>
 	  <h5 class="left-align">
+	  	<!-- show the asset name where we are looking at -->
       Asset naam: <?= $assetName?>
     </h5>
 	<?php
+	// create a table to show all the traveled routes 
 	echo "
-	      <table class='Assets centered highlight'>
+	      <table class='Assets responsive-table centered highlight'>
 		      <thead>
 			        <tr>
 			          <th>Datum</th>
@@ -120,15 +142,17 @@ if(!$result){
 			          <th>Actions</th>
 			        </tr>
 		        </thead>";
-
+    //select statement to get users assets  his travelled route
+    //the select statement is selecting by date and asset id
 	$result_assets = $database->prepare("SELECT asset.ID, point.ASSET_ID, asset.name, CAST(point.TS AS DATE), asset.activatiecode, asset.info, (SELECT ST_X(latlong)) AS LAT, (SELECT ST_y(latlong)) AS LON FROM asset INNER JOIN point on asset.ID = point.ASSET_ID WHERE point.ASSET_ID=".$_GET['ID']." GROUP BY CAST(TS AS DATE)");
 	$result_assets->execute();
 	  for($i=0; $row = $result_assets->fetch(); $i++){
+	  	// all the variables that we need from the select statement
 	    $id = $row['ID'];
 	    $ASSET_ID = $row['ASSET_ID'];
 	    $lat = $row['LAT'];
     	$lng = $row['LON'];
-
+    	// api to confert the lat lon data to city names
 	    $url = 'https://api.opencagedata.com/geocode/v1/json?q='.$lat.','.$lng.'&key=5b104f01c9434e3dad1e2d6a548445da&language=nl&pretty=1'; 
 	    $json = @file_get_contents($url);
 	    $data = json_decode($json, true);
@@ -140,6 +164,7 @@ if(!$result){
 			}
 	    }
 	    $DATE= $row['CAST(point.TS AS DATE)'];
+	    // echo the date and city name in the table
 	    // echo "<tbdoy>";
 	    echo "<tr>";
 	    echo "<td>" . $DATE . "</td>";

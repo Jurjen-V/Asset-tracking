@@ -1,6 +1,7 @@
  <?php
 // start session
 session_start();
+
 // if there is no session or level is 1 redirect user to login page
 if (empty($_SESSION['email']) || $_SESSION['level'] == 1) {
 	$_SESSION['msg'] = "You must log in first";
@@ -20,6 +21,7 @@ if (isset($_GET['logout'])) {
     header("location: index.php");
 }
 // set user id 
+// user id is being used to identify wich items in the database are connected to this account.
 $User_ID= $_SESSION['id'];
 // include db file
 include_once 'db.php';
@@ -33,41 +35,10 @@ for($i=0; $row = $result_users->fetch(); $i++){
 }	
 // if delete is pressed
 if(isset($_GET['delete'])){
+	// $_Get delete is the id of the asset the id is used to identify the correct asset and delete it
     $query = "DELETE FROM asset WHERE ID={$_GET['delete']}";
     $insert = $database->prepare($query);
     $insert->execute();
-
-    // delete from json file
-    //get all your data on file
-	$string = file_get_contents("json/GPS-tracker.json");
-	if ($string === false) {
-		// deal with error...
-	}
-
-	$json_a = json_decode($string, true);
-
-	if ($json_a === null) {
-		// deal with error...
-	}
-	// get array index to delete
-	$arr_index = array();
-	foreach ($json_a as $GPS => $GPS_data) {
-	    if ($json_a[$GPS]['ID'] == $_GET['delete']) {
-	        $arr_index[] = $GPS;
-	    }
-	}
-
-	// delete data
-	foreach ($arr_index as $i) {
-	    unset($json_a[$i]);
-	}
-
-	// rebase array
-	$json_a = array_values($json_a);
-
-	// encode array to json and save to file
-	file_put_contents('json/GPS-tracker.json', json_encode($json_a, JSON_PRETTY_PRINT));
-
     ?>
     	<script>
     	window.location.href = "assets.php";</script>
@@ -75,24 +46,28 @@ if(isset($_GET['delete'])){
 }
 // if add asset is pressed
 if(isset($_POST['submit'])) {
+	// set error to 0 if a if statement is not succes the error var will increase by one. There will also be a specific errormessage assigned to the error.
+	// in the end there will be a check if error is 0 if not show error message.
 	$error = 0;
+	// check in database if the activationkey is already in use
 	$activatiecode = htmlspecialchars($_POST['activatiecode']);
 	$query = "SELECT * FROM asset WHERE activatiecode= :activatiecode LIMIT 1";
 	$stmt = $database->prepare($query);
 	$results = $stmt->execute(array(":activatiecode" => $activatiecode));
 	$asset = $stmt->fetch(PDO::FETCH_ASSOC);
-	if ($asset) { // if user exists
+	if ($asset) { // if asset exists
 	    if ($asset['activatiecode'] == $activatiecode) {
 		    $error++;
 	        $errorMessage= "GPS already excist";
 	    }
 	}	
+	//check in database if the name is already in use
 	$name = htmlspecialchars($_POST['name']);
 	$query = "SELECT * FROM asset WHERE name= :name AND user_ID =:user_ID LIMIT 1";
 	$stmt = $database->prepare($query);
 	$results = $stmt->execute(array(":name" => $name, ":user_ID" => $User_ID));
 	$asset_naam = $stmt->fetch(PDO::FETCH_ASSOC);
-	if ($asset_naam) { // if user exists
+	if ($asset_naam) { // if GPS name exists
 	    if ($asset_naam['name'] == $name) {
 		    $error++;
 	        $errorMessage= "That name is already used";
@@ -136,41 +111,37 @@ if(isset($_POST['submit'])) {
 	        echo $e->getMessage();
 	    }
 
-	 //    // add asset to api
-		// $ch = curl_init();
+	    // if it is possible to insert assets to api Code comes below //
 
-		// curl_setopt($ch, CURLOPT_URL,"http://www.example.com/tester.phtml");
-		// curl_setopt($ch, CURLOPT_POST, 1);
+		 	// add asset to api
+			// $ch = curl_init();
 
-		// // In real life you should use something like:
-		// curl_setopt($ch, CURLOPT_POSTFIELDS, 
-		//          http_build_query(array('name' => '$name', 'activatiecode' => '$activatiecode', 'info' => '$info', 'user_ID' => '$User_ID', 'seconden' => '$seconden')));
+			// curl_setopt($ch, CURLOPT_URL,"http://www.example.com/tester.phtml");
+			// curl_setopt($ch, CURLOPT_POST, 1);
 
-		// Receive server response ...
-		// curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+			// // In real life you should use something like:
+			// curl_setopt($ch, CURLOPT_POSTFIELDS, 
+			//          http_build_query(array('name' => '$name', 'activatiecode' => '$activatiecode', 'info' => '$info', 'user_ID' => '$User_ID', 'seconden' => '$seconden')));
 
-		// $server_output = curl_exec($ch);
+			// Receive server response ...
+			// curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-		// curl_close ($ch);
+			// $server_output = curl_exec($ch);
 
-		// Further processing ...
-		// if ($server_output == "OK") {
-		// }
+			// curl_close ($ch);
 
-		// get the id of the gps 
-		$last_id = $database->lastInsertId();
+			// Further processing ...
+			// if ($server_output == "OK") {
+			// }
 
-		// add data to local json file for testing
-		$temp_array = array();
-	    $temp_array = json_decode(file_get_contents('json/GPS-tracker.json'));
-	    $upload_info = array("ID" => "$last_id" ,"name" => "$name", "activatiecode" => "$activatiecode", "info" => "$info" , "user_ID" => "$User_ID", "seconden" => "$seconden");
-	    array_push($temp_array, $upload_info);
-	    file_put_contents('json/GPS-tracker.json', json_encode($temp_array, JSON_PRETTY_PRINT));
-
+			// get the id of the gps 
+	   
+	    // all the data is handled succesfully send user to assets.php.
 	    header('location: assets.php');	
 
 	}else{?>
-		<!-- else show error message -->
+		<!-- error was not 0 so there was a error -->
+		<!-- show a html box that will contain the specified erromessage -->
 	   	<div class="alert">
 	        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
 	        <strong>Let op!</strong> <?php echo $errorMessage ?>
@@ -179,7 +150,10 @@ if(isset($_POST['submit'])) {
 }
 // if update profile is pressed
 if(isset($_POST['update'])) {
+	// set error to 0 if a if statement is not succes the error var will increase by one. There will also be a specific errormessage assigned to the error.
+	// in the end there will be a check if error is 0 if not show error message.
 	$error = 0;
+	// check in database if the email is already in use
 	$email = htmlspecialchars($_POST['email']);
 	$query = "SELECT * FROM user WHERE email = :email AND ID !=:ID LIMIT 1";
 	$stmt = $database->prepare($query);
@@ -194,7 +168,6 @@ if(isset($_POST['update'])) {
 	// if email is empty
 	if (!empty($_POST['email'])){
 	    $email = htmlspecialchars($_POST['email']);
-
 	}else{
 	    $error++;
 	    $errorMessage = "E-mail is leeg";
@@ -202,7 +175,6 @@ if(isset($_POST['update'])) {
 	// if password_1 is empty
 	if (!empty($_POST['password_1'])){
 	    $password_1 = htmlspecialchars($_POST['password_1']);
-
 	}else{
 	    $error++;
 	    $errorMessage = "Password is empty";
@@ -210,7 +182,6 @@ if(isset($_POST['update'])) {
 	// if password_2 is empty
 	if (!empty($_POST['password_2'])){
 	    $password_2 = htmlspecialchars($_POST['password_2']);
-
 	}else{
 	    $error++;
 	    $errorMessage = "Please confirm the password";
@@ -221,8 +192,10 @@ if(isset($_POST['update'])) {
       $errorMessage= "Password needs to me longer than 10 characters.";
     }
     // if password_1 and password_2 are the same
+    // make variable $password_3 (hash variant of $password_1) 
+    // from here $password_3 will be used.
     if($password_1 == $password_2){
-      $password_3 = $password_3 = password_hash($password_1, PASSWORD_DEFAULT);
+      $password_3 = password_hash($password_1, PASSWORD_DEFAULT);
     }else{
       $error++;
       $errorMessage= "Password needs to be the same";
@@ -244,36 +217,18 @@ if(isset($_POST['update'])) {
 	    catch (PDOException $e) {
 	        echo $e->getMessage();
 	    }
+	    // all the data is handled succesfully send user to assets.php.
 	    header('location: assets.php');
 
 	}else{?>
-		<!-- else show error message -->
+		<!-- error was not 0 so there was a error -->
+		<!-- show a html box that will contain the specified erromessage -->
 	   	<div class="alert">
 	        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
 	        <strong>Let op!</strong> <?php echo $errorMessage ?>
 	    </div><?php
 	}
 }
-// test json file as api
-// $string = file_get_contents("json/GPS-tracker.json");
-// if ($string === false) {
-//     // deal with error...
-// }
-
-// $json_a = json_decode($string, true);
-
-// if ($json_a === null) {
-//     // deal with error...
-// }
-// $array_length = count($json_a);
-// for ($i=0; $i < $array_length; $i++) { 
-// 	echo $json_a[$i]["ID"];
-//     echo $json_a[$i]["name"];
-//     echo $json_a[$i]['activatiecode'];
-//     echo $json_a[$i]["info"];
-//     echo $json_a[$i]['user_ID'];
-//     echo $json_a[$i]["seconden"] ."<br>";
-// }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -351,6 +306,8 @@ if(isset($_POST['update'])) {
 			    </tr>
 		    </thead>";
 	//select statement to get users assets  
+	// Variable $User_ID is used to select the correct data that is connected to the user his account
+	// User_ID is created from $_session['id'];
 	$result_assets = $database->prepare("SELECT * FROM asset WHERE user_ID=".$User_ID);
 
 	$result_assets->execute();
@@ -381,7 +338,8 @@ if(isset($_POST['update'])) {
 	<!-- add asset form -->
 	<div id="modal1" class="modal add_assets modal2">
 	  <div class="modal-content">
-	  	<h4 class="standard-color">Voeg asset toe</h4>
+	  	<iframe src="http://www.overseetracking.com/" height="100%" width="100%"></iframe> 
+	  	<!-- <h4 class="standard-color">Voeg asset toe</h4>
 		  <form class="col s12 animate" action="" method="post">
 		   	<div class="row">
 				<div class="input-field col s12" id="name">
@@ -412,7 +370,7 @@ if(isset($_POST['update'])) {
 			</div>
 	    	</div>
 		  </form>
-		</div>
+		</div> -->
 	</div>
 </main>
 <?php 
@@ -425,4 +383,5 @@ include('objects/update-profile.php');
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script type="text/javascript" src="js/materialize.min.js"></script>
 <script type="text/javascript" src="js/script.js"></script>
+<script type="text/javascript" src="js/GPS.js"></script>
 </html>

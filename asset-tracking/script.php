@@ -1,6 +1,9 @@
 <?php 
+// start session
   session_start();
+  // make this file a javascript file
   header("Content-type: application/javascript");
+  // include db file
   include_once './db.php';
 ?>
 // get html map id
@@ -16,13 +19,8 @@ var current_position,
   e,
   osmb,
   update;
-var map = L.map('map')
-map.locate({
-  watch: true,
-  setView: false,
-  maxZoom: 18,
-  enableHighAccuracy: true
-});
+// set map
+var map = L.map('map');
 document.getElementsByClassName("info_box")[0].style.display = "none";
 var count = 4;
 // Open default map from mapbox
@@ -38,27 +36,16 @@ L.tileLayer(
     }
 ).addTo(map);
 
-// Add dutch buidlings as layer from Geoserver
-var Buidlings= L.tileLayer.wms("http://localhost:8080/geoserver/Netherlands/wms", {
-    layers: 'Netherlands:NL buildings',
-    transparent: true,
-    format: 'image/png',
-});
-map.addLayer(Buidlings);
-// Add dutch railways as layer from Geoserver
-var Railways= L.tileLayer.wms("http://localhost:8080/geoserver/Netherlands/wms", {
-    layers: 'Netherlands:railways',
-    transparent: true,
-    format: 'image/png',
-});
-map.addLayer(Railways);
-
 // Set our initial location and zoomlevel
 map.setView([52.132633, 5.291266], 6);
+// if the user i signed in
 <?php if (isset($_SESSION['email'])) : ?>
+// set the height of the map so there is space for the nav bar
 document.getElementById("map").style.height = "calc(100% - 64px)";
+// hide the login form
 document.getElementById("Btn").style.display = "none";
 var layerGroup = L.layerGroup().addTo(map);
+// get last location of the gps trackers that are connected to the account and put them in a javascript array
 var array = [
   <?php
       $result_users = $database->prepare("SELECT * FROM asset WHERE latitude != '' AND longitude != '' AND user_ID =". $_SESSION['id']);
@@ -74,6 +61,8 @@ var array = [
 ];
 assets = array.map(s => eval('null,' + s));
 function addlayer() {
+  // set the popup data for the gps trackers
+  // if you click on a gps tracker it will show his name and his activationkey
   var popup_data= [
     <?php
     $result_users = $database->prepare("SELECT * FROM asset WHERE latitude != '' AND longitude != '' AND  user_ID =". $_SESSION['id']);
@@ -88,6 +77,7 @@ function addlayer() {
   var i;
   layerGroup.clearLayers();
   document.getElementById("info_box").innerHTML = ""; 
+  // style the gps trackers as google maps circles.
   for (i = 0; i < assets.length; i++) {
     // data = popup_data.map(s => eval('null,' + s));
       L.circleMarker(assets[i], {
@@ -110,6 +100,7 @@ function addlayer() {
       }).addTo(layerGroup);
       marker.bindPopup(popup_data[i]); 
     // get location name from API
+    // convert the lat lon data to city names for the info box
     document.getElementsByClassName('info_box')[0].style.display = "block";
     fetch('https://api.opencagedata.com/geocode/v1/json?key=5b104f01c9434e3dad1e2d6a548445da&language&q=' + assets[i] + '&pretty=1&no_annotations=1')
     .then(response => {
@@ -119,6 +110,7 @@ function addlayer() {
     .then(function handleData(data){
       data = data.results[0].components['suburb'];
       console.log(data);
+      // insert the city names into the info box
       document.getElementById('info_box').innerHTML +=  data + "<br>"; 
     })
     .catch(function handleError(error){
@@ -126,113 +118,6 @@ function addlayer() {
   }
 }
 addlayer();
+// excecute the function everey min to make sure it has the last location of the gps trackers
 setInterval(addlayer, 60000);
 <?php endif ?>
-// functie om afgelde route te tekenen
-function onLocationFound(e) {
-  if (i == 0) {
-    map.panTo(new L.LatLng(e.latitude, e.longitude));
-    i = i + 1;
-  }
-  var latlngs = Array();
-  var radius = e.accuracy;
-  if (current_position) {
-    map.removeLayer(current_position);
-    map.removeLayer(circle);
-  }
-  //set location
-
-  circle = new L.circleMarker(e.latlng, {
-    color: "#4285F4",
-    weight: 0,
-    fillColor: "#4285F4",
-    fillOpacity: 0.5,
-    radius: 20,
-  }).addTo(map);
-  current_position = new L.circleMarker(e.latlng, {
-    color: "white",
-    weight: 2,
-    fillColor: "#4285F4",
-    radius: 10,
-    opacity: 1,
-    fillOpacity: 1,
-  }).addTo(map);
-  map.addLayer(circle);
-  current_position.bindPopup("Latitude: " + e.latitude +"<br>" + "Longitude: " + e.longitude);
-  map.addLayer(current_position);
-  if(count == 0){
-    setTimeout(update(e), 1000);
-  }else{
-    console.log(count);
-    count -= 1;   
-  }
-}
-//set vieuw on yourlocation
-function setview(e) {
-  var latview = e._latlng.lat;
-  var lngview = e._latlng.lng;
-  map.panTo(new L.LatLng(latview, lngview));
-}
-map.on("locationfound", onLocationFound);
-function onLocationError(e) {
-  alert(e.message);
-}
-var line = L.polyline([],{dashArray: '20,15'}).addTo(map);
-
-function redraw(point) {
-    line.addLatLng(point);
-}
-function update(e) {
-  if(e != null){
-    var loc = [e.latlng];
-    if (loc.length) {
-      redraw(loc.shift());
-      setTimeout(update, 1000);
-    }
-  }
-}
-// for (i = 0; i < assets.length; i++) {
-//   var apikey = '5b104f01c9434e3dad1e2d6a548445da&language';
-
-//   var api_url = 'https://api.opencagedata.com/geocode/v1/json'
-
-//   var request_url = api_url
-//     + '?'
-//     + 'key=' + apikey
-//     + '&q=' + encodeURIComponent(assets[i])
-//     + '&pretty=1'
-//     + '&no_annotations=1';
-//   console.log(request_url);   
-//   // see full list of required and optional parameters:
-//   // https://opencagedata.com/api#forward
-
-//   var request = new XMLHttpRequest();
-//   request.open('GET', request_url, true);
-
-//   request.onload = function() {
-//     // see full list of possible response codes:
-//     // https://opencagedata.com/api#codes
-
-//     if (request.status == 200){ 
-//       // Success!
-//       var data = JSON.parse(request.responseText);
-//       console.log(data.results[0]);
-
-//     } else if (request.status <= 500){ 
-//       // We reached our target server, but it returned an error
-                           
-//       console.log("unable to geocode! Response code: " + request.status);
-//       var data = JSON.parse(request.responseText);
-//       console.log(data.status.message);
-//     } else {
-//       console.log("server error");
-//     }
-//   };
-
-//   request.onerror = function() {
-//     // There was a connection error of some sort
-//     console.log("unable to connect to server");        
-//   };
-
-//   request.send();  // make the request
-// }

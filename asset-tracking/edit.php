@@ -1,40 +1,56 @@
 <?php
+// start session
 session_start();
+// if there is no session or level is 1 redirect user to login page
 if (!isset($_SESSION['email'])) {
 	$_SESSION['msg'] = "You must log in first";
     header('location: index.php');
 }
+// if session level is 1 redirect user to admin page
 if ($_SESSION['level'] == 1) {
 	$_SESSION['msg'] = "You belong at the admin page";
     header('location: admin.php');
 }
+// if logout is pressed
 if (isset($_GET['logout'])) {
+	// destroy session
 	session_destroy();
     unset($_SESSION['email']);
+    // redirect to login page
     header("location: index.php");
 }
+// include db file
 include_once 'db.php';
+// set user id 
+// user id is being used to identify wich items in the database are connected to this account.
 $User_ID= $_SESSION['id'];
+// check if $_GET['ID'] is set else because it is needed to edit asset data.
 if(empty($_GET['ID'])){
-	header("loation: assets.php");
+	//send user to assets page if id is empty
+	header("location: assets.php");
 }else{
+	//else set the $_get['ID] to a variable
+	// the variable will be used to select the asset and update it
 	$ID = $_GET['ID'];
 }
-$result_users = $database->prepare("SELECT * FROM user");
-$result_users->execute();
-for($i=0; $row = $result_users->fetch(); $i++){
-	$id = $row['ID'];
-}	
+// Make a select call to the database to get the asset variables
+// the ID is used to get the correct asset
 $result_software = $database->prepare("SELECT * FROM asset WHERE ID = " . $ID);
 $result_software->execute();
 for($i=0; $row = $result_software->fetch(); $i++){
+	// Set all the needed variables.
+	// the variables will be filled in the form so the user has a better experience editing the asset.
 	$name = $row['name'];
 	$activatiecode = $row['activatiecode'];
 	$info = $row['info'];
 	$seconden = $row['seconden'];
 }	
+// if update asset is pressed
 if(isset($_POST['Save'])) {
+	// set error to 0 if a if statement is not succes the error var will increase by one. There will also be a specific errormessage assigned to the error.
+	// in the end there will be a check if error is 0 if not show error message.
 	$error = 0;
+	// check in database if the activationkey is already in use
 	$activatiecode = htmlspecialchars($_POST['activatiecode']);
 	$query = "SELECT * FROM asset WHERE ID != :ID AND activatiecode = :activatiecode LIMIT 1";
 	$stmt = $database->prepare($query);
@@ -46,6 +62,7 @@ if(isset($_POST['Save'])) {
 	        $errorMessage= "Die GPS is al geactiveerd";
 	    }
 	}
+	//check in database if the name is already in use
 	$name = htmlspecialchars($_POST['name']);
 	$query = "SELECT * FROM asset WHERE ID != :ID AND name= :name AND user_ID =:user_ID LIMIT 1";
 	$stmt = $database->prepare($query);
@@ -58,37 +75,38 @@ if(isset($_POST['Save'])) {
 	    }
 	}		
 	// check if input is empty
-	if (!empty($_POST['name'])){
+	if (!empty($_POST['name'])){ // if asset name is not empty
 	    $name = htmlspecialchars($_POST['name']);
 
 	}else{
 	    $error++;
 	    $errorMessage = "Naam is leeg";
 	}
-	if (!empty($_POST['activatiecode'])){
+	if (!empty($_POST['activatiecode'])){ // if asset activationkey is not empty
 	    $activatiecode  = htmlspecialchars($_POST['activatiecode']);
 
 	}else{
 	    $error++;
 	    $errorMessage = "activatiecode  is leeg";
 	}
-	if (!empty($_POST['info'])){
+	if (!empty($_POST['info'])){ // if asset info is not empty
 	    $info = htmlspecialchars($_POST['info']);
 
 	}else{
 	    $error++;
 	    $errorMessage = "info is leeg";
 	}
-	if(!empty($_POST['seconden'])){
+	if(!empty($_POST['seconden'])){ // if asset seconds is not empty
 		$seconden = htmlspecialchars($_POST['seconden']);
 	}else{
 	    $error++;
 	    $errorMessage = "Seconden is leeg";
 	}
     if ($error == 0) { // if error = 0 update the asset
+    	// update asset into database
 	    $query = "UPDATE asset SET name=:name, activatiecode =:activatiecode , info=:info, seconden=:seconden WHERE ID= :ID";
 	    $stmt = $database->prepare($query);
-
+	    // all the variables that will be inserted to the database.
 	    $stmt->bindValue(":ID", $ID, PDO::PARAM_STR);
 		$stmt->bindValue(":name", $name, PDO::PARAM_STR);
 		$stmt->bindValue(":activatiecode", $activatiecode , PDO::PARAM_STR);
@@ -101,33 +119,11 @@ if(isset($_POST['Save'])) {
 	    catch (PDOException $e) {
 	        echo $e->getMessage();
 	    }
-
-
-	    // test edit json file
-		$string = file_get_contents("json/GPS-tracker.json");
-		if ($string === false) {
-		    // deal with error...
-		}
-
-		$json_a = json_decode($string, true);
-
-		if ($json_a === null) {
-		    // deal with error...
-		}
-		foreach ($json_a as $GPS => $GPS_data) {
-			$array_length = count($GPS_data);
-			if ($json_a[$GPS]['ID'] == $ID) {
-			    $json_a[$GPS]["name"] = $name; 
-			    $json_a[$GPS]["activatiecode"] = $activatiecode;
-			    $json_a[$GPS]["info"] = $info;
-			    $json_a[$GPS]["seconden"] = $seconden;
-			}
-		}
-		$newJsonString = json_encode($json_a, JSON_PRETTY_PRINT);
-		file_put_contents('json/GPS-tracker.json', $newJsonString);
-
+	    // all the data is handled succesfully send user to assets.php.
 	    header('location: assets.php');	
 	}else{// else show alert box?> 
+		<!-- error was not 0 so there was a error -->
+		<!-- show a html box that will contain the specified erromessage -->
 	   	<div class="alert">
 	        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
 	        <strong>Let op!</strong> <?php echo $errorMessage ?>
@@ -144,10 +140,12 @@ if(isset($_POST['Save'])) {
 	<link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<!-- Title of page -->
 	<title>Edit <?= $name ?></title>
 	<!-- icon of page -->
   	<link rel="icon" href="img/favicon.png">
 </head>
+<!-- nav for mobile -->
   <ul class="sidenav" id="mobile-demo">
  	<li class="sidenav-header standard-bgcolor">
           <div class="row">
@@ -160,6 +158,7 @@ if(isset($_POST['Save'])) {
       	<li><a title="Map" href="index.php"><i class="material-icons">map</i>Kaart</a></li>
       	<li><a title="Uitloggen" href="?logout=1"><i class="material-icons left">exit_to_app</i>Uitloggen</a></li>
   </ul>
+  <!-- nav for desktop -->
   <nav>
     <div class="nav-wrapper standard-bgcolor">
     	<a href="#" class="brand-logo center">Asset Tracking</a>

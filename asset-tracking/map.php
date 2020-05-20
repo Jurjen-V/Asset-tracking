@@ -1,23 +1,40 @@
 <?php
+// start session
 session_start();
-$_SESSION['level'] = 0;
+// if there is no session or level is 1 redirect user to login page
+if (empty($_SESSION['email']) || $_SESSION['level'] == 1) {
+  $_SESSION['msg'] = "You must log in first";
+    header('location: index.php');
+}
+// if session level is 1 redirect user to admin page
 if ($_SESSION['level'] == 1) {
   $_SESSION['msg'] = "You belong at the admin page";
     header('location: admin.php');
 }
-include_once 'db.php';
-$error = 0;
+// if logout is pressed
 if (isset($_GET['logout'])) {
+  // destroy session
   session_destroy();
-  unset($_SESSION['email']);
-  header("location: index.php");
+    unset($_SESSION['email']);
+    // redirect to login page
+    header("location: index.php");
 }
+if(empty($_GET['ID'])){
+  //send user to assets page if id is empty
+  header("location: assets.php");
+}else{
+  //else set the $_get['ID] to a variable
+  // the variable will be used to select the asset and update it
+  $ID = $_GET['ID'];
+}
+// include db file
+include_once 'db.php';
 ?>
 <!DOCTYPE html>
 <html>
 <head>
   <!-- Title document -->
-  <title>Afgelegde route</title>
+  <title>Afgelegde route <?= $_GET['TS']?></title>
   <!--Load the style stylesheet of leaflet -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ==" crossorigin=""/>
   <!--Load leaflet -->
@@ -43,21 +60,22 @@ if (isset($_GET['logout'])) {
 
   <!-- icon of page -->
   <link rel="icon" href="img/favicon.png">
-
 </head>
 <body>
+  <!-- nav mobile -->
   <ul class="sidenav" id="mobile-demo">
-  <li class="sidenav-header standard-bgcolor">
-          <div class="row">
-            <div class="col s4">
-                <h4 class="white-text">Asset tracking</h4>
-            </div>
-          </div>
-        </li>
-        <li><a title="Home" class="modal-trigger" href="assets.php"><i class="material-icons left">home</i>Home</a></li>
-        <li ><a title="Map" href="index.php"><i class="material-icons">map</i>Kaart</a></li>
-        <li><a title="Uitloggen" href="?logout=1"><i class="material-icons left">exit_to_app</i>Uitloggen</a></li>
+    <li class="sidenav-header standard-bgcolor">
+      <div class="row">
+        <div class="col s4">
+          <h4 class="white-text">Asset tracking</h4>
+        </div>
+      </div>
+    </li>
+    <li><a title="Home" class="modal-trigger" href="assets.php"><i class="material-icons left">home</i>Home</a></li>
+    <li ><a title="Map" href="index.php"><i class="material-icons">map</i>Kaart</a></li>
+    <li><a title="Uitloggen" href="?logout=1"><i class="material-icons left">exit_to_app</i>Uitloggen</a></li>
   </ul>
+  <!-- nav desktop -->
   <nav>
     <div class="nav-wrapper standard-bgcolor">
       <a href="#" class="brand-logo center">Asset Tracking</a>
@@ -83,7 +101,7 @@ if (isset($_GET['logout'])) {
 <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 <script type="text/javascript">
-var elem = L.DomUtil.get('info_box');
+var elem = L.DomUtil.get('info_box'); //the info box of all the visited locations
 L.DomEvent.on(elem, 'mousewheel', L.DomEvent.stopPropagation);
 document.getElementById("map").style.height = "calc(100% - 64px)";
   // get html map id
@@ -99,6 +117,7 @@ var current_position,
   e,
   osmb,
   update;
+//set map
 var map = L.map('map')
 map.locate({
   watch: true,
@@ -121,6 +140,9 @@ L.tileLayer(
 // array where lat lon location of assets are stored in
 var array =[
   <?php
+  // make a select statement of all the lat long data 
+  // and put it in a javascript array
+  // The javascript array will then place markers on the map and draw a route
   $result_assets = $database->prepare("SELECT asset.ID, point.ASSET_ID, asset.name, CAST(point.TS AS DATE), asset.activatiecode, asset.info, (SELECT ST_X(latlong)) AS LAT, (SELECT ST_y(latlong)) AS LON FROM asset INNER JOIN point on asset.ID = point.ASSET_ID WHERE CAST(TS AS DATE) = '".$_GET['TS']."' AND point.ASSET_ID=".$_GET['ID']);
   $result_assets->execute();
   for($i=0; $row = $result_assets->fetch(); $i++){
@@ -134,12 +156,14 @@ var array =[
 // array where lat lon location gets conferted to location name
 var plaatsnaam =[
   <?php
+  // make a select statement of all the lat long data 
+  // and put it in a javascript array
   $result_assets = $database->prepare("SELECT asset.ID, point.ASSET_ID, asset.name, CAST(point.TS AS DATE), asset.activatiecode, asset.info, (SELECT ST_X(latlong)) AS LAT, (SELECT ST_y(latlong)) AS LON FROM asset INNER JOIN point on asset.ID = point.ASSET_ID WHERE CAST(TS AS DATE) = '".$_GET['TS']."' AND point.ASSET_ID=".$_GET['ID']);
   $result_assets->execute();
   for($i=0; $row = $result_assets->fetch(); $i++){
     $lat = $row['LAT'];
     $lng = $row['LON'];
-
+    // convert the lat lon numbers to city names
       $url = 'https://api.opencagedata.com/geocode/v1/json?q='.$lat.','.$lng.'&key=5b104f01c9434e3dad1e2d6a548445da&language=nl&pretty=1'; 
       $json = @file_get_contents($url);
       $data = json_decode($json, true);

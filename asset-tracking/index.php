@@ -1,12 +1,19 @@
 <?php
 session_start();
-$_SESSION['level'] = 0;
-if ($_SESSION['level'] == 1) {
-  $_SESSION['msg'] = "You belong at the admin page";
+// If a admin account tries to get acces to regular user page
+// send the admin accounts to the admin page.
+if (!empty($_SESSION['level'])){ //if session is not set 
+  if($_SESSION['level'] == 1) {
+    $_SESSION['msg'] = "You belong at the admin page";
     header('location: admin.php');
+  }
+}else{
+  $_SESSION['level'] = 0;
 }
 
 //Detect special conditions devices
+// Get browser http user agent and check if user is visiting web page from apple device
+// if true and it runs ios < 13 send user to other login page because user can not use regular login page.
 $version = preg_replace("/(.*) OS ([0-9]*)_(.*)/","$2", $_SERVER['HTTP_USER_AGENT']);
 $iPod    = stripos($_SERVER['HTTP_USER_AGENT'],"iPod");
 $iPhone  = stripos($_SERVER['HTTP_USER_AGENT'],"iPhone");
@@ -20,46 +27,58 @@ if (!isset($_SESSION['email'])){
     }
   }
 }
+// include db file
 include_once 'db.php';
-$error = 0;
 // login validation
 if (isset($_POST['login_user'])) {
-  if(!empty($_POST['email'])){
-    $email = htmlspecialchars($_POST['email']);
+  // set error to 0 if a if statement is not succes the error var will increase by one. There will also be a specific errormessage assigned to the error.
+  // in the end there will be a check if error is 0 if not show error message.
+  $error = 0;
+  // check if input fields are filled in
+  if(!empty($_POST['email'])){ // check if email is not empty
+    $email = htmlspecialchars($_POST['email']); 
   }else{
     $error++;
     $errorMessage = "Email is leeg";
   }
-  if(!empty($_POST['psw'])){
+  if(!empty($_POST['psw'])){ // check if password is not empty
     $enterd_password = htmlspecialchars($_POST['psw']);
   }else{
     $error++;
-    $errorMessage = "Password is leeg";
+    $errorMessage = "Wachtwoord is leeg";
   }
-  // Get Old Password from Database which is having unique userName
+  //check if password is correct.
+  // Get Old Password from Database using the email addres to get the password form database
   $query ="SELECT * FROM user WHERE email =:email";
   $stmt = $database->prepare($query);
   $results = $stmt->execute(array(":email" => $email));
   $user = $stmt->fetch(PDO::FETCH_ASSOC);
+  // variables that the user account with the email addres has.
   $id = $user['ID'];
   $email = $user['email'];
   $Level = $user['level'];
   $password= $user['password'];
+  // compare the filled in password with the database password.
   if(password_verify($enterd_password, $password)){
   }else{
     $error++;
-    $errorMessage= "Wachtwoorden is niet juist";
+    $errorMessage= "Wachtwoorden zijn niet juist";
   }
   if($error == 0){
+    // These variables will be used to make sure the user is logged in.
     $_SESSION['email'] = $email;
     $_SESSION['id'] = $id;
     $_SESSION['level'] = $Level;
     $_SESSION['msg'] = "You are now logged in";
     if($Level == 0){
     }else{
+      // If the user has a admin account 
+      // send the user to admin page.
       header('location: admin.php');
     }
   }else{?>
+    <!-- error was not 0 so there was a error -->
+    <!-- show a html box that will contain the specified erromessage -->
     <div style="display: block" class="alert" id="alert">
       <span class="closebtn" onclick="Close()">&times;</span> 
       <strong>Let op!</strong> <?php echo $errorMessage ?>
@@ -67,6 +86,7 @@ if (isset($_POST['login_user'])) {
     <?php
   }
 }
+// if $_GET['logout'] is set destroy session and send user to index page.
 if (isset($_GET['logout'])) {
   session_destroy();
   unset($_SESSION['email']);
@@ -101,6 +121,8 @@ if (isset($_GET['logout'])) {
 </head>
 <body>
   <div id="alert" style="display: none"></div>
+  <!-- if the user is logged in show nav bar etc -->
+  <!-- show below html code if user is logged in -->
   <?php if (isset($_SESSION['email'])) : ?>
   <ul class="sidenav" id="mobile-demo">
   <li class="sidenav-header standard-bgcolor">
@@ -127,25 +149,8 @@ if (isset($_GET['logout'])) {
       </ul>
     </div> 
   </nav>
-  <?php 
-  // $string = file_get_contents("json/locatie.json");
-  // if ($string === false) {
-  //     // deal with error...
-  // }
-
-  // $json_a = json_decode($string, true);
-
-  // if ($json_a === null) {
-  //     // deal with error...
-  // }
-  // $array_length = count($json_a);
-  // for ($i=0; $i < $array_length; $i++) { 
-  //   echo $json_a[$i]["POINT_ID"];
-  //     echo $json_a[$i]["ASSET_ID"];
-  //     echo $json_a[$i]['latlong'];
-  //     echo $json_a[$i]["TS"]."<br>";
-  // }
-endif ?>
+  <?php endif ?>
+  <!-- show below html when user is not logged in and when user is logged in -->
     <div id='map'>
       <div class="leaflet-top leaflet-right button_box2 leaflet-control standard-bgcolor white-text info_box">
         <h6 class="white-text">Locaties:</h6>
@@ -200,64 +205,3 @@ endif ?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </body>
 </html>
-<?php
-// include_once 'js/script.php';
-    // $error = 0;
-    // $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-    // if(strpos($actual_link, 'longitude') && strpos($actual_link, 'latitude') && strpos($actual_link, 'REMOTE_ADDR')){
-    //   if (!empty($_GET['REMOTE_ADDR'])){
-    //     $succes= "succes 1";
-    //   }else{
-    //       $error++;
-    //   }
-    //   if (!empty($_GET['longitude'])){
-    //     $longitude = $_GET["longitude"];
-    //     $succes= "succes 2";
-    //   }else{
-    //     $error++;
-    //   }
-    //   if (!empty($_GET['latitude'])){
-    //     $latitude = $_GET["latitude"];
-    //     $succes= "succes 3";
-    //   }else{
-    //     $error++;
-    //   }
-    //   $result = $database->prepare("SELECT * FROM location WHERE REMOTE_ADDR= :parameter  LIMIT 1");
-    //   $result->bindParam(':parameter', $REMOTE_ADDR, PDO::PARAM_STR);
-    //   $result->execute();
-    //   for($i=0; $row = $result->fetch(); $i++){
-    //     $ID = $row['ID'];
-    //     $row_REMOTE_ADDR = $row["REMOTE_ADDR"];
-    //     $row_latitude = $row['latitude'];
-    //     $row_longitude = $row['longitude'];
-    //   } 
-    //   if ($error === 0 && $result) {
-    //       if ($row_REMOTE_ADDR == $REMOTE_ADDR) {
-    //         if($_GET['longitude'] != $row_longitude || $_GET['latitude'] != $row_latitude){
-    //           $query = "UPDATE location SET latitude=:latitude, longitude=:longitude WHERE REMOTE_ADDR= :REMOTE_ADDR";
-    //           $stmt = $database->prepare($query);
-    //           $stmt->bindValue(":REMOTE_ADDR", $row_REMOTE_ADDR, PDO::PARAM_STR);
-    //           $stmt->bindValue(":latitude", $latitude, PDO::PARAM_STR);
-    //           $stmt->bindValue(":longitude", $longitude, PDO::PARAM_STR);
-    //           try {
-    //             $stmt->execute();
-    //           }
-    //           catch (PDOException $e) {
-    //             echo $e->getMessage();
-    //           }
-    //         }
-    //       }else{
-    //         $query = "INSERT INTO location (latitude, longitude, REMOTE_ADDR) VALUES (?, ?, ?)";
-    //         $insert = $database->prepare($query);
-    //         $data = array("$longitude", "$latitude", "$REMOTE_ADDR");
-    //         try {
-    //           $insert->execute($data);
-    //           $succes = "succes 4";
-    //         }
-    //         catch (PDOException $e) {
-    //           throw $e;
-    //         }
-    //       }
-    //     }
-    // }
-  ?>

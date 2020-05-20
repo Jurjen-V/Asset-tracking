@@ -1,24 +1,32 @@
 <?php
 // start session
 session_start();
-if (empty($_SESSION['email'])) {// if there is no session or level is 1 redirect user to login page
+
+// if there is no session or level is 1 redirect user to login page
+if (empty($_SESSION['email']) || $_SESSION['level'] == 1) {
 	$_SESSION['msg'] = "You must log in first";
     header('location: index.php');
 }
-if($_SESSION['level'] == 0){// if session level is 1 redirect user to admin page
-	$_SESSION['msg'] = "You must log in first";
+// if session level is 0 redirect user to user page
+if ($_SESSION['level'] == 0) {
+	$_SESSION['msg'] = "You belong at the user page";
     header('location: index.php');
 }
-if (isset($_GET['logout'])) {// if logout is pressed
-	session_destroy();	// destroy session
+// if logout is pressed
+if (isset($_GET['logout'])) {
+	// destroy session
+	session_destroy();
     unset($_SESSION['email']);
-    header("location: index.php");    // redirect to login page
+    // redirect to login page
+    header("location: index.php");
 }
-
-$User_ID= $_SESSION['id'];// set user id 
-include_once 'db.php';// include db file
-
-$result_users = $database->prepare("SELECT * FROM user WHERE ID = ".$User_ID);// request basic info from user.
+// set user id 
+// user id is being used to identify wich items in the database are connected to this account.
+$User_ID= $_SESSION['id'];
+// include db file
+include_once 'db.php';
+// request basic info from user.
+$result_users = $database->prepare("SELECT * FROM user WHERE ID = ".$User_ID);
 $result_users->execute();
 for($i=0; $row = $result_users->fetch(); $i++){
 	$id = $row['ID'];
@@ -27,6 +35,7 @@ for($i=0; $row = $result_users->fetch(); $i++){
 }	
 // if delete is pressed
 if(isset($_GET['delete'])){
+	// $_Get delete is the id of the asset the id is used to identify the correct asset and delete it
     $query = "DELETE FROM user WHERE ID={$_GET['delete']}";
     $insert = $database->prepare($query);
     $insert->execute();
@@ -36,7 +45,10 @@ if(isset($_GET['delete'])){
 }
 // if add user is pressed
 if(isset($_POST['submit'])) {
+	// set error to 0 if a if statement is not succes the error var will increase by one. There will also be a specific errormessage assigned to the error.
+	// in the end there will be a check if error is 0 if not show error message.
 	$error = 0;
+	// check in database if the email is already in use
 	$email = htmlspecialchars($_POST['email']);
 	$query = "SELECT * FROM user WHERE email = :email LIMIT 1";
 	$stmt = $database->prepare($query);
@@ -49,44 +61,55 @@ if(isset($_POST['submit'])) {
 	    }
 	}	
 	// check if input data is all filled in
-	if (!empty($_POST['email'])){
+	// check if email is not empty
+	if (!empty($_POST['email'])){ 
 	    $email = htmlspecialchars($_POST['email']);
 	}else{
 	    $error++;
 	    $errorMessage = "E-mailadres is leeg";
 	}
-	if (!empty($_POST['password_1'])){
+	// check if password_1 is filled in
+	if (!empty($_POST['password_1'])){ 
 	    $password_1 = htmlspecialchars($_POST['password_1']);
 	}else{
 	    $error++;
 	    $errorMessage = "Password is empty";
 	}
+	// check if password_2 is filled in
 	if (!empty($_POST['password_2'])){
 	    $password_2 = htmlspecialchars($_POST['password_2']);
-
 	}else{
 	    $error++;
 	    $errorMessage = "Please confirm the password";
 	}
-	if(strlen($password_1) < 10 || strlen($password_2) < 10){ //check if passwords are longer than 10 
+	//check if passwords are longer than 10 
+	if(strlen($password_1) < 10 || strlen($password_2) < 10){ 
       $error++;
       $errorMessage= "Password needs to me longer than 10 characters.";
     }
-    if($password_1 == $password_2){ //check if passwords are the same
+    // if password_1 and password_2 are the same
+    // make variable $password_3 (hash variant of $password_1) 
+    // from here $password_3 will be used.
+    if($password_1 == $password_2){
       $password_3 = $password_3 = password_hash($password_1, PASSWORD_DEFAULT);
     }else{
       $error++;
       $errorMessage= "Password needs to be the same";
     }
-    if(!empty($_POST['level'])){ //check if the level is empty
+    //check if the level is empty
+    if(!empty($_POST['level'])){ 
+    	//if the level is filled in the user his account will become a admin account aka level 1.
     	$level = htmlspecialchars($_POST['level']);
     }else{
+    	// if level is left unfilled the standard value will be filled in and that is 0 aka user level
     	$level = 0;
     }
-	if ($error == 0) { //if error is 0 proceed
+    //if error is 0 proceed
+	if ($error == 0) { 
 		// insert user into database
 	    $query = "INSERT INTO user (email, password, level) VALUES (?,?,?)";
 	    $insert = $database->prepare($query);
+	    // all the variables that will be inserted
 	    $data = array("$email", "$password_3", "$level");
 
 	    try {
@@ -95,9 +118,11 @@ if(isset($_POST['submit'])) {
 	    catch (PDOException $e) {
 	        echo $e->getMessage();
 	    }
+	    // all the data is handled succesfully send user to admin.php.
 	    header('Location: admin.php');	
 	}else{?>
-		<!-- else show error message -->
+		<!-- error was not 0 so there was a error -->
+		<!-- show a html box that will contain the specified erromessage -->
 	   	<div class="alert">
 	        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
 	        <strong>Let op!</strong> <?php echo $errorMessage ?>
@@ -106,7 +131,10 @@ if(isset($_POST['submit'])) {
 }
 // if update profile is pressed
 if(isset($_POST['update'])) {
+	// set error to 0 if a if statement is not succes the error var will increase by one. There will also be a specific errormessage assigned to the error.
+	// in the end there will be a check if error is 0 if not show error message.
 	$error = 0;
+	// check in database if the activationkey is already in use
 	$email = htmlspecialchars($_POST['email']);
 	$query = "SELECT * FROM user WHERE email = :email AND ID !=:ID LIMIT 1";
 	$stmt = $database->prepare($query);
@@ -119,43 +147,48 @@ if(isset($_POST['update'])) {
 	    }
 	}
 	// check if input fields are filled in
+	// check if email is not empty
 	if (!empty($_POST['email'])){
 	    $email = htmlspecialchars($_POST['email']);
-
 	}else{
 	    $error++;
 	    $errorMessage = "E-mail is leeg";
 	}
+	// check if password_1 is not empty
 	if (!empty($_POST['password_1'])){
 	    $password_1 = htmlspecialchars($_POST['password_1']);
-
 	}else{
 	    $error++;
 	    $errorMessage = "Password is empty";
 	}
+	// Check if password_2 is not empty
 	if (!empty($_POST['password_2'])){
 	    $password_2 = htmlspecialchars($_POST['password_2']);
-
 	}else{
 	    $error++;
 	    $errorMessage = "Please confirm the password";
 	}
-	if(strlen($password_1) < 10 || strlen($password_2) < 10){ //check if passwords are longer than 10 
+	//check if passwords are longer than 10 
+	if(strlen($password_1) < 10 || strlen($password_2) < 10){ 
       $error++;
       $errorMSG= "Password needs to me longer than 10 characters.";
     }
+    // if password_1 and password_2 are the same
+	// make variable $password_3 (hash variant of $password_1) 
+	// from here $password_3 will be used.
     if($password_1 == $password_2){ // check if passwords are the same
       $password_3 = $password_3 = password_hash($password_1, PASSWORD_DEFAULT);
     }else{
       $error++;
       $errorMSG= "Password needs to be the same";
     }
-	if ($error == 0) { //if error = 0
+    // if there are no errors proceed
+	if ($error == 0) { 
 		// update the user settings in database
 	    $query = "UPDATE user SET email=:email, password=:password_3 WHERE ID =:ID";
 	    
 	   	$stmt = $database->prepare($query);
-
+		// all the variables that will be updated
 	    $stmt->bindValue(":ID", $User_ID, PDO::PARAM_STR);
 		$stmt->bindValue(":email", $email, PDO::PARAM_STR);
 		$stmt->bindValue(":password_3", $password_3, PDO::PARAM_STR);
@@ -166,10 +199,12 @@ if(isset($_POST['update'])) {
 	    catch (PDOException $e) {
 	        echo $e->getMessage();
 	    }
+	    // all the data is handled succesfully send user to admin.php.
 	    header('Location: admin.php');
 
 	}else{?>
-		<!-- else show error message -->
+		<!-- error was not 0 so there was a error -->
+		<!-- show a html box that will contain the specified erromessage -->
 	   	<div class="alert">
 	        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
 	        <strong>Let op!</strong> <?php echo $errorMessage ?>
@@ -245,24 +280,28 @@ if(isset($_POST['update'])) {
 			          <th>Actions</th>
 			        </tr>
 		        </thead>";
+	//Select all the users that are in the database with a count that counts the amount of gps trackers that are registerd to their account 
 	$result_assets = $database->prepare("SELECT user.ID, user.email, user.level, (SELECT COUNT(*) FROM asset WHERE asset.user_ID = user.ID) as GPScount FROM user");
 
 	  $result_assets->execute();
 	  echo "<tbody>";
 	  for($i=0; $row = $result_assets->fetch(); $i++){
 	    $id = $row['ID'];
+	    // if level = 0 replace it with text "gebruiker"
 	    if($row['level'] == 0 ){
 	    	$level = "Gebruiker";
-	    }elseif($row['level'] == 1){
+	    }elseif($row['level'] == 1){ //if level = 1 replace it with text "Admin"
 	    	$level = "Admin";
-	    }else{
+	    }else{ //if it is a nother number just show the number
 	    	$level = $row['level'];
 	    }
-	    // the TR row is clickable it will redirect to edit user page.
+	    //  echo all the user data in the table 
+	    // data like email amount of gps trackers and the user his level.
 	   	echo "<tr data-href='edit_user.php?ID=". $id. "'>";
 	    echo "<td>" . $row['email'] . "</td>";
 	    echo "<td>" . $row['GPScount'] ."</td>";
 	    echo "<td>" . $level . "</td>";
+	    // edit and delete button
 	    echo "
    			<td>
 			<a title='Edit' class='link btn-floating  btn standard-bgcolor' href=edit_user.php?ID=". $id."><i class='material-icons'>edit</i></a>

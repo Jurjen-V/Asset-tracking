@@ -1,19 +1,22 @@
 // open form inlog page
 function openForm() {
+    // when open form button is pressed show the form and disable zoom functions
     document.getElementById("myForm").style.display = "block";
-    map.dragging.disable();
-    map.touchZoom.disable();
-    map.doubleClickZoom.disable();
-    map.scrollWheelZoom.disable();
+    map.dragging.disable(); //disable dragging on map
+    map.touchZoom.disable(); // disable touch zooming on map
+    map.doubleClickZoom.disable(); // disable double click zoom on map
+    map.scrollWheelZoom.disable(); // disable scroll zoom on map
 }
 // close form inlog page
 function closeForm() {
+    // when close form button is pressed hide the form and enable zoom functions
     document.getElementById("myForm").style.display = "none";
-    map.dragging.enable();
-    map.touchZoom.enable();
-    map.doubleClickZoom.enable();
-    map.scrollWheelZoom.enable();
+    map.dragging.enable(); //enable dragging on map
+    map.touchZoom.enable();// enable touch zooming on map 
+    map.doubleClickZoom.enable();// enable double click zoom on map
+    map.scrollWheelZoom.enable();// enable scroll zoom on map
 }
+// eventhandlers for materialize triggers and dropdowns
 document.addEventListener('DOMContentLoaded', function() {
     // trigger modal
     var modals = document.querySelectorAll('.modal');
@@ -28,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var collapsibles = document.querySelectorAll('.collapsible');
     var collapsible = M.Collapsible.init(collapsibles);
 });
+// close function for alert boxes
 function Close(){
     // close alert box 
     var close = document.getElementsByClassName("closebtn");
