@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:java="http://www.yworks.com/xml/yfiles-common/1.0/java" xmlns:sys="http://www.yworks.com/xml/yfiles-common/markup/primitives/2.0" xmlns:x="http://www.yworks.com/xml/yfiles-common/markup/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:y="http://www.yworks.com/xml/graphml" xmlns:yed="http://www.yworks.com/xml/yed/3" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://www.yworks.com/xml/schema/graphml/1.1/ygraphml.xsd">
-  <!--Created by yEd 3.19.1.1-->
+  <!--Created by yEd 3.20-->
   <key attr.name="Description" attr.type="string" for="graph" id="d0"/>
   <key for="port" id="d1" yfiles.type="portgraphics"/>
   <key for="port" id="d2" yfiles.type="portgeometry"/>
@@ -23,7 +23,7 @@
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="15" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="22.37646484375" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="t" textColor="#000000" verticalTextPosition="bottom" visible="true" width="159.09765625" x="240.16929687499453" xml:space="preserve" y="4.0">asset tonen leaflet map</y:NodeLabel>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="29.3359375" x="115.0824218749973" xml:space="preserve" y="33.0">User<y:LabelModel><y:ColumnNodeLabelModel offset="3.0"/></y:LabelModel><y:ModelParameter><y:ColumnNodeLabelModelParameter id="column_0" inside="true" verticalPosition="0.0"/></y:ModelParameter></y:NodeLabel>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="44.0078125" x="328.4646093749918" xml:space="preserve" y="33.0">System<y:LabelModel><y:ColumnNodeLabelModel offset="3.0"/></y:LabelModel><y:ModelParameter><y:ColumnNodeLabelModelParameter id="column_1" inside="true" verticalPosition="0.0"/></y:ModelParameter></y:NodeLabel>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="23.341796875" x="537.2653515624891" xml:space="preserve" y="33.0">API<y:LabelModel><y:ColumnNodeLabelModel offset="3.0"/></y:LabelModel><y:ModelParameter><y:ColumnNodeLabelModelParameter id="column_2" inside="true" verticalPosition="0.0"/></y:ModelParameter></y:NodeLabel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="63.35546875" x="517.2585156249891" xml:space="preserve" y="33.0">Websocket<y:LabelModel><y:ColumnNodeLabelModel offset="3.0"/></y:LabelModel><y:ModelParameter><y:ColumnNodeLabelModelParameter id="column_2" inside="true" verticalPosition="0.0"/></y:ModelParameter></y:NodeLabel>
           <y:StyleProperties>
             <y:Property name="y.view.tabular.TableNodePainter.ALTERNATE_ROW_STYLE">
               <y:SimpleStyle fillColor="#474A4340" lineColor="#000000" lineType="line" lineWidth="1.0"/>
@@ -47,7 +47,7 @@
           </y:StyleProperties>
           <y:State autoResize="true" closed="false" closedHeight="80.0" closedWidth="100.0"/>
           <y:Insets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="0" topF="0.0"/>
-          <y:BorderInsets bottom="0" bottomF="0.0" left="3" leftF="3.0" right="13" rightF="13.336249999988922" top="13" topF="13.0"/>
+          <y:BorderInsets bottom="60" bottomF="60.0" left="3" leftF="3.0" right="13" rightF="13.336249999988922" top="13" topF="13.0"/>
           <y:Table autoResizeTable="true" defaultColumnWidth="202.0" defaultMinimumColumnWidth="30.0" defaultMinimumRowHeight="30.0" defaultRowHeight="280.0">
             <y:DefaultColumnInsets bottom="3.0" left="3.0" right="3.0" top="20.0"/>
             <y:DefaultRowInsets bottom="3.0" left="20.0" right="3.0" top="3.0"/>
@@ -104,19 +104,7 @@
         <node id="n0::n2">
           <data key="d6">
             <y:ShapeNode>
-              <y:Geometry height="35.60000000000008" width="142.00000000000006" x="829.0" y="612.1999999999999"/>
-              <y:Fill color="#FFCC00" transparent="false"/>
-              <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="33.40234375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="145.421875" x="-1.7109375" xml:space="preserve" y="1.0988281250000682">Selecteert asset gegevens
-van gebruiker<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-              <y:Shape type="roundrectangle"/>
-            </y:ShapeNode>
-          </data>
-        </node>
-        <node id="n0::n3">
-          <data key="d6">
-            <y:ShapeNode>
-              <y:Geometry height="30.0" width="30.0" x="645.0" y="705.0"/>
+              <y:Geometry height="30.0" width="30.0" x="645.0" y="645.0"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" hasText="false" height="4.0" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="4.0" x="13.0" y="13.0">
@@ -131,10 +119,10 @@ van gebruiker<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel
             </y:ShapeNode>
           </data>
         </node>
-        <node id="n0::n4">
+        <node id="n0::n3">
           <data key="d6">
             <y:ShapeNode>
-              <y:Geometry height="41.60000000000008" width="157.00000000000006" x="821.5" y="699.1999999999999"/>
+              <y:Geometry height="41.60000000000008" width="157.00000000000006" x="821.5" y="639.1999999999999"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="33.40234375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="149.39453125" x="3.802734375" xml:space="preserve" y="4.098828125000068">Toont asset gegevens 
@@ -143,14 +131,28 @@ van gebruiker in kaart vorm<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/>
             </y:ShapeNode>
           </data>
         </node>
+        <node id="n0::n4">
+          <data key="d6">
+            <y:ShapeNode>
+              <y:Geometry height="49.60000000000008" width="149.50000000000006" x="829.0" y="455.19999999999993"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="48.103515625" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="129.408203125" x="10.0458984375" xml:space="preserve" y="0.7482421875000682">Systeem opent actuele 
+websocket verbinding 
+met gps tracker
+<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="roundrectangle"/>
+            </y:ShapeNode>
+          </data>
+        </node>
         <node id="n0::n5">
           <data key="d6">
             <y:ShapeNode>
-              <y:Geometry height="35.60000000000008" width="142.00000000000006" x="829.0" y="462.19999999999993"/>
+              <y:Geometry height="35.60000000000008" width="142.00000000000006" x="1039.0" y="462.19999999999993"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="33.40234375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="132.0859375" x="4.95703125" xml:space="preserve" y="1.0988281250000682">Systeem vraagt asset
-gegevens van gebruiker<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="33.40234375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="140.107421875" x="0.9462890625" xml:space="preserve" y="1.0988281250000682">Websocket levert 
+huidige lat long gegevens<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
               <y:Shape type="roundrectangle"/>
             </y:ShapeNode>
           </data>
@@ -158,19 +160,7 @@ gegevens van gebruiker<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:L
         <node id="n0::n6">
           <data key="d6">
             <y:ShapeNode>
-              <y:Geometry height="35.60000000000008" width="142.00000000000006" x="1039.0" y="462.19999999999993"/>
-              <y:Fill color="#FFCC00" transparent="false"/>
-              <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
-              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="33.40234375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="111.390625" x="15.3046875" xml:space="preserve" y="1.0988281250000682">Levert actuele GPS 
-data<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
-              <y:Shape type="roundrectangle"/>
-            </y:ShapeNode>
-          </data>
-        </node>
-        <node id="n0::n7">
-          <data key="d6">
-            <y:ShapeNode>
-              <y:Geometry height="36.84000000000009" width="158.20000000000022" x="820.8999999999999" y="521.5799999999999"/>
+              <y:Geometry height="36.84000000000009" width="158.20000000000022" x="820.8999999999999" y="551.5799999999999"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="33.40234375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="128.74609375" x="14.726953125000136" xml:space="preserve" y="1.7188281250000728">Slaat actuele GPS data
@@ -192,7 +182,7 @@ op in database<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelMode
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="n0::e1" source="n0::n2" target="n0::n4">
+    <edge id="n0::e1" source="n0::n3" target="n0::n2">
       <data key="d8" xml:space="preserve"/>
       <data key="d10">
         <y:PolyLineEdge>
@@ -203,7 +193,7 @@ op in database<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelMode
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="n0::e2" source="n0::n4" target="n0::n3">
+    <edge id="n0::e2" source="n0::n1" target="n0::n4">
       <data key="d8" xml:space="preserve"/>
       <data key="d10">
         <y:PolyLineEdge>
@@ -214,9 +204,8 @@ op in database<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelMode
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="n0::e3" source="n0::n1" target="n0::n5">
+    <edge id="n0::e3" source="n0::n4" target="n0::n5">
       <data key="d8" xml:space="preserve"/>
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -228,23 +217,10 @@ op in database<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelMode
     </edge>
     <edge id="n0::e4" source="n0::n5" target="n0::n6">
       <data key="d8" xml:space="preserve"/>
-      <data key="d9"/>
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="white_delta"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="n0::e5" source="n0::n6" target="n0::n7">
-      <data key="d8" xml:space="preserve"/>
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
-            <y:Point x="1110.0" y="540.0"/>
+            <y:Point x="1110.0" y="570.0"/>
           </y:Path>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="white_delta"/>
@@ -252,7 +228,7 @@ op in database<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelMode
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="n0::e6" source="n0::n7" target="n0::n2">
+    <edge id="n0::e5" source="n0::n6" target="n0::n3">
       <data key="d8" xml:space="preserve"/>
       <data key="d9"/>
       <data key="d10">

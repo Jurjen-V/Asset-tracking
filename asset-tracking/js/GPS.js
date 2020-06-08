@@ -1,4 +1,5 @@
 //login api
+locationTrackerID;
 function login(){
 	//set form data
     var data = new FormData();
@@ -11,7 +12,6 @@ function login(){
     var xhr = new XMLHttpRequest(); 
     xhr.addEventListener("readystatechange", function() {
         if(this.readyState === 4) {
-            console.log(this.responseText);
             //get responsetext
             // these variables will be used by getting the tracker list and making the websocket login.
             var obj = JSON.parse(this.responseText);
@@ -42,51 +42,84 @@ function getTrackers(Token, ClientID, UserName, Password){
     var xhr = new XMLHttpRequest();
     xhr.addEventListener("readystatechange", function() {
       if(this.readyState === 4) {
-        console.log(this.responseText);
+        
         // These variables will be used by connecting to websocket.
-        var trackerList = JSON.parse(this.responseText);
+        var trackerList =JSON.parse(this.responseText);
         // These variables will be used to make a connection to the websocket
-        var IP = trackerList.Transfer.ServerIP;
-        var port = trackerList.Transfer.WsOutputPort;
-
-        // all the variables inside the () brackets are needed to make the websocket connection.
-        websocketLogin(Token, ClientID, UserName, Password, IP, Port);
+        var IP = trackerList.Data.Transfer[0].ServerIP;
+        var Port = trackerList.Data.Transfer[0].WsOutputPort;
+        var i;
+        for (i = 0; i < trackerList.Data.Tracker.length; i++) {
+            //these variables will be used to store in the database by php
+            var trackerID = trackerList.Data.Tracker[i].ProductID;
+            var gpsName = trackerList.Data.Tracker[i].Name;
+            var DbID = trackerList.Data.Tracker[i].DbID;
+            var PhoneNumber = trackerList.Data.Tracker[i].PhoneNumber1;
+            var Longitude = trackerList.Data.Position[0].Longitude;
+            var Latitude = trackerList.Data.Position[0].Latitude;
+            // all the variables inside the () brackets are needed to make the websocket connection.
+            //send javascript var to php page. for database
+        }
+        dbParam = JSON.stringify(trackerList.Data);
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+          }
+        };
+        xmlhttp.open("GET", "assets.php?x=" + dbParam, true);
+        xmlhttp.send(); 
+        locationHistory(Token, locationTrackerID, DbID);
       }
     });
     // headers
     xhr.open("POST", "http://api.overseetracking.com/WebProcessorApi.ashx",true);  
     xhr.send(data);
 }
-function websocketLogin(Token, ClientID, UserName, Password, IP, Port){
-    // this function uses variables from Login function and getTrackers function.
-    // The credentials to send to the web socket
-	var Credential = "{'ClientID':'" + ClientID + "','SignalName':'00','LoginType':'0','UserID':'{UserName}','Password':'{Password}','ClientType':'4','DataIP':'','DataTypeReq':[]}#";
-    // Fill in the username and password form the login function above.
-	Credential = Credential.replace("{UserName}", UserName).replace("{Password}", Password)
-    // use the IP and port variable from getTrackers function to make connection to websocket
-	 ws = new WebSocket("ws://" + IP + ":" + Port);
-     // to this when system receives a message
-	ws.onmessage = function (event) { 
-		if (event.data) { 
-		   console.log(event.data.toString());
-		   //write your code logic here
-		}
-	};
-    // when webscoket connection is closed
-	ws.onclose = function (event) {
-		setTimeout(function () {
-			ConnectToServer();//connect again when the socket closed
-		}, 5000);
-	};
-    // When there is a error console.log the error.
-	ws.onerror = function (event) {
-		if ($rootScope.IsDebug) {
-			console.log(event);
-		}
-	};
-    // when the connection is started send the credentials to the websocket
-	ws.onopen = function (event) {
-		//send credential when open the socket
-		ws.send(Credential); 
-	};
+function locationHistory(Token, locationTrackerID, DbID){
+    // set start date (begin of the day )
+    let start = new Date();
+    start.setHours(0,0,0,0);
+
+    let end = new Date();
+    end.setHours(23,59,59,999);
+    start.toISOString();
+    end.toISOString();
+    
+    // set form data
+    var data = new FormData();
+    data.append("Token", Token); //token is a variable from the login function above.
+    data.append("InformationType", "HistoricalLocation");
+    data.append("OperationType", "Query");
+    data.append("LanguageType", "2B72ABC6-19D7-4653-AAEE-0BE542026D46");
+    data.append("Arguments", '{"Speed":"-1","ProductID":"' + locationTrackerID + '","DbID":"'+ DbID + '","StartTime":"' + start.toISOString() + '","EndTime":"'+ end.toISOString() +'"}');
+    data.append("PageArguments", '{"PageSize":"20","PageIndex":"1"}');
+
+    var xhr = new XMLHttpRequest();
+    xhr.addEventListener("readystatechange", function() {
+      if(this.readyState === 4) {
+        // These variables will be used by connecting to websocket.
+        var historyList =JSON.parse(this.responseText);
+        var i;
+        for (i = 0; i < historyList.Data.length; i++) {
+            //these variables will be used to store in the database by php
+            var DateTime = historyList.Data[i].DateTime;
+            var Longitude = historyList.Data[i].Longitude;
+            var Latitude = historyList.Data[i].Latitude;
+            // all the variables inside the () brackets are needed to make the websocket connection.
+            //send javascript var to php page. for database
+        }
+        historyList.Data[0]['locationTrackerID'] = locationTrackerID;
+        dbParam = JSON.stringify(historyList.Data);
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+          }
+        };
+        xmlhttp.open("GET", "assets.php?h=" + dbParam, true);
+        xmlhttp.send(); 
+    }
+    });
+    // headers
+    xhr.open("POST", "http://api.overseetracking.com/WebProcessorApi.ashx",true);  
+    xhr.send(data);
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:java="http://www.yworks.com/xml/yfiles-common/1.0/java" xmlns:sys="http://www.yworks.com/xml/yfiles-common/markup/primitives/2.0" xmlns:x="http://www.yworks.com/xml/yfiles-common/markup/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:y="http://www.yworks.com/xml/graphml" xmlns:yed="http://www.yworks.com/xml/yed/3" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://www.yworks.com/xml/schema/graphml/1.1/ygraphml.xsd">
-  <!--Created by yEd 3.19.1.1-->
+  <!--Created by yEd 3.20-->
   <key attr.name="Description" attr.type="string" for="graph" id="d0"/>
   <key for="port" id="d1" yfiles.type="portgraphics"/>
   <key for="port" id="d2" yfiles.type="portgeometry"/>
@@ -75,7 +75,7 @@
         <node id="n0::n0">
           <data key="d6">
             <y:ShapeNode>
-              <y:Geometry height="27.84000000000009" width="158.20000000000022" x="790.8999999999999" y="586.0799999999999"/>
+              <y:Geometry height="27.84000000000009" width="158.20000000000022" x="790.8999999999999" y="465.0"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="33.40234375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="155.4296875" x="1.3851562500001364" xml:space="preserve" y="-2.7811718749999272">user vraagt asset afgelegde 
@@ -142,7 +142,7 @@ afgelegde route aan<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:Labe
         <node id="n0::n5">
           <data key="d6">
             <y:ShapeNode>
-              <y:Geometry height="30.0" width="30.0" x="1095.0" y="405.0"/>
+              <y:Geometry height="30.0" width="30.0" x="855.0" y="405.0"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" hasText="false" height="4.0" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="4.0" x="13.0" y="13.0">
@@ -194,7 +194,7 @@ in database op per dag<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:L
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="n0::e1" source="n0::n0" target="n0::n1">
+    <edge id="n0::e1" source="n0::n3" target="n0::n2">
       <data key="d8" xml:space="preserve"/>
       <data key="d10">
         <y:PolyLineEdge>
@@ -205,7 +205,7 @@ in database op per dag<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:L
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="n0::e2" source="n0::n3" target="n0::n2">
+    <edge id="n0::e2" source="n0::n4" target="n0::n6">
       <data key="d8" xml:space="preserve"/>
       <data key="d10">
         <y:PolyLineEdge>
@@ -216,21 +216,8 @@ in database op per dag<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:L
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="n0::e3" source="n0::n4" target="n0::n6">
+    <edge id="n0::e3" source="n0::n6" target="n0::n7">
       <data key="d8" xml:space="preserve"/>
-      <data key="d9"/>
-      <data key="d10">
-        <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
-          <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="white_delta"/>
-          <y:BendStyle smoothed="false"/>
-        </y:PolyLineEdge>
-      </data>
-    </edge>
-    <edge id="n0::e4" source="n0::n6" target="n0::n7">
-      <data key="d8" xml:space="preserve"/>
-      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
@@ -242,7 +229,7 @@ in database op per dag<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:L
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="n0::e5" source="n0::n5" target="n0::n4">
+    <edge id="n0::e4" source="n0::n0" target="n0::n4">
       <data key="d8" xml:space="preserve"/>
       <data key="d9"/>
       <data key="d10">
@@ -254,14 +241,24 @@ in database op per dag<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:L
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="n0::e6" source="n0::n7" target="n0::n0">
+    <edge id="n0::e5" source="n0::n5" target="n0::n0">
       <data key="d8" xml:space="preserve"/>
       <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
-            <y:Point x="870.0" y="540.0"/>
-          </y:Path>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="white_delta"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n0::e6" source="n0::n7" target="n0::n1">
+      <data key="d8" xml:space="preserve"/>
+      <data key="d9"/>
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="white_delta"/>
           <y:BendStyle smoothed="false"/>

@@ -14,7 +14,7 @@ $pass = "";
 
 // start connection with db
 try{
-	$database = new PDO('mysql:host='.$dbhost.';dbname='.$dbname, $user, $pass);
+	$database = new PDO('mysql:host='.$dbhost.';dbname='.$dbname, $user, $pass, array(PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION));
 }catch(PDOException $e){
 	echo $e->getMessage();
 }

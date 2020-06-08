@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:java="http://www.yworks.com/xml/yfiles-common/1.0/java" xmlns:sys="http://www.yworks.com/xml/yfiles-common/markup/primitives/2.0" xmlns:x="http://www.yworks.com/xml/yfiles-common/markup/2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:y="http://www.yworks.com/xml/graphml" xmlns:yed="http://www.yworks.com/xml/yed/3" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://www.yworks.com/xml/schema/graphml/1.1/ygraphml.xsd">
-  <!--Created by yEd 3.19.1.1-->
+  <!--Created by yEd 3.20-->
   <key attr.name="Description" attr.type="string" for="graph" id="d0"/>
   <key for="port" id="d1" yfiles.type="portgraphics"/>
   <key for="port" id="d2" yfiles.type="portgeometry"/>
@@ -17,12 +17,21 @@
     <node id="n0" yfiles.foldertype="group">
       <data key="d6">
         <y:TableNode configuration="com.yworks.bpmn.Pool">
-          <y:Geometry height="312.5999999999999" width="496.0003906250057" x="514.2029296874987" y="144.484375"/>
+          <y:Geometry height="370.72756756756735" width="698.2970703125013" x="514.2029296874987" y="144.484375"/>
           <y:Fill color="#FFF2BC" color2="#D4D4D4CC" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="15" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="22.37646484375" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="t" textColor="#000000" verticalTextPosition="bottom" visible="true" width="176.587890625" x="159.7062500000029" xml:space="preserve" y="4.0">asset tonen home scherm</y:NodeLabel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="15" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="22.37646484375" horizontalTextPosition="center" iconTextGap="4" modelName="internal" modelPosition="t" textColor="#000000" verticalTextPosition="bottom" visible="true" width="176.587890625" x="260.85458984375066" xml:space="preserve" y="4.0">asset tonen home scherm</y:NodeLabel>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="29.3359375" x="121.6826171875" xml:space="preserve" y="33.0">User<y:LabelModel><y:ColumnNodeLabelModel offset="3.0"/></y:LabelModel><y:ModelParameter><y:ColumnNodeLabelModelParameter id="column_0" inside="true" verticalPosition="0.0"/></y:ModelParameter></y:NodeLabel>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="44.0078125" x="350.8468750000029" xml:space="preserve" y="33.0">System<y:LabelModel><y:ColumnNodeLabelModel offset="3.0"/></y:LabelModel><y:ModelParameter><y:ColumnNodeLabelModelParameter id="column_1" inside="true" verticalPosition="0.0"/></y:ModelParameter></y:NodeLabel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="44.0078125" x="351.85068359375055" xml:space="preserve" y="33.0">System<y:LabelModel><y:ColumnNodeLabelModel offset="3.0"/></y:LabelModel><y:ModelParameter><y:ColumnNodeLabelModelParameter id="column_1" inside="true" verticalPosition="0.0"/></y:ModelParameter></y:NodeLabel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" hasText="false" height="4.0" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="4.0" x="635.4265378323714" y="93.21805743243266">
+            <y:LabelModel>
+              <y:SmartNodeLabelModel distance="4.0"/>
+            </y:LabelModel>
+            <y:ModelParameter>
+              <y:SmartNodeLabelModelParameter labelRatioX="0.5" labelRatioY="-0.5" nodeRatioX="0.4156941436775836" nodeRatioY="-0.24855374785301582" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/>
+            </y:ModelParameter>
+          </y:NodeLabel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.701171875" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="23.341796875" x="583.4816406250013" xml:space="preserve" y="33.0">API<y:LabelModel><y:ColumnNodeLabelModel offset="3.0"/></y:LabelModel><y:ModelParameter><y:ColumnNodeLabelModelParameter id="column_2" inside="true" verticalPosition="0.0"/></y:ModelParameter></y:NodeLabel>
           <y:StyleProperties>
             <y:Property name="y.view.tabular.TableNodePainter.ALTERNATE_ROW_STYLE">
               <y:SimpleStyle fillColor="#474A4340" lineColor="#000000" lineType="line" lineWidth="1.0"/>
@@ -46,7 +55,7 @@
           </y:StyleProperties>
           <y:State autoResize="true" closed="false" closedHeight="80.0" closedWidth="100.0"/>
           <y:Insets bottom="0" bottomF="0.0" left="0" leftF="0.0" right="0" rightF="0.0" top="0" topF="0.0"/>
-          <y:BorderInsets bottom="43" bottomF="43.2843749999999" left="17" leftF="16.697070312501182" right="29" rightF="28.70332031250439" top="31" topF="30.515625"/>
+          <y:BorderInsets bottom="30" bottomF="29.811942567567257" left="17" leftF="16.697070312501182" right="29" rightF="28.5" top="31" topF="30.515625"/>
           <y:Table autoResizeTable="true" defaultColumnWidth="202.0" defaultMinimumColumnWidth="30.0" defaultMinimumRowHeight="30.0" defaultRowHeight="280.0">
             <y:DefaultColumnInsets bottom="3.0" left="3.0" right="3.0" top="20.0"/>
             <y:DefaultRowInsets bottom="3.0" left="20.0" right="3.0" top="3.0"/>
@@ -55,12 +64,15 @@
               <y:Column id="column_0" minimumWidth="65.357421875" width="232.701171875">
                 <y:Insets bottom="3.0" left="3.0" right="3.0" top="20.0"/>
               </y:Column>
-              <y:Column id="column_1" minimumWidth="65.357421875" width="240.2992187500057">
+              <y:Column id="column_1" minimumWidth="65.357421875" width="242.3068359375012">
+                <y:Insets bottom="3.0" left="3.0" right="3.0" top="20.0"/>
+              </y:Column>
+              <y:Column id="column_2" minimumWidth="30.0" width="200.2890625000001">
                 <y:Insets bottom="3.0" left="3.0" right="3.0" top="20.0"/>
               </y:Column>
             </y:Columns>
             <y:Rows>
-              <y:Row height="259.5999999999999" id="row_0" minimumHeight="30.0">
+              <y:Row height="317.72756756756735" id="row_0" minimumHeight="30.0">
                 <y:Insets bottom="3.0" left="20.0" right="3.0" top="3.0"/>
               </y:Row>
             </y:Rows>
@@ -86,7 +98,7 @@
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="33.40234375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="145.421875" x="-1.7109375" xml:space="preserve" y="1.0988281250000682">Selecteert asset gegevens
-van gebruiker<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+van gebruiker bij api<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
               <y:Shape type="roundrectangle"/>
             </y:ShapeNode>
           </data>
@@ -94,7 +106,7 @@ van gebruiker<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel
         <node id="n0::n2">
           <data key="d6">
             <y:ShapeNode>
-              <y:Geometry height="30.0" width="30.0" x="615.0" y="375.0"/>
+              <y:Geometry height="30.0" width="30.0" x="615.0" y="446.6"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" hasText="false" height="4.0" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="4.0" x="13.0" y="13.0">
@@ -112,7 +124,7 @@ van gebruiker<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel
         <node id="n0::n3">
           <data key="d6">
             <y:ShapeNode>
-              <y:Geometry height="41.60000000000008" width="157.00000000000006" x="821.5" y="369.19999999999993"/>
+              <y:Geometry height="41.60000000000008" width="157.00000000000006" x="821.5" y="440.8"/>
               <y:Fill color="#FFCC00" transparent="false"/>
               <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
               <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="33.40234375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="148.73828125" x="4.130859375" xml:space="preserve" y="4.098828125000068">Toont asset gegevens 
@@ -139,9 +151,34 @@ van gebruiker in tabel vorm<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/>
             </y:ShapeNode>
           </data>
         </node>
+        <node id="n0::n5">
+          <data key="d6">
+            <y:ShapeNode>
+              <y:Geometry height="41.60000000000008" width="157.00000000000006" x="821.4999999999999" y="369.2"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="33.40234375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="157.421875" x="-0.2109375" xml:space="preserve" y="4.098828125000011">Systeem slaat gps gegevens
+ op in de database
+<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="roundrectangle"/>
+            </y:ShapeNode>
+          </data>
+        </node>
+        <node id="n0::n6">
+          <data key="d6">
+            <y:ShapeNode>
+              <y:Geometry height="35.60000000000008" width="142.00000000000006" x="1039.0" y="282.19999999999993"/>
+              <y:Fill color="#FFCC00" transparent="false"/>
+              <y:BorderStyle color="#000000" raised="false" type="line" width="1.0"/>
+              <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="33.40234375" horizontalTextPosition="center" iconTextGap="4" modelName="custom" textColor="#000000" verticalTextPosition="bottom" visible="true" width="134.078125" x="3.9609375" xml:space="preserve" y="1.0988281250000682">Verstuurt asset gegeven
+van gebruiker<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/></y:LabelModel><y:ModelParameter><y:SmartNodeLabelModelParameter labelRatioX="0.0" labelRatioY="0.0" nodeRatioX="0.0" nodeRatioY="0.0" offsetX="0.0" offsetY="0.0" upX="0.0" upY="-1.0"/></y:ModelParameter></y:NodeLabel>
+              <y:Shape type="roundrectangle"/>
+            </y:ShapeNode>
+          </data>
+        </node>
       </graph>
     </node>
-    <edge id="n0::e0" source="n0::n1" target="n0::n3">
+    <edge id="n0::e0" source="n0::n0" target="n0::n1">
       <data key="d8" xml:space="preserve"/>
       <data key="d10">
         <y:PolyLineEdge>
@@ -152,7 +189,7 @@ van gebruiker in tabel vorm<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="n0::e1" source="n0::n0" target="n0::n1">
+    <edge id="n0::e1" source="n0::n4" target="n0::n0">
       <data key="d8" xml:space="preserve"/>
       <data key="d10">
         <y:PolyLineEdge>
@@ -163,8 +200,9 @@ van gebruiker in tabel vorm<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="n0::e2" source="n0::n3" target="n0::n2">
+    <edge id="n0::e2" source="n0::n1" target="n0::n6">
       <data key="d8" xml:space="preserve"/>
+      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
           <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
@@ -174,7 +212,33 @@ van gebruiker in tabel vorm<y:LabelModel><y:SmartNodeLabelModel distance="4.0"/>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="n0::e3" source="n0::n4" target="n0::n0">
+    <edge id="n0::e3" source="n0::n6" target="n0::n5">
+      <data key="d8" xml:space="preserve"/>
+      <data key="d9"/>
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0">
+            <y:Point x="1110.0" y="390.0"/>
+          </y:Path>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="white_delta"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n0::e4" source="n0::n5" target="n0::n3">
+      <data key="d8" xml:space="preserve"/>
+      <data key="d9"/>
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="0.0"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="white_delta"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="n0::e5" source="n0::n3" target="n0::n2">
       <data key="d8" xml:space="preserve"/>
       <data key="d9"/>
       <data key="d10">

@@ -1,9 +1,8 @@
 <?php
 // start session
 session_start();
-
 // if there is no session or level is 1 redirect user to login page
-if (empty($_SESSION['email']) || $_SESSION['level'] == 1) {
+if(empty($_SESSION['email']) || $_SESSION['level'] == 0) {
 	$_SESSION['msg'] = "You must log in first";
     header('location: index.php');
 }

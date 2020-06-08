@@ -153,8 +153,6 @@ if (isset($_GET['logout'])) {
   <!-- show below html when user is not logged in and when user is logged in -->
     <div id='map'>
       <div class="leaflet-top leaflet-right button_box2 leaflet-control standard-bgcolor white-text info_box">
-        <h6 class="white-text">Locaties:</h6>
-        <blockquote class="blockquote_white btnStyle span3 leaflet-control Button" id="info_box"></blockquote>
       </div>
       <div class="leaflet-bottom leaflet-right button_box2">
             <button type="button" id="Btn" class="open-button btn waves-effect standard-bgcolor btnStyle span3 leaflet-control Button" onclick="openForm()">Login</button>

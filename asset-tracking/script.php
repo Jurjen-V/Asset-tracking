@@ -40,47 +40,148 @@ L.tileLayer(
 map.setView([52.132633, 5.291266], 6);
 // if the user i signed in
 <?php if (isset($_SESSION['email'])) : ?>
+//login api
+function login(){
+  //set form data
+    var data = new FormData();
+    data.append("Token", "");
+    data.append("InformationType", "User");
+    data.append("OperationType", "SignIn");
+    data.append("LanguageType", "2B72ABC6-19D7-4653-AAEE-0BE542026D46");
+    data.append("Arguments", "{\"UserName\":\"HawarITInternGPS\",\"Password\":\"tTa7r3KZ\"}");
+
+    var xhr = new XMLHttpRequest(); 
+    xhr.addEventListener("readystatechange", function() {
+        if(this.readyState === 4) {
+            //get responsetext
+            // these variables will be used by getting the tracker list and making the websocket login.
+            var obj = JSON.parse(this.responseText);
+            var Token = obj.Token; // token will be used to call to api
+            // These variables will be used to make a connection to the websocket
+            var ClientID = obj.Data.SessionID;
+            var UserName = obj.Data.UserName;
+            var Password = obj.Data.Password;
+            // excecute getTrackers() with token
+            getTrackers(Token, ClientID, UserName, Password);
+        }
+    });
+    //headers
+    xhr.open("POST", "http://api.overseetracking.com/WebProcessorApi.ashx",true);  
+    xhr.send(data);
+}
+login();
+// getTrakcers form api
+function getTrackers(Token, ClientID, UserName, Password){
+  // set form data
+    var data = new FormData();
+    data.append("Token", Token); //token is a variable from the login function above.
+    data.append("InformationType", "Product");
+    data.append("OperationType", "GetMyTracker");
+    data.append("LanguageType", "2B72ABC6-19D7-4653-AAEE-0BE542026D46");
+    data.append("Arguments", "{\"TrackerType\":\"1\"}");
+
+    var xhr = new XMLHttpRequest();
+    xhr.addEventListener("readystatechange", function() {
+      if(this.readyState === 4) {
+        
+        // These variables will be used by connecting to websocket.
+        var trackerList =JSON.parse(this.responseText);
+        // These variables will be used to make a connection to the websocket
+        var IP = trackerList.Data.Transfer[0].ServerIP;
+        var Port = trackerList.Data.Transfer[0].WsOutputPort;
+        var SystemNo = trackerList.Data.Tracker[0].SystemNo;
+        //these variables will be used to store in the database by php
+        for (i = 0; i < trackerList.Data.Tracker.length; i++) {
+          var trackerID = trackerList.Data.Tracker[i].ProductID;
+          var gpsName = trackerList.Data.Tracker[i].Name;
+          var PhoneNumber = trackerList.Data.Tracker[i].PhoneNumber1;
+          // all the variables inside the () brackets are needed to make the websocket connection.
+          <?php 
+            $User_ID= $_SESSION['id'];
+            $result_assets = $database->prepare("SELECT * FROM asset WHERE user_ID=".$User_ID);
+
+            $result_assets->execute();
+            $query = "SELECT * FROM asset WHERE user_ID= :User_ID";
+            $stmt = $database->prepare($query);
+            $results = $stmt->execute(array(":User_ID" => $User_ID));
+            $asset = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($asset) :
+              $trackerID = $asset["trackerID"]; 
+            ?>
+              var userTrackers = "<?= $trackerID;?>";
+              if (userTrackers === trackerID){
+                websocketLogin(Token, ClientID, UserName, Password, IP, Port, gpsName, PhoneNumber,SystemNo);
+              }
+            <?php endif ?>
+        }
+      }
+    });
+    // headers
+    xhr.open("POST", "http://api.overseetracking.com/WebProcessorApi.ashx",true);  
+    xhr.send(data);
+}
+function websocketLogin(Token, ClientID, UserName, Password, IP, Port, gpsName, PhoneNumber,SystemNo){
+    // this function uses variables from Login function and getTrackers function.
+    // The credentials to send to the web socket
+  var Credential = "{'ClientID':'" + ClientID + "','SignalName':'00','LoginType':'0','UserID':'{UserName}','Password':'{Password}','ClientType':'4','DataIP':'','DataTypeReq':[]}";
+    // Fill in the username and password form the login function above.
+  Credential = Credential.replace("{UserName}", UserName).replace("{Password}", Password)
+    // use the IP and port variable from getTrackers function to make connection to websocket
+   ws = new WebSocket("ws://" + IP + ":" + Port);
+     // to this when system receives a message
+  ws.onmessage = function (event) { 
+    if (event.data) { 
+      let str = event.data.toString();
+      str = str.slice(0, -1); 
+      var jsonData = JSON.parse(str);
+      if (jsonData.SignalName === "80" || jsonData.SignalName === "81"){
+        var Latitude = jsonData.Latitude;
+        var Longitude = jsonData.Longitude;
+        var DateTime = jsonData.DateTime;
+        var Livelatlong = [Latitude, Longitude];
+        addlayer(Livelatlong, gpsName, PhoneNumber, DateTime);        
+      }
+    } 
+  };
+    // when webscoket connection is closed
+  ws.onclose = function (event) {
+    setTimeout(function () {
+      ws.send(Credential);//connect again when the socket closed
+    }, 5000);
+        console.log("close");
+  };
+    // When there is a error console.log the error.
+  ws.onerror = function (event) {
+    if ($rootScope.IsDebug) {
+      console.log(event);
+            console.log("error");
+    }
+  };
+  var location = "{'SignalName':'30','SystemNo':" + SystemNo + "}#";
+    // when the connection is started send the credentials to the websocket
+  ws.onopen = function (event) {
+    //send credential when open the socket
+    ws.send(Credential); 
+    ws.send(location);
+  };
+}
+
 // set the height of the map so there is space for the nav bar
 document.getElementById("map").style.height = "calc(100% - 64px)";
 // hide the login form
 document.getElementById("Btn").style.display = "none";
 var layerGroup = L.layerGroup().addTo(map);
-// get last location of the gps trackers that are connected to the account and put them in a javascript array
-var array = [
-  <?php
-      $result_users = $database->prepare("SELECT * FROM asset WHERE latitude != '' AND longitude != '' AND user_ID =". $_SESSION['id']);
-      $result_users->execute();
-      for($i=0; $row = $result_users->fetch(); $i++){
-        $id = $row['ID'];
-        $latitude = $row["latitude"];
-        $longitude = $row["longitude"]; 
-        echo "'[$latitude, $longitude]',";
 
-      }
-  ?>
-];
-assets = array.map(s => eval('null,' + s));
-function addlayer() {
+function addlayer(Livelatlong, gpsName, PhoneNumber, DateTime) {
   // set the popup data for the gps trackers
   // if you click on a gps tracker it will show his name and his activationkey
-  var popup_data= [
-    <?php
-    $result_users = $database->prepare("SELECT * FROM asset WHERE latitude != '' AND longitude != '' AND  user_ID =". $_SESSION['id']);
-    $result_users->execute();
-    for($i=0; $row = $result_users->fetch(); $i++){
-      $name = $row['name'];
-      $activatiecode =$row['activatiecode']; 
-      echo "'Name: $name <br> activatiecode: $activatiecode',";
-    }
-    ?>
-  ];
+  var popup_data= ["Name: " + gpsName + " activatiecode: " + PhoneNumber + " DateTime: " + DateTime ];  
   var i;
   layerGroup.clearLayers();
-  document.getElementById("info_box").innerHTML = ""; 
   // style the gps trackers as google maps circles.
-  for (i = 0; i < assets.length; i++) {
+  for (i = 0; i < Livelatlong.length; i++) {
     // data = popup_data.map(s => eval('null,' + s));
-      L.circleMarker(assets[i], {
+      L.circleMarker(Livelatlong, {
           color: "#4285F4",
           weight: 0,
           fillColor: "#4285F4",
@@ -88,7 +189,7 @@ function addlayer() {
           radius: 20,
           'className': 'pulse'
       }).addTo(layerGroup);
-      marker = L.circleMarker(assets[i], {
+      marker = L.circleMarker(Livelatlong, {
           color: "white",
           opacity: 1,
           weight: 2,
@@ -98,26 +199,7 @@ function addlayer() {
           fillOpacity: 1,
           'className': 'pulse'
       }).addTo(layerGroup);
-      marker.bindPopup(popup_data[i]); 
-    // get location name from API
-    // convert the lat lon data to city names for the info box
-    document.getElementsByClassName('info_box')[0].style.display = "block";
-    fetch('https://api.opencagedata.com/geocode/v1/json?key=5b104f01c9434e3dad1e2d6a548445da&language&q=' + assets[i] + '&pretty=1&no_annotations=1')
-    .then(response => {
-      if(response.ok) return response.json();
-      throw new Error(response.statusText)
-    })
-    .then(function handleData(data){
-      data = data.results[0].components['suburb'];
-      console.log(data);
-      // insert the city names into the info box
-      document.getElementById('info_box').innerHTML +=  data + "<br>"; 
-    })
-    .catch(function handleError(error){
-    })
+      marker.bindPopup(popup_data[0]); 
   }
 }
-addlayer();
-// excecute the function everey min to make sure it has the last location of the gps trackers
-setInterval(addlayer, 60000);
 <?php endif ?>

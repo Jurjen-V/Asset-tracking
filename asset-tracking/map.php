@@ -118,13 +118,8 @@ var current_position,
   osmb,
   update;
 //set map
-var map = L.map('map')
-map.locate({
-  watch: true,
-  setView: false,
-  maxZoom: 18,
-  enableHighAccuracy: true
-});
+var map = L.map('map');
+
 // Open default map from mapbox
 L.tileLayer(
     "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}",
@@ -142,70 +137,31 @@ var array =[
   <?php
   // make a select statement of all the lat long data 
   // and put it in a javascript array
-  // The javascript array will then place markers on the map and draw a route
-  $result_assets = $database->prepare("SELECT asset.ID, point.ASSET_ID, asset.name, CAST(point.TS AS DATE), asset.activatiecode, asset.info, (SELECT ST_X(latlong)) AS LAT, (SELECT ST_y(latlong)) AS LON FROM asset INNER JOIN point on asset.ID = point.ASSET_ID WHERE CAST(TS AS DATE) = '".$_GET['TS']."' AND point.ASSET_ID=".$_GET['ID']);
+  // // The javascript array will then place markers on the map and draw a route
+  $result_assets = $database->prepare("SELECT asset.ID, point.ASSET_ID, point.longitude, point.latitude, asset.name, CAST(point.TS AS DATE), asset.activatiecode, asset.info FROM asset INNER JOIN point on asset.trackerID = point.ASSET_ID WHERE CAST(TS AS DATE) = '".$_GET['TS']."' AND point.ASSET_ID='".$_GET['ID']."' LIMIT 20");
   $result_assets->execute();
   for($i=0; $row = $result_assets->fetch(); $i++){
     // print_r($row);
-    $LAT = $row['LAT'];
-    $LON = $row['LON'];
-    echo "'[$LAT, $LON]',";
+    $longitude = $row['longitude'];
+    $latitude = $row['latitude'];
+    echo "'[$latitude, $longitude]',";
   } 
   ?>
 ];
-// array where lat lon location gets conferted to location name
-var plaatsnaam =[
-  <?php
-  // make a select statement of all the lat long data 
-  // and put it in a javascript array
-  $result_assets = $database->prepare("SELECT asset.ID, point.ASSET_ID, asset.name, CAST(point.TS AS DATE), asset.activatiecode, asset.info, (SELECT ST_X(latlong)) AS LAT, (SELECT ST_y(latlong)) AS LON FROM asset INNER JOIN point on asset.ID = point.ASSET_ID WHERE CAST(TS AS DATE) = '".$_GET['TS']."' AND point.ASSET_ID=".$_GET['ID']);
-  $result_assets->execute();
-  for($i=0; $row = $result_assets->fetch(); $i++){
-    $lat = $row['LAT'];
-    $lng = $row['LON'];
-    // convert the lat lon numbers to city names
-      $url = 'https://api.opencagedata.com/geocode/v1/json?q='.$lat.','.$lng.'&key=5b104f01c9434e3dad1e2d6a548445da&language=nl&pretty=1'; 
-      $json = @file_get_contents($url);
-      $data = json_decode($json, true);
-      $results = $data['results'];
-      if (is_array($data)){
-        foreach($results as $results) {
-          $components = $results['components'];
-          $city = $components['suburb'];
-      }
-    }
-    echo "'$city',";
-  } 
-  ?>
-];
+
 route = array.map(s => eval('null,' + s));
-console.log(route);
-console.log(plaatsnaam);
 var i;
 // show all plaats namen
 for (i = 0; i < route.length; i++) {
-  document.getElementById('info_box').innerHTML +=  plaatsnaam[i] + "<br>";
-
+  document.getElementById('info_box').innerHTML +=  array[i] + "<br>";
 }  
 // show route names marker with popup
 for (i = 0; i < route.length; i++) {
   var marker = L.marker(route[i]).addTo(map);
-  marker.bindPopup(plaatsnaam[i]).openPopup();
+  marker.bindPopup(array[i]).openPopup();
 }
-// draw route between markers
-var routeControl = L.Routing.control({
-  createMarker: function() { return null; },
-  routeWhileDragging: false,
-  draggableWaypoints: false,
-  addWaypoints: false,
-  show: false,
-  lineOptions: {
-      styles: [{color: '#1c9cda', opacity: 1, weight: 5, dashArray: '20,15'}]
-   }
-}).addTo(map);
-routeControl.setWaypoints(route);
 map.setView(route[0], 10);  
-// var line = L.polyline(route,{dashArray: '20,15'}).addTo(map);
+var line = L.polyline(route,{dashArray: '20,15'}).addTo(map);
 </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 </body>

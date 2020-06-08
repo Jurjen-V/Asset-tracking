@@ -59,14 +59,14 @@ if(isset($_GET['delete']) || isset($_GET['TS'])){
 	// $_Get delete is the id of the asset the id is used to identify the correct asset and delete it
 	// $_GEt TS is the timestamp of the asset lat lon points it will delete all the asset points of that timestamp.
 	$route_id= $_GET['ID'];
-    $query = "DELETE FROM point WHERE ASSET_ID={$_GET['delete']} AND CAST(point.TS AS DATE) = '{$_GET['TS']}' ";
+    $query = "DELETE FROM point WHERE ASSET_ID='{$_GET['delete']}' AND CAST(point.TS AS DATE) = '{$_GET['TS']}' ";
     $delete = $database->prepare($query);
     $delete->execute();
     header('location: route.php?ID='.$route_id);
 }
 // select the traveled routes ordered by timestamp.
-$result_name = $database->prepare("SELECT asset.ID, point.ASSET_ID, asset.name, CAST(point.TS AS DATE), asset.activatiecode, asset.info, (SELECT ST_X(latlong)) AS LAT, (SELECT ST_y(latlong)) AS LON FROM asset INNER JOIN point on asset.ID = point.ASSET_ID WHERE point.ASSET_ID=".$_GET['ID']." GROUP BY CAST(TS AS DATE)");
-$result_name->execute();
+$result_name = $database->prepare("SELECT * FROM `point` inner join asset on asset.trackerID = point.ASSET_ID WHERE point.ASSET_ID=:ASSET_ID");
+$result_name->execute(array(":ASSET_ID" => $_GET['ID']));
 $result = $result_name->fetch(PDO::FETCH_ASSOC);
 $assetName= "";
 // if there are no traveled routes show error message.
@@ -137,48 +137,48 @@ if(!$result){
 	      <table class='Assets responsive-table centered highlight'>
 		      <thead>
 			        <tr>
-			          <th>Datum</th>
-			          <th>Start locatie</th>
+			          <th>ASSET_ID</th>
+			          <th>latitude</th>
+			          <th>longitude</th>
+			          <th>DATE</th>
 			          <th>Actions</th>
 			        </tr>
 		        </thead>";
     //select statement to get users assets  his travelled route
     //the select statement is selecting by date and asset id
-	$result_assets = $database->prepare("SELECT asset.ID, point.ASSET_ID, asset.name, CAST(point.TS AS DATE), asset.activatiecode, asset.info, (SELECT ST_X(latlong)) AS LAT, (SELECT ST_y(latlong)) AS LON FROM asset INNER JOIN point on asset.ID = point.ASSET_ID WHERE point.ASSET_ID=".$_GET['ID']." GROUP BY CAST(TS AS DATE)");
+	$ID = $_GET['ID'];
+
+	$result_assets = $database->prepare("SELECT asset.ID, point.ASSET_ID, point.latitude, point.longitude, asset.name, CAST(TS as DATE) FROM asset INNER JOIN point on asset.trackerID = point.ASSET_ID WHERE point.ASSET_ID='".$_GET['ID']."' GROUP BY CAST(TS AS DATE)");
 	$result_assets->execute();
+	echo "<tbody>";
 	  for($i=0; $row = $result_assets->fetch(); $i++){
 	  	// all the variables that we need from the select statement
 	    $id = $row['ID'];
 	    $ASSET_ID = $row['ASSET_ID'];
-	    $lat = $row['LAT'];
-    	$lng = $row['LON'];
-    	// api to confert the lat lon data to city names
-	    $url = 'https://api.opencagedata.com/geocode/v1/json?q='.$lat.','.$lng.'&key=5b104f01c9434e3dad1e2d6a548445da&language=nl&pretty=1'; 
-	    $json = @file_get_contents($url);
-	    $data = json_decode($json, true);
-	    $results = $data['results'];
-	    if (is_array($data)){
-		    foreach($results as $results) {
-		    	$components = $results['components'];
-		    	$city = $components['suburb'];
-			}
-	    }
-	    $DATE= $row['CAST(point.TS AS DATE)'];
+	    $latitude = $row['latitude'];
+    	$longitude = $row['longitude'];
+    	$DATE = $row['CAST(TS as DATE)'];
+    	
 	    // echo the date and city name in the table
 	    // echo "<tbdoy>";
 	    echo "<tr>";
-	    echo "<td>" . $DATE . "</td>";
-	    echo "<td>" . $city ."</td>";
+	    echo "<td>" . $ASSET_ID . "</td>";
+	    echo "<td>" . $latitude ."</td>";
+	    echo "<td>" . $longitude ."</td>";
+	    echo "<td>" . $DATE ."</td>";
 	    echo "
    			<td>
-   			<a title='Route' class='link btn-floating  btn standard-bgcolor' href='map.php?TS=$DATE&ID=$id'><i class='material-icons'>directions</i></a>
-   			<a title='Delete' onclick=\"return confirm('Delete This item?')\" class='link btn-floating btn standard-bgcolor'href='?ID=".$_GET['ID']."&delete=". $ASSET_ID ."&TS=". $DATE ."'><i class='material-icons'>delete</i></a>
+   			<a title='Route' class='link btn-floating  btn standard-bgcolor' href='map.php?TS=$DATE&ID=$ASSET_ID'><i class='material-icons'>directions</i></a>
+   			<a title='Delete' onclick=\"return confirm('Delete This item?')\" class='link btn-floating btn standard-bgcolor'href='?ID=".$ASSET_ID."&delete=". $ASSET_ID ."&TS=". $DATE ."'><i class='material-icons'>delete</i></a>
 			</td>";	
 	    ?>
-	<?php } ?>
+	<?php } 
+	echo "</tbody>";
+	echo "</table>"?>
 </body>
 <!-- script links -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script type="text/javascript" src="js/materialize.min.js"></script>
 <script type="text/javascript" src="js/script.js"></script>
+<!-- <script type="text/javascript" src="js/locationHistory.js"></script> -->
 </html>

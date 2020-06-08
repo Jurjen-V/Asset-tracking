@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var sidenavs = document.querySelectorAll('.sidenav');
     var sidenav = M.Sidenav.init(sidenavs);
     // trigger collapsible in mobile nav
-    var collapsibles = document.querySelectorAll('.collapsible');
+    var collapsibles = document.querySelector('.collapsible');
     var collapsible = M.Collapsible.init(collapsibles);
 });
 // close function for alert boxes
