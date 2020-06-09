@@ -1,8 +1,12 @@
 <?php
-include_once 'db.php';
+/*in this document all the functions that are used on page edit.php and edit_user.php are listed.*/
 
+// include db file to setup database connection
+include_once 'db.php';
+// give var $database the connection info from db.php
 $database = db_connect();
 
+// Function getAsset is used to get the asset to edit and fill that data into the form. that way the user has a better edit experience. 
 function getAsset($database, $ID){
 	// Make a select call to the database to get the asset variables
 	// the ID is used to get the correct asset
@@ -18,6 +22,7 @@ function getAsset($database, $ID){
 		return $row;
 	}	
 }
+// This function is used to update the asset. When the user submits the updated data to the system this functions is getting executed.
 function editAsset($database, $ID, $User_ID){
 	// set error to 0 if a if statement is not succes the error var will increase by one. There will also be a specific errormessage assigned to the error.
 	// in the end there will be a check if error is 0 if not show error message.
@@ -102,6 +107,7 @@ function editAsset($database, $ID, $User_ID){
 	    </div><?php
 	}
 }
+// this function gets user by id
 function getUserID($database, $ID){
 	// Make a select call to the database to get the asset variables
 	// the ID is used to get the correct asset
@@ -116,6 +122,7 @@ function getUserID($database, $ID){
 		return $row;
 	}	
 }
+// This function is used to update user data. the function is executed when user submits the edit user form.
 function editUser($database, $ID, $User_ID){
 	// set error to 0 if a if statement is not succes the error var will increase by one. There will also be a specific errormessage assigned to the error.
 	// in the end there will be a check if error is 0 if not show error message.

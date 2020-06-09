@@ -1,5 +1,9 @@
 <?php
+/*in this document all the functions that are used to save gps data to database are listed. the file 'gps.js' sends data to this file to save gps data to database*/
+
+// include db file to setup database connection
 include 'db.php';
+// give var $database the connection info from db.php
 $database = db_connect();
 
 // update gps to database
@@ -8,6 +12,7 @@ $history = json_decode($dbParam, true); // decoding received JSON to array
 if(isset($history)){
 	updateToDb($history, $database);
 }
+// function updateToDb is used to update locationhistory to database. the location histroy is sennd by javascript post function and handled with function updateToDb
 function updateToDb($history, $database){
 	// update gps to database
 	$error = 0;
@@ -27,14 +32,14 @@ function updateToDb($history, $database){
 			catch (PDOException $e) {
 				echo $e->getMessage();
 			}
-			header('location: assets.php?GpsUpdated=1');
+			header('location: ../assets.php?GpsUpdated=1');
 	}
 }
-// updateToDb();
 $obj = json_decode($_GET["x"], true);
 if(isset($obj)){
 	trackerList($obj, $database);
 }
+// function trackerList is used to check if there are new gps trackers activated. if so insert new gps tracker to database else update current gps tracker
 function trackerList($obj, $database){
 	// db_connect();
 	$error = 0;
@@ -82,7 +87,7 @@ function trackerList($obj, $database){
 				    echo $e->getMessage();
 				}
 				// all the data is handled succesfully send user to assets.php.
-				header('location: assets.php?GpsUpdated=1');
+				header('location: ../assets.php?GpsUpdated=1');
 			}
 		}else{
 			// add gps tracker to database but do not connect it to user account
@@ -97,7 +102,7 @@ function trackerList($obj, $database){
 			catch (PDOException $e) {
 				echo $e->getMessage();
 			}
-			// header('location: assets.php?GpsUpdated=1');
+			header('location: assets.php?GpsUpdated=1');
 		}	
 	}
 }

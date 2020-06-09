@@ -1,8 +1,12 @@
 <?php
-include_once 'db.php';
+/*in this document all the functions that are used on page sign-up.php are listed. */
 
+// include db file to setup database connection
+include_once 'db.php';
+// give var $database the connection info from db.php
 $database = db_connect();
 
+// the funciton signUp is used to handle the data that is send when user completes sigh-up form.
 function signUp($database){
 	// set error to 0 if a if statement is not succes the error var will increase by one. There will also be a specific errormessage assigned to the error.
     // in the end there will be a check if error is 0 if not show error message.

@@ -1,6 +1,5 @@
 <?php
 include 'functions/global.php';
-include 'functions/AssetsFunctions.php';
 include 'functions/route.php';
 // start session
 session_start();

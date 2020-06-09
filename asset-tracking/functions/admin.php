@@ -1,9 +1,12 @@
 <?php
-include_once 'db.php';
+/*in this document all the functions that are used on page admin.php are listed. the functions deleteUser and submitUser are used to manage user accounts */
 
+// include db file to setup database connection
+include_once 'db.php';
+// give var $database the connection info from db.php
 $database = db_connect();
 
-// if delete is pressed
+// deleteUser function is used to delete a user. The function is activated when delete is pressed
 function deleteUser($database){
 	// $_Get delete is the id of the asset the id is used to identify the correct asset and delete it
     $query = "DELETE FROM user WHERE ID={$_GET['delete']}";
@@ -13,6 +16,7 @@ function deleteUser($database){
     	<script>window.location.href = "admin.php";</script>
     <?php
 }
+// Function submitUser is used to submit user accounts to database.The function is triggerd when add user form is filled in and submitted.
 function submitUser($database){
 	// set error to 0 if a if statement is not succes the error var will increase by one. There will also be a specific errormessage assigned to the error.
 	// in the end there will be a check if error is 0 if not show error message.

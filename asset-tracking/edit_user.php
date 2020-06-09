@@ -2,7 +2,6 @@
 // start session
 session_start();
 // include function file
-include 'functions/AssetsFunctions.php';
 include 'functions/global.php';
 include 'functions/edit.php';
 // if there is no session redirect user to login page

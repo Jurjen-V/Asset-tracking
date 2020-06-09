@@ -1,4 +1,8 @@
 <?php
+/*In this document the function db_connect is defined. 
+db_connect is used to make a connection to database by pdo */
+
+// this function is used to open a connection to the database. the function is used in all files that talk with the database.
 function db_connect(){
 	// wachtwoorden db lokaal
 	$dbhost ="localhost";

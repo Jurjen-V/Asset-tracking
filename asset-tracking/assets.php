@@ -101,10 +101,11 @@ if(isset($_POST['update'])) {
 		<table class='Assets responsive-table centered highlight'>
 		    <thead>
 			    <tr>
+			        <th>TrackerID</th>			
 			    	<th>Asset name</th>
 			    	<th>activatiecode</th>
 			        <th>Info</th>
-			        <th>Seconden</th>			
+			        <th>Seconden</th>
 			        <th>Actions</th>
 			    </tr>
 		    </thead>";
@@ -122,11 +123,11 @@ if(isset($_POST['update'])) {
 	    // the TR row is clickable it will redirect to view asset routes page.	    
 
 	    echo "<tr data-href='route.php?ID=". $id. "'>";
+	   	echo "<td>" . $row['trackerID'] . "</td>";
 	    echo "<td>" . $row['name'] . "</td>";
 	    echo "<td>" . $row['activatiecode'] . "</td>";
 	   	echo "<td>" . $row['info'] . "</td>";
 	   	echo "<td>" . $row['seconden'] . "</td>";
-	   	echo "<td>" . $row['trackerID'] . "</td>";
 	    echo "
    			<td>
    			<a title='Route' class='link btn-floating  btn standard-bgcolor' href=route.php?ID=". $trackerID."><i class='material-icons'>visibility</i></a>
