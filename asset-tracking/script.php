@@ -4,7 +4,8 @@
   // make this file a javascript file
   header("Content-type: application/javascript");
   // include db file
-  include_once './db.php';
+  include_once 'functions/db.php';
+  $database = db_connect();
 ?>
 // get html map id
 var current_position,
@@ -98,9 +99,6 @@ function getTrackers(Token, ClientID, UserName, Password){
           // all the variables inside the () brackets are needed to make the websocket connection.
           <?php 
             $User_ID= $_SESSION['id'];
-            $result_assets = $database->prepare("SELECT * FROM asset WHERE user_ID=".$User_ID);
-
-            $result_assets->execute();
             $query = "SELECT * FROM asset WHERE user_ID= :User_ID";
             $stmt = $database->prepare($query);
             $results = $stmt->execute(array(":User_ID" => $User_ID));

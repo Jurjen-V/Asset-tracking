@@ -1,26 +1,19 @@
 <?php
 // start session
 session_start();
+// include function file
+include 'functions/AssetsFunctions.php';
+include 'functions/global.php';
+include 'functions/edit.php';
 // if there is no session redirect user to login page
-if (!isset($_SESSION['email'])) {
-	$_SESSION['msg'] = "You must log in first";
-    header('location: index.php');
-}
 // if session level is 0 redirect user to user page
-if($_SESSION['level'] == 0){
-	$_SESSION['msg'] = "You must log in first";
-    header('location: index.php');
-}
+checkSessionAdmin();
+
 // if logout is pressed
 if (isset($_GET['logout'])) {
-	// destroy session
-	session_destroy();
-    unset($_SESSION['email']);
-    // redirect to login page
-    header("location: index.php");
+	logOut();
 }
-// include db file
-include_once 'db.php';
+
 // set user id 
 // user id is being used to identify wich items in the database are connected to this account.
 $User_ID= $_SESSION['id'];
@@ -32,105 +25,12 @@ if(empty($_GET['ID'])){
 	//else set the $_get['ID] to a variable
 	// the variable will be used to select the asset and update it
 	$ID = $_GET['ID'];
+	$row = getUserID($database, $ID);
 }
-// Make a select call to the database to get the asset variables
-// the ID is used to get the correct asset
-$result_software = $database->prepare("SELECT * FROM user WHERE ID = " . $ID);
-$result_software->execute();
-for($i=0; $row = $result_software->fetch(); $i++){
-	// Set all the needed variables.
-	// the variables will be filled in the form so the user has a better experience editing the asset.
-	$email = $row['email'];
-	$password = $row['password'];
-	$level = $row['level'];
-}	
+
 // if update user is pressed
 if(isset($_POST['Save'])) {
-	// set error to 0 if a if statement is not succes the error var will increase by one. There will also be a specific errormessage assigned to the error.
-	// in the end there will be a check if error is 0 if not show error message.
-	$error = 0;
-	// check in database if the activationkey is already in use
-	$email = htmlspecialchars($_POST['email']);
-	$query = "SELECT * FROM user WHERE email = :email AND ID !=:ID LIMIT 1";
-	$stmt = $database->prepare($query);
-	$results = $stmt->execute(array(":email" => $email, ":ID" => $ID));
-	$user = $stmt->fetch(PDO::FETCH_ASSOC);
-	if ($user) { // if user exists
-	    if ($user['email'] == $email) {
-		    $error++;
-	        $errorMessage= "User already excist";
-	    }
-	}	
-	// check if input is empty
-	if (!empty($_POST['email'])){ //check if email is not empty
-	    $email = htmlspecialchars($_POST['email']);
-	}else{
-	    $error++;
-	    $errorMessage = "E-mailadres is leeg";
-	}
-	if (!empty($_POST['password_1'])){ //check if password_1 is not empty
-	    $password_1 = htmlspecialchars($_POST['password_1']);
-	}else{
-		// There is no error ++ because the admin does not need the password of the user to update the account.
-	}
-	if (!empty($_POST['password_2'])){ // check if password_2 is not empty
-	    $password_2 = htmlspecialchars($_POST['password_2']);
-	}else{
-		// There is no error ++ because the admin does not need the password of the user to update the account.
-	}
-	// if the admin is filling in the password then the system checks if they are not empty
-	// if they are longer than 10 characters
-	// and if they are the same
-	if(!empty($_POST['password_1']) && !empty($_POST['password_2'])){
-		// if password_1 and password_2 is not 10 characters
-		if(strlen($password_1) < 10 || strlen($password_2) < 10){
-	      $error++;
-	      $errorMessage= "Password needs to me longer than 10 characters.";
-	    }
-	    // if password_1 and password_2 are the same
-	    // make variable $password_3 (hash variant of $password_1) 
-	    // from here $password_3 will be used.
-	    if($password_1 == $password_2){
-	      $password = $password = password_hash($password_1, PASSWORD_DEFAULT);
-	    }else{
-	      $error++;
-	      $errorMessage= "Password needs to be the same";
-	    }
-	}
-    if(!empty($_POST['level'])){ // check if level is not empty
-    	//if the level is filled in the user his account will become a admin account aka level 1.
-    	$level = htmlspecialchars($_POST['level']);
-    }else{
-    	// if level is left unfilled the standard value will be filled in and that is 0 aka user level
-    	$level = 0;
-    }
-    // if there are no errors proceed
-    if ($error == 0) {
-    	// update user data
-	    $query = "UPDATE user SET email=:email, password =:password , level=:level WHERE ID= :ID";
-	    $stmt = $database->prepare($query);
-	    // all the variables that will be updated
-	    $stmt->bindValue(":ID", $ID, PDO::PARAM_STR);
-		$stmt->bindValue(":email", $email, PDO::PARAM_STR);
-		$stmt->bindValue(":password", $password , PDO::PARAM_STR);
-		$stmt->bindValue(":level", $level, PDO::PARAM_STR);
-
-	    try {
-	        $stmt->execute();
-	    }
-	    catch (PDOException $e) {
-	        echo $e->getMessage();
-	    }
-	    // all the data is handled succesfully send user to assets.php.
-	    header('Location: admin.php');	
-	}else{?>
-		<!-- error was not 0 so there was a error -->
-		<!-- show a html box that will contain the specified erromessage -->
-	   	<div class="alert">
-	        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-	        <strong>Let op!</strong> <?php echo $errorMessage ?>
-	    </div><?php
-	}
+	editUser($database, $ID, $User_ID);
 }	
 ?>
 <!DOCTYPE html>
@@ -142,7 +42,7 @@ if(isset($_POST['Save'])) {
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	<!-- title of page -->
-	<title>Edit <?= $email ?></title>
+	<title>Edit <?= $row['email'] ?></title>
 	<!-- icon of page -->
   	<link rel="icon" href="img/favicon.png">
 </head>
@@ -178,7 +78,7 @@ if(isset($_POST['Save'])) {
 		<h4 class="standard-color">Bewerk gebruiker</h4>
 			<div class="row">
 				<div class="input-field col s12" id="email">
-					<input class="validate" type="email" value="<?=$email?>" required name="email">
+					<input class="validate" type="email" value="<?=$row['email']?>" required name="email">
 	          		<label for="E-mail address">E-mail address</label>
 	          		<span class="helper-text" data-error="Veld mag niet leeg zijn" data-success="correct">voorbeeld@voorbeeld.nl</span>
 				</div>
@@ -201,7 +101,7 @@ if(isset($_POST['Save'])) {
 				<div class="input-field col s12" id="password">
 					<p>
 				      <label>
-				        <input name="level" type="checkbox" value="1" <?= $level == 1 ? 'checked' : ''?>  />
+				        <input name="level" type="checkbox" value="1" <?= $row['level'] == 1 ? 'checked' : ''?>  />
 				        <span>Admin?</span>
 				      </label>
 				    </p>

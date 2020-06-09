@@ -1,296 +1,37 @@
  <?php
 // start session
 session_start();
-// if there is no session or level is 1 redirect user to login page
-if (empty($_SESSION['email']) || $_SESSION['level'] == 1) {
-	$_SESSION['msg'] = "You must log in first";
-    header('location: index.php');
-}
-// if session level is 1 redirect user to admin page
-if ($_SESSION['level'] == 1) {
-	$_SESSION['msg'] = "You belong at the admin page";
-    header('location: admin.php');
-}
+// include function file
+include 'functions/AssetsFunctions.php';
+include 'functions/global.php';
+
+checkSessionUser();
+
 // if logout is pressed
 if (isset($_GET['logout'])) {
-	// destroy session
-	session_destroy();
-    unset($_SESSION['email']);
-    // redirect to login page
-    header("location: index.php");
+	logOut();
 }
 // set user id 
 // user id is being used to identify wich items in the database are connected to this account.
 $User_ID= $_SESSION['id'];
-// include db file
-include_once 'db.php';
-// request basic info from user.
-$result_users = $database->prepare("SELECT * FROM user WHERE ID = ".$User_ID);
-$result_users->execute();
-for($i=0; $row = $result_users->fetch(); $i++){
-	$id = $row['ID'];
-	$email = $row['email'];
-	$password = $row['password'];	
-}
-// update gps to database
-$history = json_decode($_GET["h"], true);
-if(isset($history)){
-	$error = 0;
-	$length = count($history);
-	for ($i = 0; $i < $length; $i++) {
-		$trackerID = $history[0]['locationTrackerID'];
-		$DateTime = $history[$i]['DateTime'];
-		$Longitude = $history[$i]['Longitude'];
-		$Latitude = $history[$i]['Latitude'];
 
-		$query = "SELECT * FROM `point` WHERE Asset_ID= :trackerID AND TS =:DateTime AND Latitude =:Latitude AND Longitude =:Longitude LIMIT 1";
-		$stmt = $database->prepare($query);
-		$results = $stmt->execute(array(":trackerID" => $trackerID, ":DateTime" => $DateTime, ":Latitude" => $Latitude, ":Longitude" => $Longitude));
-		$point = $stmt->fetch(PDO::FETCH_ASSOC);
-		if ($point) { // if point excist
-		}else{
-			$query = "INSERT INTO `point` (Asset_ID, latitude, longitude, TS) VALUES (?,?,?,?)";
-				$insert = $database->prepare($query);
-				$data = array("$trackerID", "$Latitude", "$Longitude","$DateTime");
-			try {
-				$insert->execute($data);
-			}
-			catch (PDOException $e) {
-				echo $e->getMessage();
-			}
-		}
-		header('location: assets.php?GpsUpdated=1');
-	}
-}
+$email = getUser($database, $User_ID);
 
-$obj = json_decode($_GET["x"], true);
-if(isset($obj)){
-	$error = 0;
-	$length = count($obj['Tracker']);
-	for ($i = 0; $i < $length; $i++) {
-		$trackerID = $obj['Tracker'][$i]['ProductID'];
-		$gpsName = $obj['Tracker'][$i]['Name'];
-		$PhoneNumber = $obj['Tracker'][$i]['PhoneNumber1'];
-		$Latitude = $obj['Position'][$i]['Latitude'];
-		$Longitude = $obj['Position'][$i]['Longitude'];
-		// check in database if the gps is already in use
-		// check if nothing is empty
-		if (!empty($gpsName)){ //if asset name is not empty
-			$gpsName = $gpsName;
-		}else{
-			$error++;
-			$errorMessage = "Naam is leeg";
-		}
-		if (!empty($PhoneNumber)){ // if activatiecode is not empty
-			$PhoneNumber = $PhoneNumber;
-		}else{
-			$error++;
-			$errorMessage = "Activatiecode is empty";
-		}
-		$query = "SELECT * FROM asset WHERE trackerID= :trackerID LIMIT 1";
-		$stmt = $database->prepare($query);
-		$results = $stmt->execute(array(":trackerID" => $trackerID));
-		$asset = $stmt->fetch(PDO::FETCH_ASSOC);
-		if ($asset) { // if asset exists
-			if ($asset['trackerID'] == $trackerID) {
-			   	// update user data
-				$query = "UPDATE asset SET longitude=:Longitude, latitude=:Latitude WHERE trackerID =:trackerID";
-				    
-				$stmt = $database->prepare($query);
+$startTime = getTS($database);
 
-				$stmt->bindValue(":trackerID", $trackerID, PDO::PARAM_STR);
-				$stmt->bindValue(":Longitude", $Longitude, PDO::PARAM_STR);
-				$stmt->bindValue(":Latitude", $Latitude, PDO::PARAM_STR);
-
-				try {
-					$stmt->execute();
-				}
-				catch (PDOException $e) {
-				    echo $e->getMessage();
-				}
-				// all the data is handled succesfully send user to assets.php.
-				header('location: assets.php?GpsUpdated=1');
-			}
-		}else{
-			// add gps tracker to database but do not connect it to user account
-			$query = "INSERT INTO asset (trackerID, name, latitude, longitude, activatiecode, info, user_ID, seconden) VALUES (?,?,?,?,?,?,?,?)";
-			$insert = $database->prepare($query);
-			$data = array("$trackerID","$gpsName","$Latitude", "$Longitude", "$PhoneNumber", "" ,"", "");
-
-			try {
-				$insert->execute($data);
-			}
-			catch (PDOException $e) {
-				echo $e->getMessage();
-			}
-			header('location: assets.php?GpsUpdated=1');
-		}	
-	}
-}
-// if delete is pressed
 if(isset($_GET['delete'])){
-	// $_Get delete is the id of the asset the id is used to identify the correct asset and delete it
-    $query = "DELETE FROM asset WHERE ID={$_GET['delete']}";
-    $insert = $database->prepare($query);
-    $insert->execute();
-    ?>
-    	<script>
-    	window.location.href = "assets.php";</script>
-    <?php
+	deleteAsset($database, $_GET['delete']);
 }
+
 // if add asset is pressed
 if(isset($_POST['submit'])) {
-	// set error to 0 if a if statement is not succes the error var will increase by one. There will also be a specific errormessage assigned to the error.
-	// in the end there will be a check if error is 0 if not show error message.
-	$error = 0;
-	// check in database if the activationkey is already in use
-	$activatiecode = htmlspecialchars($_POST['activatiecode']);
-	$query = "SELECT * FROM asset WHERE activatiecode= :activatiecode AND user_ID = 0 LIMIT 1";
-	$stmt = $database->prepare($query);
-	$results = $stmt->execute(array(":activatiecode" => $activatiecode));
-	$asset = $stmt->fetch(PDO::FETCH_ASSOC);
-	$trackerID = $asset['trackerID'];
-	if ($asset) { // if asset exists
-	    if ($asset['activatiecode'] == $activatiecode) {
-	    	if (!empty($_POST['name'])){ //if asset name is not empty
-	    		$name = htmlspecialchars($_POST['name']);
-			}else{
-			    $error++;
-			    $errorMessage = "Naam is leeg";
-			}
-			if (!empty($_POST['activatiecode'])){ // if activatiecode is not empty
-			    $activatiecode = htmlspecialchars($_POST['activatiecode']);
-			}else{
-			    $error++;
-			    $errorMessage = "Activatiecode is empty";
-			}
-			if (!empty($_POST['info'])){ //if info is not empty
-			    $info = htmlspecialchars($_POST['info']);
-
-			}else{
-			    $error++;
-			    $errorMessage = "Info is leeg";
-			}
-			if(!empty($_POST['seconden'])){ //if seconden is not empty
-				$seconden = htmlspecialchars($_POST['seconden']);
-			}else{
-			    $error++;
-			    $errorMessage = "Seconden is leeg";
-			}
-		}else{
-			$error++;
-			$errorMessage= "De gps tracker moet nog geactiveerd worden.";
-		}
-		if ($error == 0) { //if error is 0 proceed
-			// insert asset into database
-			$query = "UPDATE asset SET name=:gpsName, user_ID=:user_ID, info=:info WHERE trackerID =:trackerID";
-			$stmt = $database->prepare($query);
-
-			$stmt->bindValue(":trackerID", $trackerID, PDO::PARAM_STR);
-			$stmt->bindValue(":gpsName", $name, PDO::PARAM_STR);
-			$stmt->bindValue(":info", $info, PDO::PARAM_STR);
-			$stmt->bindValue(":user_ID", $User_ID, PDO::PARAM_STR);
-
-			try {
-			    $stmt->execute();
-			}
-			catch (PDOException $e) {
-			    echo $e->getMessage();
-			}
-			// all the data is handled succesfully send user to assets.php.
-			// header('location: assets.php');	
-
-		}else{?>
-			<!-- error was not 0 so there was a error -->
-			<!-- show a html box that will contain the specified erromessage -->
-			<div class="alert">
-			    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-			    <strong>Let op!</strong> <?php echo $errorMessage ?>
-			</div><?php
-		}
-	}	
+	submitAsset($database, $User_ID);
 }
+
 
 // if update profile is pressed
 if(isset($_POST['update'])) {
-	// set error to 0 if a if statement is not succes the error var will increase by one. There will also be a specific errormessage assigned to the error.
-	// in the end there will be a check if error is 0 if not show error message.
-	$error = 0;
-	// check in database if the email is already in use
-	$email = htmlspecialchars($_POST['email']);
-	$query = "SELECT * FROM user WHERE email = :email AND ID !=:ID LIMIT 1";
-	$stmt = $database->prepare($query);
-	$results = $stmt->execute(array(":email" => $email, ":ID" => $User_ID));
-	$user = $stmt->fetch(PDO::FETCH_ASSOC);
-	if ($user) { // if user exists
-	    if ($user['email'] == $email) {
-		    $error++;
-	        $errorMessage= "User already excist";
-	    }
-	}	
-	// if email is empty
-	if (!empty($_POST['email'])){
-	    $email = htmlspecialchars($_POST['email']);
-	}else{
-	    $error++;
-	    $errorMessage = "E-mail is leeg";
-	}
-	// if password_1 is empty
-	if (!empty($_POST['password_1'])){
-	    $password_1 = htmlspecialchars($_POST['password_1']);
-	}else{
-	    $error++;
-	    $errorMessage = "Password is empty";
-	}
-	// if password_2 is empty
-	if (!empty($_POST['password_2'])){
-	    $password_2 = htmlspecialchars($_POST['password_2']);
-	}else{
-	    $error++;
-	    $errorMessage = "Please confirm the password";
-	}
-	// if password_1 and password_2 is not 10 characters
-	if(strlen($password_1) < 10 || strlen($password_2) < 10){
-      $error++;
-      $errorMessage= "Password needs to me longer than 10 characters.";
-    }
-    // if password_1 and password_2 are the same
-    // make variable $password_3 (hash variant of $password_1) 
-    // from here $password_3 will be used.
-    if($password_1 == $password_2){
-      $password_3 = password_hash($password_1, PASSWORD_DEFAULT);
-    }else{
-      $error++;
-      $errorMessage= "Password needs to be the same";
-    }
-    // if there are no errors proceed
-	if ($error == 0) {
-		// update user data
-	    $query = "UPDATE user SET email=:email, password=:password_3 WHERE ID =:ID";
-	    
-	   	$stmt = $database->prepare($query);
-
-	    $stmt->bindValue(":ID", $User_ID, PDO::PARAM_STR);
-		$stmt->bindValue(":email", $email, PDO::PARAM_STR);
-		$stmt->bindValue(":password_3", $password_3, PDO::PARAM_STR);
-
-	    try {
-	        $stmt->execute();
-	    }
-	    catch (PDOException $e) {
-	        echo $e->getMessage();
-	    }
-	    // all the data is handled succesfully send user to assets.php.
-	    header('location: assets.php');
-
-	}else{?>
-		<!-- error was not 0 so there was a error -->
-		<!-- show a html box that will contain the specified erromessage -->
-	   	<div class="alert">
-	        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-	        <strong>Let op!</strong> <?php echo $errorMessage ?>
-	    </div><?php
-	}
+	updateProfile($database, $User_ID);
 }
 ?>
 <!DOCTYPE html>
@@ -450,6 +191,7 @@ include('objects/update-profile.php');
 if(empty($_GET['GpsUpdated'])){?>
 	<script type="text/javascript">
 		var locationTrackerID = "<?= $trackerID?>";
+		var startTime = "<?=$startTime?>";
 	</script>
 	<script type="text/javascript" src="js/GPS.js"></script>
 <?php

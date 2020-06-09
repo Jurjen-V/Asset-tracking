@@ -1,75 +1,12 @@
 <?php
+include 'functions/global.php';
 session_start();
-// If a admin account tries to get acces to regular user page
-// send the admin accounts to the admin page.
-if (!empty($_SESSION['level'])){
-  if($_SESSION['level'] == 1) {
-    $_SESSION['msg'] = "You belong at the admin page";
-    header('location: admin.php');
-  }
-}else{
-  $_SESSION['level'] = 0;
-}
-include_once 'db.php';
 
+checkSessionLevel();
+$IOS = 1;
 // login validation
 if (isset($_POST['login_user'])) {
-  // set error to 0 if a if statement is not succes the error var will increase by one. There will also be a specific errormessage assigned to the error.
-  // in the end there will be a check if error is 0 if not show error message.
-  $error = 0;
-  // check if input fields are filled in
-  if(!empty($_POST['email'])){ // check if email is not empty
-    $email = htmlspecialchars($_POST['email']);
-  }else{
-    $error++;
-    $errorMessage = "Email is leeg";
-  }
-  if(!empty($_POST['psw'])){ //check if password is not empty
-    $enterd_password = htmlspecialchars($_POST['psw']);
-  }else{
-    $error++;
-    $errorMessage = "Password is leeg";
-  }
-  //check if password is correct.
-  // Get Old Password from Database using the email addres to get the password form database
-  $query ="SELECT * FROM user WHERE email =:email";
-  $stmt = $database->prepare($query);
-  $results = $stmt->execute(array(":email" => $email));
-  $user = $stmt->fetch(PDO::FETCH_ASSOC);
-  // variables that the user account with the email addres has.
-  $id = $user['ID'];
-  $email = $user['email'];
-  $Level = $user['level'];
-  $password= $user['password'];
-  // compare the filled in password with the database password.
-  if(password_verify($enterd_password, $password)){
-  }else{
-    $error++;
-    $errorMessage= "Wachtwoorden is niet juist";
-  }
-  if($error == 0){
-    // These variables will be used to make sure the user is logged in.
-    $_SESSION['email'] = $email;
-    $_SESSION['id'] = $id;
-    $_SESSION['level'] = $Level;
-    $_SESSION['msg'] = "You are now logged in";
-    if($Level == 0){
-      // If the user has a user account 
-      // send the user to user page.
-      header('location: index.php');
-    }else{
-      // If the user has a admin account 
-      // send the user to admin page.
-      header('location: admin.php');
-    }
-  }else{?>
-    <!-- error was not 0 so there was a error -->
-    <!-- show a html box that will contain the specified erromessage -->
-    <div class="alert">
-      <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-      <strong>Let op!</strong> <?php echo $errorMessage ?>
-    </div><?php
-  }
+  loginUser($database, $IOS);
 }
 ?>
 <!DOCTYPE html>

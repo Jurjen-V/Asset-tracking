@@ -1,5 +1,6 @@
 //login api
 locationTrackerID;
+startTime;
 function login(){
 	//set form data
     var data = new FormData();
@@ -59,6 +60,7 @@ function getTrackers(Token, ClientID, UserName, Password){
             var Latitude = trackerList.Data.Position[0].Latitude;
             // all the variables inside the () brackets are needed to make the websocket connection.
             //send javascript var to php page. for database
+            locationHistory(Token, locationTrackerID, DbID);
         }
         dbParam = JSON.stringify(trackerList.Data);
         xmlhttp = new XMLHttpRequest();
@@ -66,9 +68,8 @@ function getTrackers(Token, ClientID, UserName, Password){
           if (this.readyState == 4 && this.status == 200) {
           }
         };
-        xmlhttp.open("GET", "assets.php?x=" + dbParam, true);
+        xmlhttp.open("GET", "functions/GPS_call.php?x=" + dbParam, true);
         xmlhttp.send(); 
-        locationHistory(Token, locationTrackerID, DbID);
       }
     });
     // headers
@@ -91,14 +92,15 @@ function locationHistory(Token, locationTrackerID, DbID){
     data.append("InformationType", "HistoricalLocation");
     data.append("OperationType", "Query");
     data.append("LanguageType", "2B72ABC6-19D7-4653-AAEE-0BE542026D46");
-    data.append("Arguments", '{"Speed":"-1","ProductID":"' + locationTrackerID + '","DbID":"'+ DbID + '","StartTime":"' + start.toISOString() + '","EndTime":"'+ end.toISOString() +'"}');
-    data.append("PageArguments", '{"PageSize":"20","PageIndex":"1"}');
+    data.append("Arguments", '{"Speed":"-1","ProductID":"' + locationTrackerID + '","DbID":"'+ DbID + '","StartTime":"' + startTime + '","EndTime":"'+ end.toISOString() +'"}');
+    data.append("PageArguments", '{"PageSize":"500","PageIndex":"1"}');
 
     var xhr = new XMLHttpRequest();
     xhr.addEventListener("readystatechange", function() {
       if(this.readyState === 4) {
         // These variables will be used by connecting to websocket.
         var historyList =JSON.parse(this.responseText);
+        console.log(historyList);
         var i;
         for (i = 0; i < historyList.Data.length; i++) {
             //these variables will be used to store in the database by php
@@ -109,14 +111,16 @@ function locationHistory(Token, locationTrackerID, DbID){
             //send javascript var to php page. for database
         }
         historyList.Data[0]['locationTrackerID'] = locationTrackerID;
+        historyList['HistoryPost'] = 1;
         dbParam = JSON.stringify(historyList.Data);
         xmlhttp = new XMLHttpRequest();
         xmlhttp.onreadystatechange = function() {
           if (this.readyState == 4 && this.status == 200) {
           }
         };
-        xmlhttp.open("GET", "assets.php?h=" + dbParam, true);
-        xmlhttp.send(); 
+        xmlhttp.open("POST", "functions/GPS_call.php", true);
+        xmlhttp.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+        xmlhttp.send(dbParam); 
     }
     });
     // headers

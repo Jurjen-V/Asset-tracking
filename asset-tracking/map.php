@@ -1,23 +1,15 @@
 <?php
+include 'functions/global.php';
 // start session
 session_start();
-// if there is no session or level is 1 redirect user to login page
-if (empty($_SESSION['email']) || $_SESSION['level'] == 1) {
-  $_SESSION['msg'] = "You must log in first";
-    header('location: index.php');
-}
-// if session level is 1 redirect user to admin page
-if ($_SESSION['level'] == 1) {
-  $_SESSION['msg'] = "You belong at the admin page";
-    header('location: admin.php');
-}
+
+checkSessionUser();
+
 // if logout is pressed
 if (isset($_GET['logout'])) {
   // destroy session
-  session_destroy();
-    unset($_SESSION['email']);
-    // redirect to login page
-    header("location: index.php");
+  // redirect to login page
+  logOut();
 }
 if(empty($_GET['ID'])){
   //send user to assets page if id is empty
@@ -27,8 +19,6 @@ if(empty($_GET['ID'])){
   // the variable will be used to select the asset and update it
   $ID = $_GET['ID'];
 }
-// include db file
-include_once 'db.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -90,10 +80,10 @@ include_once 'db.php';
     </div> 
   </nav>
     <div id='map'>
-      <div class="leaflet-top leaflet-right button_box2 leaflet-control standard-bgcolor white-text info_box">
-        <h6 class="white-text">Locaties:</h6>
-        <blockquote class="blockquote_white btnStyle span3 leaflet-control Button" id="info_box"></blockquote>
-      </div>
+      <!-- <div class="leaflet-top leaflet-right button_box2 leaflet-control standard-bgcolor white-text info_box"> -->
+        <!-- <h6 class="white-text">Locaties:</h6> -->
+        <!-- <blockquote class="blockquote_white btnStyle span3 leaflet-control Button" id="info_box"></blockquote> -->
+      <!-- </div> -->
     </div>
     <!-- script links -->
 <script type="text/javascript" src="js/script.js"></script>
@@ -101,8 +91,8 @@ include_once 'db.php';
 <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 <script type="text/javascript">
-var elem = L.DomUtil.get('info_box'); //the info box of all the visited locations
-L.DomEvent.on(elem, 'mousewheel', L.DomEvent.stopPropagation);
+// var elem = L.DomUtil.get('info_box'); //the info box of all the visited locations
+// L.DomEvent.on(elem, 'mousewheel', L.DomEvent.stopPropagation);
 document.getElementById("map").style.height = "calc(100% - 64px)";
   // get html map id
 var current_position,
@@ -138,7 +128,7 @@ var array =[
   // make a select statement of all the lat long data 
   // and put it in a javascript array
   // // The javascript array will then place markers on the map and draw a route
-  $result_assets = $database->prepare("SELECT asset.ID, point.ASSET_ID, point.longitude, point.latitude, asset.name, CAST(point.TS AS DATE), asset.activatiecode, asset.info FROM asset INNER JOIN point on asset.trackerID = point.ASSET_ID WHERE CAST(TS AS DATE) = '".$_GET['TS']."' AND point.ASSET_ID='".$_GET['ID']."' LIMIT 20");
+  $result_assets = $database->prepare("SELECT asset.ID, point.ASSET_ID, point.longitude, point.latitude, asset.name, CAST(point.TS AS DATE), asset.activatiecode, asset.info FROM asset INNER JOIN point on asset.trackerID = point.ASSET_ID WHERE CAST(TS AS DATE) = '".$_GET['TS']."' AND point.ASSET_ID='".$_GET['ID']."'");
   $result_assets->execute();
   for($i=0; $row = $result_assets->fetch(); $i++){
     // print_r($row);
@@ -152,9 +142,9 @@ var array =[
 route = array.map(s => eval('null,' + s));
 var i;
 // show all plaats namen
-for (i = 0; i < route.length; i++) {
-  document.getElementById('info_box').innerHTML +=  array[i] + "<br>";
-}  
+// for (i = 0; i < route.length; i++) {
+//   document.getElementById('info_box').innerHTML +=  array[i] + "<br>";
+// }  
 // show route names marker with popup
 for (i = 0; i < route.length; i++) {
   var marker = L.marker(route[i]).addTo(map);

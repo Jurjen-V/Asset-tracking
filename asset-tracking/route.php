@@ -1,86 +1,29 @@
 <?php
+include 'functions/global.php';
+include 'functions/AssetsFunctions.php';
+include 'functions/route.php';
 // start session
 session_start();
 
-// if there is no session or level is 1 redirect user to login page
-if (empty($_SESSION['email']) || $_SESSION['level'] == 1) {
-	$_SESSION['msg'] = "You must log in first";
-    header('location: index.php');
-}
-// if session level is 1 redirect user to admin page
-if ($_SESSION['level'] == 1) {
-	$_SESSION['msg'] = "You belong at the admin page";
-    header('location: admin.php');
-}
+checkSessionUser();
 // if logout is pressed
 if (isset($_GET['logout'])) {
 	// destroy session
-	session_destroy();
-    unset($_SESSION['email']);
     // redirect to login page
-    header("location: index.php");
+    logOut();
 }
 // set user id 
 // user id is being used to identify wich items in the database are connected to this account.
 $User_ID= $_SESSION['id'];
-// include db file
-include_once 'db.php';
-// test insert to test the route data
-if(isset($_POST['TEST'])){
-	$location = array("POINT(52.972565, 5.612297)", "POINT(52.966623, 5.590024)", "POINT(52.967554, 5.545907)", "POINT(52.991894, 5.553374)", "POINT(52.985539, 5.583587)", "POINT(52.972565, 5.612297)");
-	$length = count($location);
-	for($i = 0; $i<$length; $i++) {
-		$ASSET_ID = $_GET['ID'];
-		$sql = "INSERT INTO `point` SET `latlong` = ".$location[$i] . ", ASSET_ID = ".$ASSET_ID;
-		$insert = $database->prepare($sql);
-		$data = array("$location[$i]", "$ASSET_ID");
-		print_r($data);
-		try 
-		{
-		    $insert->execute($data);
-			print_r($insert);
-		}
-		catch(PDOException $e)
-		{               
-	    	echo $e->getMessage();
-		}
-	} 
-}
-// request basic info from user.
-$result_users = $database->prepare("SELECT * FROM user WHERE ID = ".$User_ID);
-$result_users->execute();
-for($i=0; $row = $result_users->fetch(); $i++){
-	$id = $row['ID'];
-	$email = $row['email'];
-	$password = $row['password'];	
-}	
+
+getUser($database, $User_ID);
+
 // if delete is pressed
 if(isset($_GET['delete']) || isset($_GET['TS'])){
-	// $_Get delete is the id of the asset the id is used to identify the correct asset and delete it
-	// $_GEt TS is the timestamp of the asset lat lon points it will delete all the asset points of that timestamp.
-	$route_id= $_GET['ID'];
-    $query = "DELETE FROM point WHERE ASSET_ID='{$_GET['delete']}' AND CAST(point.TS AS DATE) = '{$_GET['TS']}' ";
-    $delete = $database->prepare($query);
-    $delete->execute();
-    header('location: route.php?ID='.$route_id);
-}
-// select the traveled routes ordered by timestamp.
-$result_name = $database->prepare("SELECT * FROM `point` inner join asset on asset.trackerID = point.ASSET_ID WHERE point.ASSET_ID=:ASSET_ID");
-$result_name->execute(array(":ASSET_ID" => $_GET['ID']));
-$result = $result_name->fetch(PDO::FETCH_ASSOC);
-$assetName= "";
-// if there are no traveled routes show error message.
-if(!$result){
-	$errorMessage = "Geen afgelegde routes gevonden";
-	?>
-	<div class="alert">
-	   	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-	    <strong>Let op!</strong> <?php echo $errorMessage ?>
-	</div><?php
-}else{
-	$assetName = $result['name'];
+	deleteRoute($database, $_GET['delete'], $_GET['TS']);
 }
 
+$assetName = getRoute($database);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -123,10 +66,6 @@ if(!$result){
     </div> 
   </nav>
 <body>
-	<form method="post">
-		<!-- send test data to database button -->
-		<button class="btn waves-effect standard-bgcolor" type="submit" name="TEST">send test</button>
-	</form>
 	  <h5 class="left-align">
 	  	<!-- show the asset name where we are looking at -->
       Asset naam: <?= $assetName?>
