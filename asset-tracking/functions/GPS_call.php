@@ -22,7 +22,7 @@ function updateToDb($history, $database){
 		$DateTime = $history[$i]['DateTime'];
 		$Longitude = $history[$i]['Longitude'];
 		$Latitude = $history[$i]['Latitude'];
-
+		if($Longitude != 0 && $Latitude != 0){
 			$query = "INSERT INTO `point` (Asset_ID, latitude, longitude, TS) VALUES (?,?,?,?)";
 			$insert = $database->prepare($query);
 			$data = array("$trackerID", "$Latitude", "$Longitude","$DateTime");
@@ -33,6 +33,7 @@ function updateToDb($history, $database){
 				echo $e->getMessage();
 			}
 			header('location: ../assets.php?GpsUpdated=1');
+		}
 	}
 }
 $obj = json_decode($_GET["x"], true);
@@ -48,9 +49,9 @@ function trackerList($obj, $database){
 		$trackerID = $obj['Tracker'][$i]['ProductID'];
 		$gpsName = $obj['Tracker'][$i]['Name'];
 		$PhoneNumber = $obj['Tracker'][$i]['PhoneNumber1'];
-		echo $PhoneNumber;
 		$Latitude = $obj['Position'][$i]['Latitude'];
 		$Longitude = $obj['Position'][$i]['Longitude'];
+		$PhoneNumber = trim($PhoneNumber," ");
 		// check in database if the gps is already in use
 		// check if nothing is empty
 		if (!empty($gpsName)){ //if asset name is not empty

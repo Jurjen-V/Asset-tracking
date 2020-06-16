@@ -82,6 +82,7 @@ if(isset($_POST['Save'])) {
 	          		<span class="helper-text" data-error="Veld mag niet leeg zijn" data-success="correct">voorbeeld@voorbeeld.nl</span>
 				</div>
 			</div>
+			<a class="waves-effect waves-light btn modal-trigger help-bgcolor" href="#modal1">Uitleg wachtwoorden</a>
 			<div class="row">
 				<div class="input-field col s12" id="password">
 					<input minlength="10" type="password" class="validate" name="password_1">
@@ -113,6 +114,17 @@ if(isset($_POST['Save'])) {
 	    	</div>
 		  </form>
 	</div>
+	  <!-- Modal Structure -->
+  <div id="modal1" class="modal">
+    <div class="modal-content">
+      <h4>Uitleg wachtwoorden</h4>
+      <p>Als admin kun je de wachtwoord velden leeg laten.</p>
+      <p>Het syteem gebruikt in dat geval het oude wachtwoord van het account</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Sluit</a>
+    </div>
+  </div>
 	<!-- include footer -->
 	<?php include('objects/footer.php'); ?>
 </body>

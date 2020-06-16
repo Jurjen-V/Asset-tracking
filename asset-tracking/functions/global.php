@@ -213,3 +213,27 @@ function updateProfile($database, $User_ID){
       </div><?php
   }
 }
+function selectUserAssets($database){
+      $result_trackerID = $database->prepare("SELECT * FROM asset where user_ID = ".$_SESSION['id']);
+
+    $result_trackerID->execute();
+    // loop database results
+    if ($result_trackerID->rowCount() > 0) {
+      while ($trackerID_row = $result_trackerID->fetch(PDO::FETCH_LAZY)) {
+        $trackerID[] = $trackerID_row['trackerID'];
+      }
+    } else {
+       $trackerID = null;
+    }
+    return $trackerID;
+}
+function selectAllAssets($database){
+  $result_trackerID = $database->prepare("SELECT * FROM asset");
+
+  $result_trackerID->execute();
+  // loop database results
+  while ($trackerID_row = $result_trackerID->fetch(PDO::FETCH_LAZY)) {
+    $trackerID[] = $trackerID_row['trackerID'];
+  }
+  return $trackerID;
+}

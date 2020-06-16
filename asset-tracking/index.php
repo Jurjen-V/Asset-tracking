@@ -29,6 +29,7 @@ if (isset($_POST['login_user'])) {
 if (isset($_GET['logout'])) {
   logOut();
 }
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -60,7 +61,9 @@ if (isset($_GET['logout'])) {
   <div id="alert" style="display: none"></div>
   <!-- if the user is logged in show nav bar etc -->
   <!-- show below html code if user is logged in -->
-  <?php if (isset($_SESSION['email'])) : ?>
+  <?php if (isset($_SESSION['email'])) : 
+    $trackerID = selectUserAssets($database);
+    ?>
   <ul class="sidenav" id="mobile-demo">
   <li class="sidenav-header standard-bgcolor">
           <div class="row">
@@ -128,6 +131,11 @@ if (isset($_GET['logout'])) {
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
 <script type="text/javascript">
+  <?php  if (isset($_SESSION['email'])) :?>
+    var trackerIDArray = <?php echo json_encode($trackerID); ?>;
+  <?php else:?>
+    var trackerIDArray = 0;
+  <?php endif ?>
   var alert = document.getElementById('alert');
   var map = document.getElementById('map')
   if (alert.style.display === 'block') {

@@ -7,6 +7,7 @@
   include_once 'functions/db.php';
   $database = db_connect();
 ?>
+console.log(trackerIDArray);
 // get html map id
 var current_position,
   circle,
@@ -92,10 +93,21 @@ function getTrackers(Token, ClientID, UserName, Password){
         var Port = trackerList.Data.Transfer[0].WsOutputPort;
         var SystemNo = trackerList.Data.Tracker[0].SystemNo;
         //these variables will be used to store in the database by php
+        var latlong = [];
+        for (i = 0; i < trackerList.Data.Position.length; i++) {
+          var Latitude = trackerList.Data.Position[i].Latitude;
+          var Longitude = trackerList.Data.Position[i].Longitude;
+          if(trackerList.Data.Tracker[i].ProductID === trackerIDArray[i]){
+            latlong.push({Latitude :trackerList.Data.Position[i].Latitude, Longitude : trackerList.Data.Position[i].Longitude});
+          }
+        }
+        addlayer(latlong);
         for (i = 0; i < trackerList.Data.Tracker.length; i++) {
           var trackerID = trackerList.Data.Tracker[i].ProductID;
           var gpsName = trackerList.Data.Tracker[i].Name;
           var PhoneNumber = trackerList.Data.Tracker[i].PhoneNumber1;
+
+
           // all the variables inside the () brackets are needed to make the websocket connection.
           <?php 
             $User_ID= $_SESSION['id'];
@@ -108,17 +120,18 @@ function getTrackers(Token, ClientID, UserName, Password){
             ?>
               var userTrackers = "<?= $trackerID;?>";
               if (userTrackers === trackerID){
-                websocketLogin(Token, ClientID, UserName, Password, IP, Port, gpsName, PhoneNumber,SystemNo);
+                websocketLogin(Token, ClientID, UserName, Password, IP, Port, gpsName, PhoneNumber,SystemNo, latlong);
               }
             <?php endif ?>
         }
+
       }
     });
     // headers
     xhr.open("POST", "http://api.overseetracking.com/WebProcessorApi.ashx",true);  
     xhr.send(data);
 }
-function websocketLogin(Token, ClientID, UserName, Password, IP, Port, gpsName, PhoneNumber,SystemNo){
+function websocketLogin(Token, ClientID, UserName, Password, IP, Port, gpsName, PhoneNumber,SystemNo, latlong){
     // this function uses variables from Login function and getTrackers function.
     // The credentials to send to the web socket
   var Credential = "{'ClientID':'" + ClientID + "','SignalName':'00','LoginType':'0','UserID':'{UserName}','Password':'{Password}','ClientType':'4','DataIP':'','DataTypeReq':[]}";
@@ -129,15 +142,19 @@ function websocketLogin(Token, ClientID, UserName, Password, IP, Port, gpsName, 
      // to this when system receives a message
   ws.onmessage = function (event) { 
     if (event.data) { 
+      console.log(event);
       let str = event.data.toString();
+      console.log(str);
       str = str.slice(0, -1); 
       var jsonData = JSON.parse(str);
+      console.log(jsonData);
       if (jsonData.SignalName === "80" || jsonData.SignalName === "81"){
+        var SystemNo = jsonData.SystemNo;
         var Latitude = jsonData.Latitude;
         var Longitude = jsonData.Longitude;
         var DateTime = jsonData.DateTime;
         var Livelatlong = [Latitude, Longitude];
-        addlayer(Livelatlong, gpsName, PhoneNumber, DateTime);        
+        Livelayer(Livelatlong, SystemNo, DateTime, latlong, gpsName, PhoneNumber);        
       }
     } 
   };
@@ -170,15 +187,45 @@ document.getElementById("map").style.height = "calc(100% - 64px)";
 document.getElementById("Btn").style.display = "none";
 var layerGroup = L.layerGroup().addTo(map);
 
-function addlayer(Livelatlong, gpsName, PhoneNumber, DateTime) {
+function addlayer(latlong) {
   // set the popup data for the gps trackers
   // if you click on a gps tracker it will show his name and his activationkey
-  var popup_data= ["Name: " + gpsName + " activatiecode: " + PhoneNumber + " DateTime: " + DateTime ];  
+
   var i;
   layerGroup.clearLayers();
   // style the gps trackers as google maps circles.
-  for (i = 0; i < Livelatlong.length; i++) {
-    // data = popup_data.map(s => eval('null,' + s));
+  for (i = 0; i < latlong.length; i++) {
+      L.circleMarker([latlong[i].Latitude, latlong[i].Longitude], {
+          color: "#4285F4",
+          weight: 0,
+          fillColor: "#4285F4",
+          fillOpacity: 0.5,
+          radius: 20,
+          'className': 'pulse'
+      }).addTo(layerGroup);
+      marker = L.circleMarker([latlong[i].Latitude, latlong[i].Longitude], {
+          color: "white",
+          opacity: 1,
+          weight: 2,
+          fillColor: "#4285F4",
+          radius: 10,
+          opacity: 1,
+          fillOpacity: 1,
+          'className': 'pulse'
+      }).addTo(layerGroup);
+      // marker.bindPopup([latlong[i].Latitude, latlong[i].Longitude]); 
+  }
+}
+function Livelayer(Livelatlong, SystemNo, DateTime, latlong, gpsName, PhoneNumber) {
+  // set the popup data for the gps trackers
+  // if you click on a gps tracker it will show his name and his activationkey
+  var popup_data= ["SystemNo: " + SystemNo + " DateTime: " + DateTime ];  
+  var i;
+  addlayer(latlong, gpsName, PhoneNumber);
+  layerGroup.clearLayers();
+  console.log(Livelatlong);
+  // style the gps trackers as google maps circles.
+  for (i = 0; i < latlong.length; i++) {
       L.circleMarker(Livelatlong, {
           color: "#4285F4",
           weight: 0,
@@ -197,7 +244,7 @@ function addlayer(Livelatlong, gpsName, PhoneNumber, DateTime) {
           fillOpacity: 1,
           'className': 'pulse'
       }).addTo(layerGroup);
-      marker.bindPopup(popup_data[0]); 
+      marker.bindPopup(popup_data[i]); 
   }
 }
 <?php endif ?>

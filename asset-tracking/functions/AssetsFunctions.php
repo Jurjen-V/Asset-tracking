@@ -9,13 +9,12 @@ $database = db_connect();
 
 // function getTS is used to get the last timestamp from database.
 // The timestamp is used to make historylocation call with javascript
-function getTS($database){
-	$query = "SELECT * FROM `point` ORDER BY TS DESC LIMIT 1";
+function getTS($database, $trackerID){
+	$query = "SELECT TS, ASSET_ID FROM `point` ORDER BY TS DESC LIMIT 1";
 	$stmt = $database->prepare($query);
 	$results = $stmt->execute();
 	$point = $stmt->fetch(PDO::FETCH_ASSOC);
-	$startTime= $point['TS'];
-	return $startTime;
+	return $point['TS'];
 }
 // function deleteAsset is used to delete the asset. the function is activated when delete is pressed
 function deleteAsset($database){

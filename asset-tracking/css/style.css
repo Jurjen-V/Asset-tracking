@@ -24,6 +24,9 @@ input[type=range] + .thumb.active .value {
 .standard-bgcolor{
   background-color: #1C9CDA !important;
 }
+.help-bgcolor{
+  background-color: #ffa92a !important; 
+}
 .standard-color{
   color: #1C9CDA !important;
 }

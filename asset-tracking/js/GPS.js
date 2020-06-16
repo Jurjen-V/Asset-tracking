@@ -1,5 +1,5 @@
 //login api
-locationTrackerID;
+trackerIDArray;
 startTime;
 function login(){
 	//set form data
@@ -60,7 +60,10 @@ function getTrackers(Token, ClientID, UserName, Password){
             var Latitude = trackerList.Data.Position[0].Latitude;
             // all the variables inside the () brackets are needed to make the websocket connection.
             //send javascript var to php page. for database
-            locationHistory(Token, locationTrackerID, DbID);
+            var length= trackerIDArray.length;
+            for (i = 0; i < length; i++) {
+                locationHistory(Token, trackerIDArray[i], DbID, startTime);
+            }
         }
         dbParam = JSON.stringify(trackerList.Data);
         xmlhttp = new XMLHttpRequest();
@@ -76,7 +79,7 @@ function getTrackers(Token, ClientID, UserName, Password){
     xhr.open("POST", "http://api.overseetracking.com/WebProcessorApi.ashx",true);  
     xhr.send(data);
 }
-function locationHistory(Token, locationTrackerID, DbID){
+function locationHistory(Token, trackerIDArray, DbID, startTime){
     // set start date (begin of the day )
     let start = new Date();
     start.setHours(0,0,0,0);
@@ -85,14 +88,13 @@ function locationHistory(Token, locationTrackerID, DbID){
     end.setHours(23,59,59,999);
     start.toISOString();
     end.toISOString();
-    
     // set form data
     var data = new FormData();
     data.append("Token", Token); //token is a variable from the login function above.
     data.append("InformationType", "HistoricalLocation");
     data.append("OperationType", "Query");
     data.append("LanguageType", "2B72ABC6-19D7-4653-AAEE-0BE542026D46");
-    data.append("Arguments", '{"Speed":"-1","ProductID":"' + locationTrackerID + '","DbID":"'+ DbID + '","StartTime":"' + startTime + '","EndTime":"'+ end.toISOString() +'"}');
+    data.append("Arguments", '{"Speed":"-1","ProductID":"' + trackerIDArray + '","DbID":"'+ DbID + '","StartTime":"' + startTime + '","EndTime":"'+ end.toISOString() +'"}');
     data.append("PageArguments", '{"PageSize":"500","PageIndex":"1"}');
 
     var xhr = new XMLHttpRequest();
@@ -100,7 +102,6 @@ function locationHistory(Token, locationTrackerID, DbID){
       if(this.readyState === 4) {
         // These variables will be used by connecting to websocket.
         var historyList =JSON.parse(this.responseText);
-        console.log(historyList);
         var i;
         for (i = 0; i < historyList.Data.length; i++) {
             //these variables will be used to store in the database by php
@@ -110,17 +111,19 @@ function locationHistory(Token, locationTrackerID, DbID){
             // all the variables inside the () brackets are needed to make the websocket connection.
             //send javascript var to php page. for database
         }
-        historyList.Data[0]['locationTrackerID'] = locationTrackerID;
-        historyList['HistoryPost'] = 1;
-        dbParam = JSON.stringify(historyList.Data);
-        xmlhttp = new XMLHttpRequest();
-        xmlhttp.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200) {
-          }
-        };
-        xmlhttp.open("POST", "functions/GPS_call.php", true);
-        xmlhttp.setRequestHeader("Content-type", "application/json;charset=UTF-8");
-        xmlhttp.send(dbParam); 
+        if (historyList.Data[0] != undefined) {
+            historyList.Data[0]['locationTrackerID'] = trackerIDArray;
+            historyList['HistoryPost'] = 1;
+            dbParam = JSON.stringify(historyList.Data);
+            xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+              if (this.readyState == 4 && this.status == 200) {
+              }
+            };
+            xmlhttp.open("POST", "functions/GPS_call.php", true);
+            xmlhttp.setRequestHeader("Content-type", "application/json;charset=UTF-8");
+            xmlhttp.send(dbParam); 
+        }
     }
     });
     // headers

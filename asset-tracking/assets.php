@@ -17,7 +17,6 @@ $User_ID= $_SESSION['id'];
 
 $email = getUser($database, $User_ID);
 
-$startTime = getTS($database);
 
 if(isset($_GET['delete'])){
 	deleteAsset($database, $_GET['delete']);
@@ -100,43 +99,37 @@ if(isset($_POST['update'])) {
 	echo "
 		<table class='Assets responsive-table centered highlight'>
 		    <thead>
-			    <tr>
-			        <th>TrackerID</th>			
+			    <tr>		
 			    	<th>Asset name</th>
 			    	<th>activatiecode</th>
 			        <th>Info</th>
-			        <th>Seconden</th>
 			        <th>Actions</th>
 			    </tr>
 		    </thead>";
 	//select statement to get users assets  
 	// Variable $User_ID is used to select the correct data that is connected to the user his account
 	// User_ID is created from $_session['id'];
-	$result_assets = $database->prepare("SELECT * FROM asset WHERE user_ID=".$User_ID);
+	$trackerID =  selectAllAssets($database);
+	
+    $startTime = getTS($database, $trackerID);
+    $result_assets = $database->prepare("SELECT * FROM asset WHERE user_ID=".$User_ID);
 
 	$result_assets->execute();
-	// loop database results
 	echo "<tbody>";
 	for($i=0; $row = $result_assets->fetch(); $i++){
 	    $id = $row['ID'];
-	    $trackerID = $row['trackerID'];
-	    // the TR row is clickable it will redirect to view asset routes page.	    
-
-	    echo "<tr data-href='route.php?ID=". $id. "'>";
-	   	echo "<td>" . $row['trackerID'] . "</td>";
+	    echo "<tr>";
 	    echo "<td>" . $row['name'] . "</td>";
 	    echo "<td>" . $row['activatiecode'] . "</td>";
 	   	echo "<td>" . $row['info'] . "</td>";
-	   	echo "<td>" . $row['seconden'] . "</td>";
 	    echo "
    			<td>
-   			<a title='Route' class='link btn-floating  btn standard-bgcolor' href=route.php?ID=". $trackerID."><i class='material-icons'>visibility</i></a>
+   			<a title='Route' class='link btn-floating  btn standard-bgcolor' href=route.php?ID=". $row['trackerID']."><i class='material-icons'>visibility</i></a>
 			<a title='Edit' class='link btn-floating  btn standard-bgcolor' href=edit.php?ID=". $id."><i class='material-icons'>edit</i></a>
    			<a title='Delete' onclick=\"return confirm('Delete This item?')\" class='link btn-floating btn standard-bgcolor'href='?delete=". $id ."'><i class='material-icons'>delete</i></a>
 			</td>";
 			echo "</tr>";
-	    ?>
-	<?php }
+		}
 		echo "</tbody>";
 		echo "</table>";
 	  ?>
@@ -152,10 +145,11 @@ if(isset($_POST['update'])) {
 	          		<label for="Name">Asset name</label>
 	          		<span class="helper-text" data-error="Veld mag niet leeg zijn" data-success="correct">Geef de GPS tracker een naam</span>
 				</div>
+				<a class="waves-effect waves-light btn modal-trigger help-bgcolor" href="#modal2">Activatiecode?</a>
 				<div class="input-field col s12" id="activatiecode">
 					<input id="Activatiecode" class="validate" type="text" required name="activatiecode">
 	          		<label for="Activatiecode">Activatiecode</label>
-	          		<span class="helper-text" data-error="Moet uniek zijn" data-success="correct">Activatiecode van de tracker (IMEI + korte activatie string)</span>
+	          		<span class="helper-text" data-error="Moet uniek zijn" data-success="correct">Activatiecode van de tracker (volledig telefoon nummer zoals "31684636932")</span>
 				</div>
 				<div class="input-field col s12" id="info">
 					<input id="Info" class="validate" type="text" required name="info">
@@ -177,6 +171,17 @@ if(isset($_POST['update'])) {
 		  </form>
 		</div>
 	</div>
+<!-- Modal Structure -->
+  <div id="modal2" class="modal">
+    <div class="modal-content">
+      <h4>Uitleg activatiecode</h4>
+      <p>Om een gps tracker aan uw account te koppelen heeft u het mobiele nummer nodig van de gps tracker (sim kaart telefoon nummer). </p>
+      <p>Het telefoon nummer voert u in zoals dit voorbeeld:31684636932</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Sluit</a>
+    </div>
+  </div>
 </main>
 <?php 
 // include update profile modal and footer
@@ -189,14 +194,12 @@ include('objects/update-profile.php');
 <script type="text/javascript" src="js/materialize.min.js"></script>
 <script type="text/javascript" src="js/script.js"></script>
 <?php 
-if(empty($_GET['GpsUpdated'])){?>
-	<script type="text/javascript">
-		var locationTrackerID = "<?= $trackerID?>";
-		var startTime = "<?=$startTime?>";
-	</script>
-	<script type="text/javascript" src="js/GPS.js"></script>
-<?php
-}
-?>
+if(!isset($_GET['GpsUpdated'])):?>
+<script type="text/javascript">
+	var trackerIDArray = <?php echo json_encode($trackerID); ?>;
+	var startTime = "<?php echo $startTime?>";
+</script>
+<script type="text/javascript" src="js/GPS.js"></script>
+<?php endif?>
 <p id="demo"></p>
 </html>
